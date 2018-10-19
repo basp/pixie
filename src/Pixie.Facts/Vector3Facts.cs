@@ -4,17 +4,18 @@ namespace Pixie.Facts
     using Pixie;
     using Xunit;
 
-    public class Vector2Facts
+    public class Vector3Facts
     {
         [Fact]
         public void ConstructWithValue()
         {
             const float value = 0.123f;
             
-            var v = new Vector2(value);
+            var v = new Vector3(value);
             
             Assert.Equal(value, v.X);
             Assert.Equal(value, v.Y);
+            Assert.Equal(value, v.Z);
         }
 
         [Fact]
@@ -22,11 +23,13 @@ namespace Pixie.Facts
         {
             const float x = 0.123f;
             const float y = 0.456f;
-            
-            var v = new Vector2(x, y);
+            const float z = 0.789f;
+
+            var v = new Vector3(x, y, z);
             
             Assert.Equal(x, v.X);
             Assert.Equal(y, v.Y);
+            Assert.Equal(z, v.Z);
         }
     }
 }
