@@ -26,8 +26,11 @@ namespace Pixie
         }
 
         public byte R;
+
         public byte G;
+
         public byte B;
+
         public byte A;
 
         public bool Equals(Color other) =>
