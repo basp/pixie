@@ -37,25 +37,25 @@ namespace Pixie
             Vector4 row3,
             Vector4 row4)
         {
-            M11 = row1.W;
-            M12 = row1.X;
-            M13 = row1.Y;
-            M14 = row1.Z;
+            M11 = row1.X;
+            M12 = row1.Y;
+            M13 = row1.Z;
+            M14 = row1.W;
 
-            M21 = row2.W;
-            M22 = row2.X;
-            M23 = row2.Y;
-            M24 = row2.Z;
+            M21 = row2.X;
+            M22 = row2.Y;
+            M23 = row2.Z;
+            M24 = row2.W;
 
-            M31 = row3.W;
-            M32 = row3.X;
-            M33 = row3.Y;
-            M34 = row3.Z;
+            M31 = row3.X;
+            M32 = row3.Y;
+            M33 = row3.Z;
+            M34 = row3.W;
 
-            M41 = row4.W;
-            M42 = row4.X;
-            M43 = row4.Y;
-            M44 = row4.Z;
+            M41 = row4.X;
+            M42 = row4.Y;
+            M43 = row4.Z;
+            M44 = row4.W;
         }
 
         public float M11;
