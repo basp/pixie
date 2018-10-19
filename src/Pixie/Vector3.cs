@@ -18,6 +18,13 @@ namespace Pixie
             Z = z;
         }
 
+        public Vector3(Vector2 value, float z)
+        {
+            X = value.X;
+            Y = value.Y;
+            Z = z;
+        }
+
         public static Vector3 One = new Vector3(1, 1, 1);
         
         public static Vector3 UnitX = new Vector3(1, 0, 0);
