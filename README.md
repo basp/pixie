@@ -25,3 +25,19 @@ The turtle knows only `Turn(degrees)` and `Forward(units)` commands. The `Turn` 
 
 ### drawing
 Once you issue the `PenDown` command the turtle starts drawing with the current pen settings. If you issue the `PenUp` command the turtle stops drawing and you can move it around without messing up the canvas.
+
+### remembering locations
+The turtle has exceptional memory but unfortionately it can only remember things in order. That means you can only ask him about the last location he visited before he remembers the next one.
+
+```
+var turtle = new Turtle(adapter);
+turtle
+    .Push()         // remember location 0
+    .Forward(10)
+    .Push()         // remember location 1
+    .Forward(10)
+    .Pop()          // turtle is at location 1
+    .Forward(10)
+    .Pop();         // turtle is at location 0
+```
+

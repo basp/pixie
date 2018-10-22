@@ -1,6 +1,7 @@
 namespace Pixie
 {
     using System;
+    using System.Collections.Generic;
 
     // https://docs.microsoft.com/en-us/dotnet/api/system.drawing.graphics?view=netframework-4.7.2
     public interface IGraphics
@@ -27,6 +28,8 @@ namespace Pixie
 
         private IGraphics gfx;
 
+        private Stack<Vector2> locations = new Stack<Vector2>();
+        
         private Vector2 heading = Vector2.UnitX;
 
         private Vector2 position = Vector2.Zero;
@@ -92,6 +95,18 @@ namespace Pixie
         public Turtle PenUp()
         {
             this.isPenDown = false;
+            return this;
+        }
+
+        public Turtle Push()
+        {
+            this.locations.Push(this.position);
+            return this;
+        }
+
+        public Turtle Pop()
+        {
+            this.position = this.locations.Pop();
             return this;
         }
 
