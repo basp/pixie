@@ -2,15 +2,52 @@ namespace Pixie
 {
     using System;
 
+    // https://docs.microsoft.com/en-us/dotnet/api/system.drawing.graphics?view=netframework-4.7.2
+    public interface IGraphics : IDisposable
+    {
+        float Width { get; }
+
+        float Height { get; }
+
+        void DrawLine(IPen pen, float x1, float y1, float x2, float y2);
+    }
+
+    public interface IPen
+    {
+        Color Color { get; }
+
+        float Width { get; }
+    }
+
     public class Turtle : IDisposable
     {
+        private bool disposed;
+
+        private IGraphics gfx;
+
         private Vector2 heading = Vector2.UnitX;
 
-        private Vector2 location;
+        private Vector2 location = Vector2.Zero;
+
+        private bool isPenDown = false;
+
+        private IPen pen = new WhitePen(1.5f);
+
+        private Func<float, Color, IPen> penFactory;
 
         public Vector2 Heading => this.heading;
 
         public Vector2 Location => this.location;
+
+        public IPen Pen => this.pen;
+
+        public bool IsPenDown => this.isPenDown;
+
+        public Turtle(IGraphics gfx, Func<float, Color, IPen> penFactory)
+        {
+            this.gfx = gfx;
+            this.penFactory = penFactory;
+        }
 
         public Turtle Turn(float degrees)
         {
@@ -24,16 +61,65 @@ namespace Pixie
         {
             var dx = this.heading.X * distance;
             var dy = this.heading.Y * distance;
-            this.location = location.Translate(dx, dy);
+            var newLocation = location.Translate(dx, dy);
+            if (this.isPenDown)
+            {
+                this.gfx.DrawLine(
+                    this.pen,
+                    this.location.X,
+                    this.location.Y,
+                    newLocation.X,
+                    newLocation.Y);
+            }
+
+            this.location = newLocation;
             return this;
+        }
+
+        public Turtle PenDown()
+        {
+            this.isPenDown = true;
+            return this;
+        }
+
+        public Turtle PenUp()
+        {
+            this.isPenDown = false;
+            return this;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+            this.disposed = true;
         }
 
         public void Dispose()
         {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         static float ToRadians(float deg) => (float)(deg * 2 * Math.PI / 360);
     }
+
+    internal class WhitePen : IPen
+    {
+        private float width;
+
+        public WhitePen(float width)
+        {
+            this.width = width;
+        }
+
+        public Color Color => new Color(255, 255, 255);
+
+        public float Width => this.width;
+    }
+
 
     internal struct Matrix2
     {
@@ -54,6 +140,7 @@ namespace Pixie
 
     internal static class Extensions
     {
+        [Obsolete("Use matrix operations instead")]
         public static Vector2 Rotate(this Vector2 a, double theta) =>
             new Vector2
             {
