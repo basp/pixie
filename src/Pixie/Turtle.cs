@@ -28,7 +28,7 @@ namespace Pixie
 
         private IGraphics gfx;
 
-        private Stack<Vector2> locations = new Stack<Vector2>();
+        private Stack<Tuple<Vector2, Vector2>> memory = new Stack<Tuple<Vector2, Vector2>>();
         
         private Vector2 heading = Vector2.UnitX;
 
@@ -100,13 +100,16 @@ namespace Pixie
 
         public Turtle Push()
         {
-            this.locations.Push(this.position);
+            var t = Tuple.Create(this.position, this.heading);
+            this.memory.Push(t);
             return this;
         }
 
         public Turtle Pop()
         {
-            this.position = this.locations.Pop();
+            var t = this.memory.Pop();
+            this.position = t.Item1;
+            this.heading = t.Item2;
             return this;
         }
 
