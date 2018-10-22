@@ -24,6 +24,8 @@ namespace Pixie
             B = b;
             A = alpha;
         }
+        
+        public static Color White = new Color(255, 255, 255, 255);
 
         public byte R;
 

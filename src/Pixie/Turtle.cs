@@ -36,20 +36,22 @@ namespace Pixie
 
         private bool isPenDown = false;
 
-        private IPen pen = new WhitePen(DefaultWidth);
-
         private Func<float, Color, IPen> penFactory;
 
         public Vector2 Heading => this.heading;
 
         public Vector2 Position => this.position;
 
-        public IPen Pen => this.pen;
+        public IPen Pen
+        {
+            get;
+            set;
+        }
 
         public bool IsPenDown => this.isPenDown;
 
         public Turtle(IGraphics gfx)
-            : this(gfx, (w, c) => new WhitePen(DefaultWidth))
+            : this(gfx, (w, c) => new WhitePen(w))
         {
         }
 
@@ -57,6 +59,7 @@ namespace Pixie
         {
             this.gfx = gfx;
             this.penFactory = penFactory;
+            this.Pen = penFactory(1.5f, Color.White);
         }
 
         public Turtle Turn(float degrees)
@@ -75,7 +78,7 @@ namespace Pixie
             if (this.isPenDown)
             {
                 this.gfx.DrawLine(
-                    this.pen,
+                    this.Pen,
                     this.position.X,
                     this.position.Y,
                     newLocation.X,
