@@ -3,7 +3,7 @@ namespace Pixie
     using System;
 
     // https://docs.microsoft.com/en-us/dotnet/api/system.drawing.graphics?view=netframework-4.7.2
-    public interface IGraphics : IDisposable
+    public interface IGraphics
     {
         float Width { get; }
 
@@ -21,27 +21,34 @@ namespace Pixie
 
     public class Turtle : IDisposable
     {
+        const float DefaultWidth = 3.5f;
+
         private bool disposed;
 
         private IGraphics gfx;
 
         private Vector2 heading = Vector2.UnitX;
 
-        private Vector2 location = Vector2.Zero;
+        private Vector2 position = Vector2.Zero;
 
         private bool isPenDown = false;
 
-        private IPen pen = new WhitePen(1.5f);
+        private IPen pen = new WhitePen(DefaultWidth);
 
         private Func<float, Color, IPen> penFactory;
 
         public Vector2 Heading => this.heading;
 
-        public Vector2 Location => this.location;
+        public Vector2 Position => this.position;
 
         public IPen Pen => this.pen;
 
         public bool IsPenDown => this.isPenDown;
+
+        public Turtle(IGraphics gfx)
+            : this(gfx, (w, c) => new WhitePen(DefaultWidth))
+        {
+        }
 
         public Turtle(IGraphics gfx, Func<float, Color, IPen> penFactory)
         {
@@ -61,18 +68,18 @@ namespace Pixie
         {
             var dx = this.heading.X * distance;
             var dy = this.heading.Y * distance;
-            var newLocation = location.Translate(dx, dy);
+            var newLocation = position.Translate(dx, dy);
             if (this.isPenDown)
             {
                 this.gfx.DrawLine(
                     this.pen,
-                    this.location.X,
-                    this.location.Y,
+                    this.position.X,
+                    this.position.Y,
                     newLocation.X,
                     newLocation.Y);
             }
 
-            this.location = newLocation;
+            this.position = newLocation;
             return this;
         }
 
@@ -115,7 +122,7 @@ namespace Pixie
             this.width = width;
         }
 
-        public Color Color => new Color(255, 255, 255);
+        public Color Color => new Color(255, 255, 255, 255);
 
         public float Width => this.width;
     }
@@ -131,10 +138,10 @@ namespace Pixie
         public static Matrix2 CreateRotation(float theta) =>
             new Matrix2
             {
-                M11 = (float)Math.Round(Math.Cos(theta), 0),
-                M12 = -(float)Math.Round(Math.Sin(theta), 0),
-                M21 = (float)Math.Round(Math.Sin(theta), 0),
-                M22 = (float)Math.Round(Math.Cos(theta), 0),
+                M11 = (float)Math.Round(Math.Cos(theta), 1),
+                M12 = -(float)Math.Round(Math.Sin(theta), 1),
+                M21 = (float)Math.Round(Math.Sin(theta), 1),
+                M22 = (float)Math.Round(Math.Cos(theta), 1),
             };
     }
 
@@ -144,8 +151,8 @@ namespace Pixie
         public static Vector2 Rotate(this Vector2 a, double theta) =>
             new Vector2
             {
-                X = (float)Math.Round(a.X * Math.Cos(theta) - a.Y * Math.Sin(theta), 2),
-                Y = (float)Math.Round(a.X * Math.Sin(theta) + a.Y * Math.Cos(theta), 2),
+                X = (float)Math.Round(a.X * Math.Cos(theta) - a.Y * Math.Sin(theta), 1),
+                Y = (float)Math.Round(a.X * Math.Sin(theta) + a.Y * Math.Cos(theta), 1),
             };
 
         public static Vector2 Multiply(this Vector2 a, Matrix2 b)
