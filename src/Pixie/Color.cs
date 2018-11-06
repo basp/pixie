@@ -44,6 +44,9 @@ namespace Pixie
 
     public static class ColorExtensions
     {
+        public static Pixie.Color ToPixieColor(this System.Drawing.Color self) =>
+            new Pixie.Color(self.R, self.G, self.B, self.A);
+
         public static System.Drawing.Color ToSystemDrawingColor(this Color self) =>
             System.Drawing.Color.FromArgb(self.A, self.R, self.G, self.B);
     }

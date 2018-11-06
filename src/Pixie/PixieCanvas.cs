@@ -25,6 +25,16 @@ namespace Pixie
 
         public Bitmap Bitmap => this.bmp;
 
+        public void DrawString(Color color, float x, float y, string s)
+        {
+            x = ScaleTranslateX(x);
+            y = ScaleTranslateY(y);
+
+            var font = new Font(new FontFamily("Hack"), 12, FontStyle.Italic);
+            var brush = new SolidBrush(color.ToSystemDrawingColor());
+            this.gfx.DrawString(s, font, brush, x, y);
+        }
+
         public void FillPie(Color color, float x, float y, float r, float startAngle, float sweepAngle)
         {
             var brush = new SolidBrush(color.ToSystemDrawingColor());
