@@ -1,6 +1,6 @@
 # pixie
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/8JYDrkm"><a href="//imgur.com/8JYDrkm">Prototyping PixieCanvas</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+<img src="https://i.imgur.com/vh9ydVql.png">
 
 This is a set of experimental classes for computer graphics. The main set pieces are:
 
