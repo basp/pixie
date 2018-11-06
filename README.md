@@ -1,6 +1,6 @@
 # pixie
 
-<img src="https://i.imgur.com/vh9ydVql.png">
+<img src="https://i.imgur.com/IhD4pbr.png">
 
 This is a set of experimental classes for computer graphics. The main set pieces are:
 
