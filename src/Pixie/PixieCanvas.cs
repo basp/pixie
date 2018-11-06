@@ -27,8 +27,8 @@ namespace Pixie
 
         public void DrawString(Color color, float x, float y, string s)
         {
-            x = ScaleTranslateX(x);
-            y = ScaleTranslateY(y);
+            x = ScaleTranslateXToPixel(x);
+            y = ScaleTranslateYToPixel(y);
 
             var font = new Font(new FontFamily("Hack"), 12, FontStyle.Italic);
             var brush = new SolidBrush(color.ToSystemDrawingColor());
@@ -43,8 +43,8 @@ namespace Pixie
 
         public void FillPie(Brush brush, float x, float y, float r, float startAngle, float sweepAngle)
         {
-            x = this.ScaleTranslateX(x);
-            y = this.ScaleTranslateY(y);
+            x = this.ScaleTranslateXToPixel(x);
+            y = this.ScaleTranslateYToPixel(y);
             r = this.Scale(r);
 
             var x1 = x - r;
@@ -63,8 +63,8 @@ namespace Pixie
 
         public void DrawArc(Pen pen, float x, float y, float r, float startAngle, float sweepAngle)
         {
-            x = this.ScaleTranslateX(x);
-            y = this.ScaleTranslateY(y);
+            x = this.ScaleTranslateXToPixel(x);
+            y = this.ScaleTranslateYToPixel(y);
             r = this.Scale(r);
 
             var x1 = x - r;
@@ -83,10 +83,10 @@ namespace Pixie
 
         public void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
         {
-            x1 = this.ScaleTranslateX(x1);
-            y1 = this.ScaleTranslateY(y1);
-            x2 = this.ScaleTranslateX(x2);
-            y2 = this.ScaleTranslateY(y2);
+            x1 = this.ScaleTranslateXToPixel(x1);
+            y1 = this.ScaleTranslateYToPixel(y1);
+            x2 = this.ScaleTranslateXToPixel(x2);
+            y2 = this.ScaleTranslateYToPixel(y2);
 
             gfx.DrawLine(pen.ToSystemDrawingPen(), x1, y1, x2, y2);
         }
@@ -99,8 +99,8 @@ namespace Pixie
 
         public void FillCircle(Brush brush, float x, float y, float r)
         {
-            x = this.ScaleTranslateX(x);
-            y = this.ScaleTranslateY(y);
+            x = this.ScaleTranslateXToPixel(x);
+            y = this.ScaleTranslateYToPixel(y);
             r = this.Scale(r);
 
             var x1 = x - r;
@@ -120,8 +120,8 @@ namespace Pixie
 
         public void DrawCircle(Pen pen, float x, float y, float r)
         {
-            x = this.ScaleTranslateX(x);
-            y = this.ScaleTranslateY(y);
+            x = this.ScaleTranslateXToPixel(x);
+            y = this.ScaleTranslateYToPixel(y);
             r = this.Scale(r);
 
             var x1 = x - r;
@@ -149,9 +149,13 @@ namespace Pixie
 
         public float Scale(float v) => v * this.sizeOverTwo;
 
-        public float ScaleTranslateX(float x) => x * this.sizeOverTwo + this.sizeOverTwo;
+        public float ScaleTranslateXToPixel(float x) => x * this.sizeOverTwo + this.sizeOverTwo;
 
-        public float ScaleTranslateY(float y) => -y * this.sizeOverTwo + this.sizeOverTwo;
+        public float ScaleTranslateYToPixel(float y) => -y * this.sizeOverTwo + this.sizeOverTwo;
+
+        public float ScaleTranslateXToUnit(float x) => 0.0f;
+
+        public float ScaleTranslateYToUnit(float y) => 0.0f;
 
         protected virtual void Dispose(bool disposing)
         {
