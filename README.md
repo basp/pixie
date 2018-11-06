@@ -55,7 +55,7 @@ It's better to define a _palette_ of colors that you want to use and select from
 * You will be able to more consistantly change the look and feel of your images
 * Changing the look and feel will be easier
 * A word like `Black` reads a lot easier than `Color.FromArgb(...)`
-* Your ifmages will be more consistent in look and feel
+* Your images will be more consistent in look and feel
 
 ```
 static readonly Pixie.Color White = System.Drawing.Color.White.ToPixieColor();
