@@ -41,4 +41,10 @@ namespace Pixie
             this.B == other.B &&
             this.A == other.A;
     }
+
+    public static class ColorExtensions
+    {
+        public static System.Drawing.Color ToSystemDrawingColor(this Color self) =>
+            System.Drawing.Color.FromArgb(self.A, self.R, self.G, self.B);
+    }
 }
