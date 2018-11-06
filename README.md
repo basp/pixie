@@ -10,7 +10,7 @@ This is a set of experimental classes for computer graphics. The main set pieces
 Both implementations are very much in sandboxing/experimental stage. Use at own risk.
 
 ## the pixie canvas
-The `PixieCanvas` was designed to provide a uniform canvas for experimentation that automatically scales and/or translates results from any coordinate sysytem appropriately to a bitmap representation.
+The `PixieCanvas` was designed to provide a uniform canvas for experimentation that automatically scales and/or translates results from any coordinate system appropriately to a bitmap representation.
 
 ### overview
 The `PixieCanvas` is a `(-1, -1)` to `(1, 1)` canvas where `(-1, -1)` is the bottom left coordinate and `(1, 1)` is the top right coordinate in a plane. The main differences between drawing with `System.Drawing.Graphics` and `PixieCanvas` are: 
