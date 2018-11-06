@@ -67,5 +67,7 @@ This gives you a few benefits:
 
 It's even better if you use that palette to define semantic names for your sections such as
 ```
-static readonly Pixie.Color Heading = White;
+static readonly Pixie.Color Heading = new {
+    Color = White,
+};
 ```
