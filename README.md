@@ -69,5 +69,6 @@ It's even better if you use that palette to define semantic names for your secti
 ```
 static readonly Pixie.Color Heading = new {
     Color = White,
+    Font = ...
 };
 ```
