@@ -51,15 +51,21 @@ pixie.DrawLine(System.Drawing.Color.White.ToPixieColor(), -1, -1, 1, 1)
 ```
 
 ### tips
-It's better to define a _palette_ of colors that you want to use and select from those in your presentations. This gives you a few benefits:
-* You will be able to more consistantly change the look and feel of your images
-* Changing the look and feel will be easier
-* A word like `Black` reads a lot easier than `Color.FromArgb(...)`
-* Your images will be more consistent in look and feel
+It's better to define a _palette_ of colors that you want to use and select from those in your presentations. 
 
 ```
 static readonly Pixie.Color White = System.Drawing.Color.White.ToPixieColor();
 static readonly Pixie.Color Black = System.Drawing.Color.Black.ToPixieColor();
 static readonly Pixie.Color Azure = System.Drawing.Color.Azure.ToPixieColor();
-...
+```
+
+This gives you a few benefits:
+* You will be able to more consistantly change the look and feel of your images
+* Changing the look and feel will be easier
+* A word like `Black` reads a lot easier than `Color.FromArgb(...)`
+* Your images will be more consistent in look and feel
+
+It's even better if you use that palette to define semantic names for your sections such as
+```
+static readonly Pixie.Color Heading = White;
 ```
