@@ -54,6 +54,25 @@ namespace Pixie
 
             gfx.FillPie(brush, x1, y1, w, h, startAngle, sweepAngle);
         }
+    
+        public void FillRect(Color color, float x, float y, float w, float h)
+        {
+            var brush = new SolidBrush(color.ToSystemDrawingColor());
+            this.FillRect(brush, x, y, w, h);
+        }
+
+        public void FillRect(Brush brush, float x, float y, float w, float h)
+        {
+            x = this.ScaleTranslateXToPixel(x);
+            y = this.ScaleTranslateYToPixel(y);
+            w = this.Scale(w);
+            h = this.Scale(h);
+
+            var x1 = x - (w / 2);
+            var y1 = y - (h / 2);
+
+            gfx.FillRectangle(brush, x1, y1, w, h);
+        }
 
         public void DrawArc(Color color, float x, float y, float r, float startAngle, float sweepAngle)
         {
