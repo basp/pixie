@@ -7,7 +7,7 @@ namespace Pixie.Facts
     public class Vector2Facts
     {
         [Fact]
-        public void ConstructWithValue()
+        public void ConstructWithSingleValue()
         {
             const float value = 0.123f;
             
@@ -18,7 +18,7 @@ namespace Pixie.Facts
         }
 
         [Fact]
-        public void ContructWithDimensions()
+        public void ContructWithTwoValues()
         {
             const float x = 0.123f;
             const float y = 0.456f;

@@ -14,19 +14,19 @@ namespace Pixie
 
     public static class Bernstein2
     {
-        public static Vector2 Line(Vector2 p1, Vector2 p2, float t) =>
-            new Vector2
-            {
-                X = B0_1(t) * p1.X + B1_1(t) * p2.X,
-                Y = B0_1(t) * p1.Y + B1_1(t) * p2.Y,
-            };
+        public static Vector2 Line(Vector2 p1, Vector2 p2, float t)
+        {
+            var x = B0_1(t) * p1.X + B1_1(t) * p2.X;
+            var y = B0_1(t) * p1.Y + B1_1(t) * p2.Y;
+            return new Vector2(x, y);
+        }
 
-        public static Vector2 Parabola(Vector2 p1, Vector2 p2, Vector2 p3, float t) =>
-            new Vector2
-            {
-                X = Bernstein2.B0_3(t) * p1.X + Bernstein2.B1_3(t) * p2.X + Bernstein2.B2_3(t) * p3.X + Bernstein2.B3_3(t) * p3.X,
-                Y = Bernstein2.B0_3(t) * p1.Y + Bernstein2.B1_3(t) * p2.Y + Bernstein2.B2_3(t) * p3.Y + Bernstein2.B3_3(t) * p3.Y,
-            };
+        public static Vector2 Parabola(Vector2 p1, Vector2 p2, Vector2 p3, float t)
+        {
+            var x = Bernstein2.B0_3(t) * p1.X + Bernstein2.B1_3(t) * p2.X + Bernstein2.B2_3(t) * p3.X + Bernstein2.B3_3(t) * p3.X;
+            var y = Bernstein2.B0_3(t) * p1.Y + Bernstein2.B1_3(t) * p2.Y + Bernstein2.B2_3(t) * p3.Y + Bernstein2.B3_3(t) * p3.Y;
+            return new Vector2(x, y);
+        }
 
         public static float B0_0(float t) => 1.0f;
 

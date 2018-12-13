@@ -4,6 +4,22 @@ namespace Pixie
 
     public struct Vector3 : IEquatable<Vector3>
     {
+        public static Vector3 One = new Vector3(1, 1, 1);
+        
+        public static Vector3 UnitX = new Vector3(1, 0, 0);
+        
+        public static Vector3 UnitY = new Vector3(0, 1, 0);
+        
+        public static Vector3 UnitZ = new Vector3(0, 0, 1);
+
+        public static Vector3 Zero = new Vector3(0, 0, 0);
+
+        public float X;
+        
+        public float Y;
+
+        public float Z;
+
         public Vector3(float value)
         {
             X = value;
@@ -24,22 +40,6 @@ namespace Pixie
             Y = value.Y;
             Z = z;
         }
-
-        public static Vector3 One = new Vector3(1, 1, 1);
-        
-        public static Vector3 UnitX = new Vector3(1, 0, 0);
-        
-        public static Vector3 UnitY = new Vector3(0, 1, 0);
-        
-        public static Vector3 UnitZ = new Vector3(0, 0, 1);
-
-        public static Vector3 Zero = new Vector3(0, 0, 0);
-
-        public float X;
-        
-        public float Y;
-
-        public float Z;
 
         public bool Equals(Vector3 other) => 
             this.X == other.X && 

@@ -148,33 +148,15 @@ namespace Pixie
         public float Width => this.width;
     }
 
-
-    internal struct Matrix2
-    {
-        public float M11;
-        public float M12;
-        public float M21;
-        public float M22;
-
-        public static Matrix2 CreateRotation(float theta) =>
-            new Matrix2
-            {
-                M11 = (float)Math.Round(Math.Cos(theta), 1),
-                M12 = -(float)Math.Round(Math.Sin(theta), 1),
-                M21 = (float)Math.Round(Math.Sin(theta), 1),
-                M22 = (float)Math.Round(Math.Cos(theta), 1),
-            };
-    }
-
     internal static class Extensions
     {
         [Obsolete("Use matrix operations instead")]
-        public static Vector2 Rotate(this Vector2 a, double theta) =>
-            new Vector2
-            {
-                X = (float)Math.Round(a.X * Math.Cos(theta) - a.Y * Math.Sin(theta), 1),
-                Y = (float)Math.Round(a.X * Math.Sin(theta) + a.Y * Math.Cos(theta), 1),
-            };
+        public static Vector2 Rotate(this Vector2 a, double theta)
+        {
+            var x = (float)Math.Round(a.X * Math.Cos(theta) - a.Y * Math.Sin(theta), 1);
+            var y = (float)Math.Round(a.X * Math.Sin(theta) + a.Y * Math.Cos(theta), 1);
+            return new Vector2(x, y);
+        }
 
         public static Vector2 Multiply(this Vector2 a, Matrix2 b)
         {
