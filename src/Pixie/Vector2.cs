@@ -177,12 +177,14 @@
 
         public static void Transform(Vector2 v, Matrix m, out Vector2 result)
         {
-            throw new NotImplementedException();
+            result = Transform(v, m);
         }
 
         public static Vector2 Transform(Vector2 v, Matrix m)
         {
-            throw new NotImplementedException();
+            var v4 = new Vector4(v, 0, 1);
+            var result = Vector4.Transform(v4, m);
+            return new Vector2(result.X, result.Y);
         }
 
         public static Vector2 operator -(Vector2 v) =>

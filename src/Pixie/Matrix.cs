@@ -87,6 +87,94 @@ namespace Pixie
             M44 = row4.W;
         }
 
+        public static void CreateRotationX(float t, out Matrix result)
+        {
+            result = CreateRotationX(t);
+        }
+
+        public static Matrix CreateRotationX(float t) =>
+            new Matrix(
+                1, 0, 0, 0,
+                0, (float)Math.Cos(t), -(float)Math.Sin(t), 0,
+                0, (float)Math.Sin(t), (float)Math.Cos(t), 0,
+                0, 0, 0, 1);
+
+        public static void CreateRotationY(float t, out Matrix result)
+        {
+            result = CreateRotationY(t);
+        }
+
+        public static Matrix CreateRotationY(float t) =>
+            new Matrix(
+                (float)Math.Cos(t), 0, (float)Math.Sin(t), 0,
+                0, 1, 0, 0,
+                -(float)Math.Sin(t), 0, (float)Math.Cos(t), 0,
+                0, 0, 0, 1);
+
+        public static void CreateRotationZ(float t, out Matrix result)
+        {
+            result = CreateRotationZ(t);
+        }
+
+        public static Matrix CreateRotationZ(float t) =>
+            new Matrix(
+                (float)Math.Cos(t), -(float)Math.Sin(t), 0, 0,
+                (float)Math.Sin(t), (float)Math.Cos(t), 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1);
+
+        public static void CreateScale(float s, out Matrix result)
+        {
+            result = CreateScale(s);
+        }
+
+        public static Matrix CreateScale(float s) =>
+            new Matrix(
+                s, 0, 0, 0,
+                0, s, 0, 0,
+                0, 0, s, 0,
+                0, 0, 0, 1);
+
+        public static void CreateScale(float sx, float sy, float sz, out Matrix result)
+        {
+            result = CreateScale(sx, sy, sz);
+        }
+
+        public static Matrix CreateScale(float sx, float sy, float sz) =>
+            new Matrix(
+                sx, 0, 0, 0,
+                0, sy, 0, 0,
+                0, 0, sz, 0,
+                0, 0, 0, 1);
+
+        public static void CreateScale(Vector3 sv, out Matrix result)
+        {
+            result = CreateScale(sv);
+        }
+
+        public static Matrix CreateScale(Vector3 sv) =>
+            CreateScale(sv.X, sv.Y, sv.Z);
+
+        public static void CreateTranslation(float dx, float dy, float dz, out Matrix result)
+        {
+            result = CreateTranslation(dx, dy, dz);
+        }
+
+        public static Matrix CreateTranslation(float dx, float dy, float dz) =>
+            new Matrix(
+                1, 0, 0, dx,
+                0, 1, 0, dy,
+                0, 0, 1, dz,
+                0, 0, 0, 1);
+
+        public static void CreateTranslation(Vector3 tv, out Matrix result)
+        {
+            result = CreateTranslation(tv);
+        }
+
+        public static Matrix CreateTranslation(Vector3 tv) =>
+            CreateTranslation(tv.X, tv.Y, tv.Z);
+
         public static void Add(Matrix a, Matrix b, out Matrix result)
         {
             result = Add(a, b);

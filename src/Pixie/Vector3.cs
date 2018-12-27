@@ -5,17 +5,17 @@ namespace Pixie
     public struct Vector3 : IEquatable<Vector3>
     {
         public static Vector3 One = new Vector3(1, 1, 1);
-        
+
         public static Vector3 UnitX = new Vector3(1, 0, 0);
-        
+
         public static Vector3 UnitY = new Vector3(0, 1, 0);
-        
+
         public static Vector3 UnitZ = new Vector3(0, 0, 1);
 
         public static Vector3 Zero = new Vector3(0, 0, 0);
 
         public readonly float X;
-        
+
         public readonly float Y;
 
         public readonly float Z;
@@ -107,7 +107,7 @@ namespace Pixie
         public static void Floor(Vector3 v, out Vector3 result)
         {
             result = Floor(v);
-        }            
+        }
 
         public static Vector3 Floor(Vector3 v) =>
             new Vector3(
@@ -219,12 +219,14 @@ namespace Pixie
 
         public static void Transform(Vector3 v, Matrix m, out Vector3 result)
         {
-            throw new NotImplementedException();
+            result = Transform(v, m);
         }
 
         public static Vector3 Transform(Vector3 v, Matrix m)
         {
-            throw new NotImplementedException();
+            var v4 = new Vector4(v.X, v.Y, v.Z, 1);
+            var result = Vector4.Transform(v4, m);
+            return new Vector3(result.X, result.Y, result.Z);
         }
 
         public static Vector3 operator -(Vector3 v) =>
@@ -256,8 +258,8 @@ namespace Pixie
 
         public Vector3 Ceiling() => Ceiling(this);
 
-        public bool Equals(Vector3 other) => 
-            this.X == other.X && 
+        public bool Equals(Vector3 other) =>
+            this.X == other.X &&
             this.Y == other.Y &&
             this.Z == other.Z;
 
@@ -273,7 +275,7 @@ namespace Pixie
 
         public override bool Equals(object obj)
         {
-            if(obj.GetType() != typeof(Vector3))
+            if (obj.GetType() != typeof(Vector3))
             {
                 return false;
             }

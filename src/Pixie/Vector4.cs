@@ -130,7 +130,7 @@ namespace Pixie
         public static void Floor(Vector4 u, out Vector4 result)
         {
             result = Floor(u);
-        }            
+        }
 
         public static Vector4 Floor(Vector4 u) =>
             new Vector4(
@@ -252,12 +252,21 @@ namespace Pixie
 
         public static void Transform(Vector4 v, Matrix m, out Vector4 result)
         {
-            throw new NotImplementedException();
+            result = Transform(v, m);
         }
 
         public static Vector4 Transform(Vector4 v, Matrix m)
         {
-            throw new NotImplementedException();
+            var row1 = new Vector4(m.M11, m.M12, m.M13, m.M14);
+            var row2 = new Vector4(m.M21, m.M22, m.M23, m.M24);
+            var row3 = new Vector4(m.M31, m.M32, m.M33, m.M34);
+            var row4 = new Vector4(m.M41, m.M42, m.M43, m.M44);
+
+            return new Vector4(
+                Vector4.Dot(v, row1),
+                Vector4.Dot(v, row2),
+                Vector4.Dot(v, row3),
+                Vector4.Dot(v, row4));
         }
 
         public static Vector4 operator -(Vector4 u) =>
@@ -268,7 +277,7 @@ namespace Pixie
 
         public static Vector4 operator -(Vector4 u, Vector4 v) =>
             Vector4.Subtract(u, v);
-            
+
         public static Vector4 operator *(Vector4 u, Vector4 v) =>
             Vector4.Multiply(u, v);
 
@@ -301,7 +310,7 @@ namespace Pixie
             x = this.X;
             y = this.Y;
             z = this.Z;
-            w = this.W;            
+            w = this.W;
         }
 
         public bool Equals(Vector4 other) =>
@@ -312,7 +321,7 @@ namespace Pixie
 
         public override bool Equals(object obj)
         {
-            if(obj.GetType() != typeof(Vector4))
+            if (obj.GetType() != typeof(Vector4))
             {
                 return false;
             }
@@ -337,8 +346,8 @@ namespace Pixie
 
         public float LengthSquared() =>
             (float)(
-                Math.Pow(this.X, 2) + 
-                Math.Pow(this.Y, 2) + 
+                Math.Pow(this.X, 2) +
+                Math.Pow(this.Y, 2) +
                 Math.Pow(this.Z, 2) +
                 Math.Pow(this.W, 2));
 
