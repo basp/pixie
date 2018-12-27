@@ -1,10 +1,18 @@
 namespace Pixie
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     public struct Matrix : IEquatable<Matrix>
     {
+        public static Matrix Identity =>
+            new Matrix(
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1);
+
         public readonly float M11;
         public readonly float M12; // first row, second column
         public readonly float M13;
@@ -79,53 +87,32 @@ namespace Pixie
             M44 = row4.W;
         }
 
-        public Vector4[] Rows => new[]
-        {
-            new Vector4(this.M11, this.M12, this.M13, this.M14),
-            new Vector4(this.M21, this.M22, this.M23, this.M24),
-            new Vector4(this.M31, this.M32, this.M33, this.M34),
-            new Vector4(this.M41, this.M42, this.M43, this.M44),
-        };
-
-        public Vector4[] Columns => new[]
-        {
-            new Vector4(this.M11, this.M21, this.M31, this.M41),
-            new Vector4(this.M12, this.M22, this.M32, this.M42),
-            new Vector4(this.M13, this.M23, this.M33 ,this.M43),
-            new Vector4(this.M14, this.M24, this.M34 ,this.M44),
-        };
-
-        public static Matrix Add(Matrix a, Matrix b)
-        {
-            throw new NotImplementedException();
-        }
-
         public static void Add(Matrix a, Matrix b, out Matrix result)
         {
             result = Add(a, b);
         }
 
-        public static Matrix Multiply(Matrix a, Matrix b)
+        public static Matrix Add(Matrix a, Matrix b)
         {
-            var m11 = a.M11 * b.M11 + a.M12 * b.M21 + a.M13 * b.M31 + a.M14 * b.M41;
-            var m12 = a.M11 * b.M12 + a.M12 * b.M22 + a.M13 * b.M32 + a.M14 * b.M42;
-            var m13 = a.M11 * b.M13 + a.M12 * b.M23 + a.M13 * b.M33 + a.M14 * b.M43;
-            var m14 = a.M11 * b.M14 + a.M12 * b.M24 + a.M13 * b.M34 + a.M14 * b.M44;  
+            var m11 = a.M11 + b.M11;
+            var m12 = a.M12 + b.M12;
+            var m13 = a.M13 + b.M13;
+            var m14 = a.M14 + b.M14;
 
-            var m21 = a.M21 * b.M11 + a.M22 * b.M21 + a.M23 * b.M31 + a.M24 * b.M41;
-            var m22 = a.M21 * b.M12 + a.M22 * b.M22 + a.M23 * b.M32 + a.M24 * b.M42;
-            var m23 = a.M21 * b.M13 + a.M22 * b.M23 + a.M23 * b.M33 + a.M24 * b.M43;
-            var m24 = a.M21 * b.M14 + a.M22 * b.M24 + a.M23 * b.M34 + a.M24 * b.M44;  
+            var m21 = a.M21 + b.M21;
+            var m22 = a.M22 + b.M22;
+            var m23 = a.M23 + b.M23;
+            var m24 = a.M24 + b.M24;
 
-            var m31 = a.M31 * b.M11 + a.M32 * b.M21 + a.M33 * b.M31 + a.M34 * b.M41;
-            var m32 = a.M31 * b.M12 + a.M32 * b.M22 + a.M33 * b.M32 + a.M34 * b.M42;
-            var m33 = a.M31 * b.M13 + a.M32 * b.M23 + a.M33 * b.M33 + a.M34 * b.M43;
-            var m34 = a.M31 * b.M14 + a.M32 * b.M24 + a.M33 * b.M34 + a.M34 * b.M44;  
+            var m31 = a.M31 + b.M31;
+            var m32 = a.M32 + b.M32;
+            var m33 = a.M33 + b.M33;
+            var m34 = a.M34 + b.M34;
 
-            var m41 = a.M41 * b.M11 + a.M42 * b.M21 + a.M43 * b.M31 + a.M44 * b.M41;
-            var m42 = a.M41 * b.M12 + a.M42 * b.M22 + a.M43 * b.M32 + a.M44 * b.M42;
-            var m43 = a.M41 * b.M13 + a.M42 * b.M23 + a.M43 * b.M33 + a.M44 * b.M43;
-            var m44 = a.M41 * b.M14 + a.M42 * b.M24 + a.M43 * b.M34 + a.M44 * b.M44;  
+            var m41 = a.M41 + b.M41;
+            var m42 = a.M42 + b.M42;
+            var m43 = a.M43 + b.M43;
+            var m44 = a.M44 + b.M44;
 
             return new Matrix(
                 m11, m12, m13, m14,
@@ -134,14 +121,138 @@ namespace Pixie
                 m41, m42, m43, m44);
         }
 
+        public static void Divide(Matrix a, Matrix b, out Matrix result)
+        {
+            result = Divide(a, b);
+        }
+
+        public static Matrix Divide(Matrix a, Matrix b)
+        {
+            var row1 = new Vector4(a.M11 / b.M11, a.M12 / b.M12, a.M13 / b.M13, a.M14 / b.M14);
+            var row2 = new Vector4(a.M21 / b.M21, a.M22 / b.M22, a.M23 / b.M23, a.M24 / b.M24);
+            var row3 = new Vector4(a.M31 / b.M31, a.M32 / b.M32, a.M33 / b.M33, a.M34 / b.M34);
+            var row4 = new Vector4(a.M41 / b.M41, a.M42 / b.M42, a.M43 / b.M43, a.M44 / b.M44);
+            return new Matrix(row1, row2, row3, row4);
+        }
+
+        public static void Divide(Matrix a, float s, out Matrix result)
+        {
+            result = Divide(a, s);
+        }
+
+        public static Matrix Divide(Matrix a, float s)
+        {
+            var row1 = new Vector4(a.M11 / s, a.M12 / s, a.M13 / s, a.M14 / s);
+            var row2 = new Vector4(a.M21 / s, a.M22 / s, a.M23 / s, a.M24 / s);
+            var row3 = new Vector4(a.M31 / s, a.M32 / s, a.M33 / s, a.M34 / s);
+            var row4 = new Vector4(a.M41 / s, a.M42 / s, a.M43 / s, a.M44 / s);
+            return new Matrix(row1, row2, row3, row4);
+        }
+
+        public static void Invert(Matrix a, out Matrix result)
+        {
+            result = Invert(a);
+        }
+
+        public static Matrix Invert(Matrix a)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void Lerp(Matrix a, Matrix b, float t, out Matrix result)
+        {
+            result = Lerp(a, b, t);
+        }
+
+        public static Matrix Lerp(Matrix a, Matrix b, float t)
+        {
+            var row1 = new Vector4(
+                MathHelpers.Lerp(a.M11, b.M11, t),
+                MathHelpers.Lerp(a.M12, b.M12, t),
+                MathHelpers.Lerp(a.M13, b.M13, t),
+                MathHelpers.Lerp(a.M14, b.M14, t));
+
+            var row2 = new Vector4(
+                MathHelpers.Lerp(a.M21, b.M21, t),
+                MathHelpers.Lerp(a.M22, b.M22, t),
+                MathHelpers.Lerp(a.M23, b.M23, t),
+                MathHelpers.Lerp(a.M24, b.M24, t));
+
+            var row3 = new Vector4(
+                MathHelpers.Lerp(a.M31, b.M31, t),
+                MathHelpers.Lerp(a.M32, b.M32, t),
+                MathHelpers.Lerp(a.M33, b.M33, t),
+                MathHelpers.Lerp(a.M34, b.M34, t));
+
+            var row4 = new Vector4(
+                MathHelpers.Lerp(a.M41, b.M41, t),
+                MathHelpers.Lerp(a.M42, b.M42, t),
+                MathHelpers.Lerp(a.M43, b.M43, t),
+                MathHelpers.Lerp(a.M44, b.M44, t));
+
+            return new Matrix(row1, row2, row3, row4);
+        }
+
         public static void Multiply(Matrix a, Matrix b, out Matrix result)
         {
             result = Multiply(a, b);
         }
 
-        public static Matrix Subtract(Matrix a, Matrix b)
+        public static Matrix Multiply(Matrix a, Matrix b)
         {
-            throw new NotImplementedException();
+            var m11 = a.M11 * b.M11 + a.M12 * b.M21 + a.M13 * b.M31 + a.M14 * b.M41;
+            var m12 = a.M11 * b.M12 + a.M12 * b.M22 + a.M13 * b.M32 + a.M14 * b.M42;
+            var m13 = a.M11 * b.M13 + a.M12 * b.M23 + a.M13 * b.M33 + a.M14 * b.M43;
+            var m14 = a.M11 * b.M14 + a.M12 * b.M24 + a.M13 * b.M34 + a.M14 * b.M44;
+
+            var m21 = a.M21 * b.M11 + a.M22 * b.M21 + a.M23 * b.M31 + a.M24 * b.M41;
+            var m22 = a.M21 * b.M12 + a.M22 * b.M22 + a.M23 * b.M32 + a.M24 * b.M42;
+            var m23 = a.M21 * b.M13 + a.M22 * b.M23 + a.M23 * b.M33 + a.M24 * b.M43;
+            var m24 = a.M21 * b.M14 + a.M22 * b.M24 + a.M23 * b.M34 + a.M24 * b.M44;
+
+            var m31 = a.M31 * b.M11 + a.M32 * b.M21 + a.M33 * b.M31 + a.M34 * b.M41;
+            var m32 = a.M31 * b.M12 + a.M32 * b.M22 + a.M33 * b.M32 + a.M34 * b.M42;
+            var m33 = a.M31 * b.M13 + a.M32 * b.M23 + a.M33 * b.M33 + a.M34 * b.M43;
+            var m34 = a.M31 * b.M14 + a.M32 * b.M24 + a.M33 * b.M34 + a.M34 * b.M44;
+
+            var m41 = a.M41 * b.M11 + a.M42 * b.M21 + a.M43 * b.M31 + a.M44 * b.M41;
+            var m42 = a.M41 * b.M12 + a.M42 * b.M22 + a.M43 * b.M32 + a.M44 * b.M42;
+            var m43 = a.M41 * b.M13 + a.M42 * b.M23 + a.M43 * b.M33 + a.M44 * b.M43;
+            var m44 = a.M41 * b.M14 + a.M42 * b.M24 + a.M43 * b.M34 + a.M44 * b.M44;
+
+            return new Matrix(
+                m11, m12, m13, m14,
+                m21, m22, m23, m24,
+                m31, m32, m33, m34,
+                m41, m42, m43, m44);
+        }
+
+        public static void Multiply(Matrix a, float s, out Matrix result)
+        {
+            result = Multiply(a, s);
+        }
+
+        public static Matrix Multiply(Matrix a, float s)
+        {
+            var row1 = new Vector4(a.M11 * s, a.M12 * s, a.M13 * s, a.M14 * s);
+            var row2 = new Vector4(a.M21 * s, a.M22 * s, a.M23 * s, a.M24 * s);
+            var row3 = new Vector4(a.M31 * s, a.M32 * s, a.M33 * s, a.M34 * s);
+            var row4 = new Vector4(a.M41 * s, a.M42 * s, a.M43 * s, a.M44 * s);
+            return new Matrix(row1, row2, row3, row4);
+        }
+
+        public static void Negate(Matrix a, out Matrix result)
+        {
+            result = Negate(a);
+        }
+
+        public static Matrix Negate(Matrix a)
+        {
+            var row1 = new Vector4(-a.M11, -a.M12, -a.M13, -a.M14);
+            var row2 = new Vector4(-a.M21, -a.M22, -a.M23, -a.M24);
+            var row3 = new Vector4(-a.M31, -a.M32, -a.M33, -a.M34);
+            var row4 = new Vector4(-a.M41, -a.M42, -a.M43, -a.M44);
+            return new Matrix(row1, row2, row3, row4);
         }
 
         public static void Subtract(Matrix a, Matrix b, out Matrix result)
@@ -149,9 +260,95 @@ namespace Pixie
             result = Subtract(a, b);
         }
 
+        public static Matrix Subtract(Matrix a, Matrix b)
+        {
+            var m11 = a.M11 - b.M11;
+            var m12 = a.M12 - b.M12;
+            var m13 = a.M13 - b.M13;
+            var m14 = a.M14 - b.M14;
+
+            var m21 = a.M21 - b.M21;
+            var m22 = a.M22 - b.M22;
+            var m23 = a.M23 - b.M23;
+            var m24 = a.M24 - b.M24;
+
+            var m31 = a.M31 - b.M31;
+            var m32 = a.M32 - b.M32;
+            var m33 = a.M33 - b.M33;
+            var m34 = a.M34 - b.M34;
+
+            var m41 = a.M41 - b.M41;
+            var m42 = a.M42 - b.M42;
+            var m43 = a.M43 - b.M43;
+            var m44 = a.M44 - b.M44;
+
+            return new Matrix(
+                m11, m12, m13, m14,
+                m21, m22, m23, m24,
+                m31, m32, m33, m34,
+                m41, m42, m43, m44);
+        }
+
+        public static void Transpose(Matrix a, out Matrix result)
+        {
+            result = Transpose(a);
+        }
+
+        public static Matrix Transpose(Matrix a)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Matrix operator -(Matrix a) =>
+            Matrix.Negate(a);
+
+        public static Matrix operator +(Matrix a, Matrix b) =>
+            Matrix.Add(a, b);
+
+        public static Matrix operator -(Matrix a, Matrix b) =>
+            Matrix.Subtract(a, b);
+
+        public static Matrix operator *(Matrix a, Matrix b) =>
+            Matrix.Multiply(a, b);
+
+        public static Matrix operator *(Matrix a, float s) =>
+            Matrix.Multiply(a, s);
+
+        public static Matrix operator /(Matrix a, Matrix b) =>
+            Matrix.Divide(a, b);
+
+        public static Matrix operator /(Matrix a, float s) =>
+            Matrix.Divide(a, s);
+
+        public static bool operator ==(Matrix a, Matrix b) =>
+            a.Equals(b);
+
+        public static bool operator !=(Matrix a, Matrix b) =>
+            !a.Equals(b);
+
+        public float Determinant() => throw new NotImplementedException();
+
+        public bool Equals(Matrix other) =>
+            this.M11 == other.M11 &&
+            this.M12 == other.M12 &&
+            this.M13 == other.M13 &&
+            this.M14 == other.M14 &&
+            this.M21 == other.M21 &&
+            this.M22 == other.M22 &&
+            this.M23 == other.M23 &&
+            this.M24 == other.M24 &&
+            this.M31 == other.M31 &&
+            this.M32 == other.M32 &&
+            this.M33 == other.M33 &&
+            this.M34 == other.M34 &&
+            this.M41 == other.M41 &&
+            this.M42 == other.M42 &&
+            this.M43 == other.M43 &&
+            this.M44 == other.M44;
+
         public override bool Equals(object obj)
         {
-            if(obj.GetType() != typeof(Matrix))
+            if (obj.GetType() != typeof(Matrix))
             {
                 return false;
             }
@@ -180,23 +377,5 @@ namespace Pixie
             h ^= this.M44.GetHashCode();
             return h;
         }
-
-        public bool Equals(Matrix other) =>
-            this.M11 == other.M11 &&
-            this.M12 == other.M12 &&
-            this.M13 == other.M13 &&
-            this.M14 == other.M14 &&
-            this.M21 == other.M21 &&
-            this.M22 == other.M22 &&
-            this.M23 == other.M23 &&
-            this.M24 == other.M24 &&
-            this.M31 == other.M31 &&
-            this.M32 == other.M32 &&
-            this.M33 == other.M33 &&
-            this.M34 == other.M34 &&
-            this.M41 == other.M41 &&
-            this.M42 == other.M42 &&
-            this.M43 == other.M43 &&
-            this.M44 == other.M44;
     }
 }
