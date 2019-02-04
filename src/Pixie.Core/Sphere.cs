@@ -4,12 +4,34 @@ namespace Pixie.Core
 
     public class Sphere : IShape
     {
+        private Float4x4 transform = Float4x4.Identity;
+        private Float4x4 inv = Float4x4.Identity;
+
         public Sphere()
         {
-            this.Transform = Float4x4.Identity;
         }
 
-        public Float4x4 Transform { get; set; }
+        public Float4x4 Transform
+        {
+            get => this.transform;
+            set 
+            {
+                this.inv = value.Inverse();
+                this.transform = value;
+            }
+        }
+
+        public Float4x4 Inverse => this.inv;
+
+        public Float4 NormalAt(Float4 point)
+        {
+            var objectPoint = this.inv * point;
+            var objectNormal = objectPoint - Float4.Zero;
+            var worldNormal = this.inv.Transpose() * objectNormal;
+            worldNormal.W = 0f; // hacky fix
+            return worldNormal.Normalize();
+        }
+            
 
         public IntersectionList Intersect(Ray ray)
         {

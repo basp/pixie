@@ -4,10 +4,13 @@
 
     public struct Float4
     {
-        public readonly float X;
-        public readonly float Y;
-        public readonly float Z;
-        public readonly float W;
+        public static Float4 Zero =>
+            new Float4(0, 0, 0, 0);
+
+        public float X;
+        public float Y;
+        public float Z;
+        public float W;
 
         public Float4(float v)
         {
