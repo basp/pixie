@@ -2,6 +2,7 @@ namespace Pixie.Core
 {
     using System;
     using System.Linq;
+    using System.Runtime.CompilerServices;
 
     public struct Float3x3
     {

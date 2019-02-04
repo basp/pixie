@@ -68,21 +68,15 @@
                 a.Z / s,
                 a.W / s);
 
-        public override string ToString() =>
-            $"({this.X}, {this.Y}, {this.Z}, {this.W})";
-    }
-
-    public static class Float4Extensions
-    {
-        public static float MagnitudeSquared(this Float4 a) =>
+        public static float MagnitudeSquared(Float4 a) =>
             a.X * a.X + a.Y * a.Y + a.Z * a.Z + a.W * a.W;
 
-        public static float Magnitude(this Float4 a) =>
-            (float)Math.Sqrt(a.MagnitudeSquared());
+        public static float Magnitude(Float4 a) =>
+            (float)Math.Sqrt(Float4.MagnitudeSquared(a));
 
-        public static Float4 Normalize(this Float4 a)
+        public static Float4 Normalize(Float4 a)
         {
-            var mag = a.Magnitude();
+            var mag = Float4.Magnitude(a);
             return new Float4(
                 a.X / mag,
                 a.Y / mag,
@@ -90,14 +84,24 @@
                 a.W / mag);
         }
 
-        public static float Dot(this Float4 a, Float4 b) =>
+        public static float Dot(Float4 a, Float4 b) =>
             a.X * b.X + a.Y * b.Y + a.Z * b.Z + a.W * b.W;
 
-
-        public static Float4 Cross(this Float4 a, Float4 b) =>
+        public static Float4 Cross(Float4 a, Float4 b) =>
             Float4.Vector(
                 a.Y * b.Z - a.Z * b.Y,
                 a.Z * b.X - a.X * b.Z,
                 a.X * b.Y - a.Y * b.X);
+
+        public float Magnitude() => Float4.Magnitude(this);
+
+        public Float4 Normalize() => Float4.Normalize(this);
+
+        public float Dot(Float4 v) => Float4.Dot(this, v);
+
+        public Float4 Cross(Float4 v) => Float4.Cross(this, v);
+
+        public override string ToString() =>
+            $"({this.X}, {this.Y}, {this.Z}, {this.W})";
     }
 }
