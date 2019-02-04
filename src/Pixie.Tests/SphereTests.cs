@@ -192,5 +192,27 @@ namespace Pixie.Tests
             var comparer = new ApproxFloat4EqualityComparer(eps);
             Assert.Equal(expected, n, comparer);
         }
+
+        [Fact]
+        public void TestSphereDefaultMaterial()
+        {
+            var s = new Sphere();
+            var @default = Material.Default();
+            const int prec = 15;
+            Assert.Equal(@default.Ambient, s.Material.Ambient, prec);
+            Assert.Equal(@default.Diffuse, s.Material.Diffuse, prec);
+            Assert.Equal(@default.Specular, s.Material.Specular, prec);
+            Assert.Equal(@default.Shininess, s.Material.Shininess, prec);
+        }
+
+        [Fact]
+        public void TestSphereMaybeAssignedMaterial()
+        {
+            var s = new Sphere();
+            var m = s.Material;
+            m.Ambient = 1;
+            s.Material = m;
+            Assert.Equal(m, s.Material);
+        }
     }
 }

@@ -4,6 +4,12 @@ namespace Pixie.Core
 
     public struct Color
     {
+        public static Color White =>
+            new Color(1, 1, 1);
+
+        public static Color Black =>
+            new Color(0, 0, 0);
+
         public readonly float R;
         public readonly float G;
         public readonly float B;

@@ -9,7 +9,10 @@ namespace Pixie.Core
 
         public Sphere()
         {
+            this.Material = Material.Default();
         }
+
+        public Material Material { get; set; }
 
         public Float4x4 Transform
         {

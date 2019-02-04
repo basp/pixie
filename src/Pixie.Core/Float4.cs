@@ -96,6 +96,9 @@
                 a.Z * b.X - a.X * b.Z,
                 a.X * b.Y - a.Y * b.X);
 
+        public static Float4 Reflect(Float4 a, Float4 n) =>
+            a - n * 2 * Dot(a, n);
+
         public float Magnitude() => Float4.Magnitude(this);
 
         public Float4 Normalize() => Float4.Normalize(this);
@@ -103,6 +106,8 @@
         public float Dot(Float4 v) => Float4.Dot(this, v);
 
         public Float4 Cross(Float4 v) => Float4.Cross(this, v);
+
+        public Float4 Reflect(Float4 n) => Float4.Reflect(this, n);
 
         public override string ToString() =>
             $"({this.X}, {this.Y}, {this.Z}, {this.W})";

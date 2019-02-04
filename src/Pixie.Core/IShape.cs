@@ -2,6 +2,8 @@ namespace Pixie.Core
 {
     public interface IShape
     {
+        Material Material { get; set; }
+
         Float4x4 Transform { get; set; }
 
         Float4x4 Inverse { get; }

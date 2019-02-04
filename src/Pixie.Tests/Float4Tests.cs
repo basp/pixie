@@ -154,5 +154,30 @@ namespace Pixie.Tests
             Assert.Equal(Float4.Vector(-1, 2, -1), a.Cross(b));
             Assert.Equal(Float4.Vector(1, -2, 1), b.Cross(a));
         }
+
+        [Fact]
+        public void TestReflectVectorApproachingAt45Degrees()
+        {
+            var v = Float4.Vector(1, -1, 0);
+            var n = Float4.Vector(0, 1, 0);
+            var r = v.Reflect(n);
+            var expected = Float4.Vector(1, 1, 0);
+            Assert.Equal(expected, r);
+        }
+
+        [Fact]
+        public void TestReflectOfSlantedSurface()
+        {
+            var v = Float4.Vector(0, -1, 0);
+            var n = Float4.Vector(
+                (float)Math.Sqrt(2)/2,
+                (float)Math.Sqrt(2)/2,
+                0);
+            var r = v.Reflect(n);
+            var expected = Float4.Vector(1, 0, 0);
+            const float eps = 0.0000001f;
+            var comparer = new ApproxFloat4EqualityComparer(eps);
+            Assert.Equal(expected, r, comparer);
+        }
     }
 }
