@@ -1,7 +1,9 @@
 namespace Pixie.Core
 {
-    public interface IShape 
+    public interface IShape
     {
-        Intersection[] Intersect(Ray ray);
+        Float4x4 Transform { get; set; }
+        
+        IntersectionList Intersect(Ray ray);
     }
 }

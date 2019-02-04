@@ -68,15 +68,11 @@ namespace Pixie.Core
                 a[1, 0] * b.X + a[1, 1] * b.Y + a[1, 2] * b.Z + a[1, 3] * b.W,
                 a[2, 0] * b.X + a[2, 1] * b.Y + a[2, 2] * b.Z + a[2, 3] * b.W,
                 a[3, 0] * b.X + a[3, 1] * b.Y + a[3, 2] * b.Z + a[3, 3] * b.W);
-        
 
-        public override string ToString() =>
-            $"({string.Join(", ", this.data)})";
-    }
+        public static Ray operator*(Float4x4 a, Ray r) =>
+            new Ray(a * r.Origin, a * r.Direction);
 
-    public static class Float4x4Extensions
-    {
-        public static Float4x4 Transpose(this Float4x4 a)
+        public static Float4x4 Transpose(Float4x4 a)
         {
             var m = new Float4x4(0);
             for(var i = 0; i < 4; i++)
@@ -90,6 +86,14 @@ namespace Pixie.Core
             return m;
         }
 
+        public Float4x4 Transpose() => Float4x4.Transpose(this);
+
+        public override string ToString() =>
+            $"({string.Join(", ", this.data)})";
+    }
+
+    public static class Float4x4Extensions
+    {
         public static Float3x3 Submatrix(this Float4x4 a, int dropRow, int dropCol)
         {
             var rows = Enumerable.Range(0, 4)

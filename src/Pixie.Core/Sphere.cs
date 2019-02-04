@@ -4,8 +4,17 @@ namespace Pixie.Core
 
     public class Sphere : IShape
     {
-        public Intersection[] Intersect(Ray ray)
+        public Sphere()
         {
+            this.Transform = Float4x4.Identity;
+        }
+
+        public Float4x4 Transform { get; set; }
+
+        public IntersectionList Intersect(Ray ray)
+        {
+            ray = this.Transform.Inverse() * ray;
+
             var sphereToRay = ray.Origin - Float4.Point(0, 0, 0);
 
             var a = Float4.Dot(ray.Direction, ray.Direction);
@@ -18,18 +27,20 @@ namespace Pixie.Core
             // and there are no intersections.
             if (discriminant < 0)
             {
-                return new Intersection[0];
+                return IntersectionList.Empty();
             }
 
             // Otherwise, we have two intersections which we can
             // solve for t using the quadratic formula.
             var t1 = (-b - (float)Math.Sqrt(discriminant)) / (2 * a);
             var t2 = (-b + (float)Math.Sqrt(discriminant)) / (2 * a);
-            return new[]
+            var xs = new[]
             {
                 new Intersection(t1, this),
                 new Intersection(t2, this),
             };
+
+            return IntersectionList.Create(xs);
         }
     }
 }

@@ -4,7 +4,6 @@ namespace Pixie.Core
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using Optional;
 
     public class IntersectionList : IReadOnlyList<Intersection>
     {
@@ -22,7 +21,10 @@ namespace Pixie.Core
 
         public int Count => this.xs.Count;
 
-        public bool IsReadOnly => this.xs.IsReadOnly;
+        public bool IsReadOnly => true;
+
+        public static IntersectionList Empty() =>
+            new IntersectionList(new Intersection[0]);
 
         public static IntersectionList Create(params Intersection[] intersections)
         {
