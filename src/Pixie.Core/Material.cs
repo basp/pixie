@@ -2,7 +2,7 @@ namespace Pixie.Core
 {
     using System;
 
-    public struct Material : IMaterial
+    public class Material : IMaterial, IEquatable<Material>
     {
         public float Ambient;
         public float Diffuse;
@@ -10,15 +10,21 @@ namespace Pixie.Core
         public float Shininess;
         public Color Color;
 
-        public static Material Default() =>
-            new Material
-            {
-                Ambient = 0.1f,
-                Diffuse = 0.9f,
-                Specular = 0.9f,
-                Shininess = 200.0f,
-                Color = Color.White,
-            };
+        public Material()
+        {
+            this.Ambient = 0.1f;
+            this.Diffuse = 0.9f;
+            this.Specular = 0.9f;
+            this.Shininess = 200.0f;
+            this.Color = Color.White;
+        }
+
+        public bool Equals(Material other) =>
+            this.Ambient == other.Ambient &&
+            this.Diffuse == other.Diffuse &&
+            this.Specular == other.Specular &&
+            this.Shininess == other.Shininess &&
+            this.Color.Equals(other.Color);
 
         public Color Li(
             PointLight light, 

@@ -197,7 +197,7 @@ namespace Pixie.Tests
         public void TestSphereDefaultMaterial()
         {
             var s = new Sphere();
-            var @default = Material.Default();
+            var @default = new Material();
             const int prec = 15;
             Assert.Equal(@default.Ambient, s.Material.Ambient, prec);
             Assert.Equal(@default.Diffuse, s.Material.Diffuse, prec);

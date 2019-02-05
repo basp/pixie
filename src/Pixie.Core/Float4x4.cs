@@ -1,8 +1,9 @@
-using System.Linq;
-
 namespace Pixie.Core
 {
-    public struct Float4x4
+    using System;
+    using System.Linq;
+
+    public struct Float4x4 : IEquatable<Float4x4>
     {
         public static Float4x4 Identity =>
             new Float4x4(
@@ -90,6 +91,22 @@ namespace Pixie.Core
 
         public override string ToString() =>
             $"({string.Join(", ", this.data)})";
+
+        public bool Equals(Float4x4 other)
+        {
+            for(var i = 0; i < 4; i++)
+            {
+                for(var j = 0; j < 4; j++)
+                {
+                    if(this[i, j] != other[i, j])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
     }
 
     public static class Float4x4Extensions

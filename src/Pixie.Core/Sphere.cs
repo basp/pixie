@@ -2,14 +2,14 @@ namespace Pixie.Core
 {
     using System;
 
-    public class Sphere : IShape
+    public class Sphere : IShape, IEquatable<Sphere>
     {
         private Float4x4 transform = Float4x4.Identity;
         private Float4x4 inv = Float4x4.Identity;
 
         public Sphere()
         {
-            this.Material = Material.Default();
+            this.Material = new Material();
         }
 
         public Material Material { get; set; }
@@ -34,7 +34,6 @@ namespace Pixie.Core
             worldNormal.W = 0f; // hacky fix
             return worldNormal.Normalize();
         }
-            
 
         public IntersectionList Intersect(Ray ray)
         {
@@ -67,5 +66,10 @@ namespace Pixie.Core
 
             return IntersectionList.Create(xs);
         }
+
+        public bool Equals(Sphere other) =>
+            this.Material.Equals(other.Material) &&
+            this.transform.Equals(other.transform) &&
+            this.inv.Equals(other.inv);
     }
 }

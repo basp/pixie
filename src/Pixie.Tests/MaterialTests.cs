@@ -11,7 +11,7 @@ namespace Pixie.Tests
 
         public MaterialTests()
         {
-            this.m = Material.Default();
+            this.m = new Material();
             this.position = Float4.Point(0, 0, 0);
         }
 
@@ -20,7 +20,7 @@ namespace Pixie.Tests
         public void TestDefaultMaterial()
         {
             const int prec = 15;
-            var m = Material.Default();
+            var m = new Material();
             Assert.Equal(0.1f, m.Ambient, prec);
             Assert.Equal(0.9f, m.Diffuse, prec);
             Assert.Equal(0.9f, m.Specular, prec);
@@ -77,7 +77,7 @@ namespace Pixie.Tests
                 Float4.Point(0, 10, -10),
                 Color.White);
             var result = m.Li(light, position, eyev, normalv);
-            var expected = new Color(1.6364f, 1.6364f, 1.6364f)
+            var expected = new Color(1.6364f, 1.6364f, 1.6364f);
             // Reallyl low precision on this one.
             const float eps = 0.0001f;
             var comparer = new ApproxColorEqualityComparer(eps);

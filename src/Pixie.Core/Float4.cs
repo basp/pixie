@@ -2,7 +2,7 @@
 {
     using System;
 
-    public struct Float4
+    public struct Float4 : IEquatable<Float4>
     {
         public static Float4 Zero =>
             new Float4(0, 0, 0, 0);
@@ -111,5 +111,11 @@
 
         public override string ToString() =>
             $"({this.X}, {this.Y}, {this.Z}, {this.W})";
+
+        public bool Equals(Float4 other) =>
+            this.X == other.X &&
+            this.Y == other.Y &&
+            this.Z == other.Z &&
+            this.W == other.W;
     }
 }
