@@ -18,11 +18,14 @@ namespace Pixie.Core
 
         public Color Shade(Computations comps)
         {
+            var light = this.Lights[0];
+            var shadow = IsShadowed(comps.OverPoint, light);
             return comps.Object.Material.Li(
-                this.Lights[0],
-                comps.Point,
+                light,
+                comps.OverPoint,
                 comps.Eyev,
-                comps.Normalv);
+                comps.Normalv,
+                shadow);
         }
 
         public Color ColorAt(Ray ray)
@@ -36,34 +39,20 @@ namespace Pixie.Core
 
             return Color.Black;
         }
-    }
 
-    public class DefaultWorld : World
-    {
-        public DefaultWorld()
+        public bool IsShadowed(Float4 point, PointLight light)
         {
-            var s1 = new Sphere
+            var v = light.Position - point;
+            var distance = v.Magnitude();
+            var direction = v.Normalize();
+            var r = new Ray(point, direction);
+            var xs = this.Intersect(r);
+            if (xs.TryGetHit(out var i))
             {
-                Material = new Material
-                {
-                    Color = new Color(0.8f, 1.0f, 0.6f),
-                    Diffuse = 0.7f,
-                    Specular = 0.2f,
-                },
-            };
+                return i.T < distance;
+            }
 
-            var s2 = new Sphere
-            {
-                Transform = Transform.Scale(0.5f, 0.5f, 0.5f),
-            };
-
-            var light = new PointLight(
-                Float4.Point(-10, 10, -10),
-                Color.White);
-
-            this.Objects.Add(s1);
-            this.Objects.Add(s2);
-            this.Lights.Add(light);
+            return false;
         }
     }
 }

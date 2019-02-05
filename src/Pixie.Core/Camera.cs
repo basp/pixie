@@ -44,6 +44,9 @@ namespace Pixie.Core
 
         public Float4x4 Transform { get; set; } = Float4x4.Identity;
 
+        public IProgressMonitor ProgressMonitor { get; set; } =
+            new ProgressMonitor();
+
         public Ray RayForPixel(int px, int py)
         {
             var xOffset = (px + 0.5f) * this.pixelSize;
@@ -63,15 +66,21 @@ namespace Pixie.Core
 
         public Canvas Render(World w)
         {
+            this.ProgressMonitor.OnStarted();
             var img = new Canvas(this.hsize, this.vsize);
             for (var y = 0; y < this.vsize - 1; y++)
             {
-                for(var x = 0; x < this.hsize - 1;x++)
+                this.ProgressMonitor.OnRowStarted(y);
+                for (var x = 0; x < this.hsize - 1; x++)
                 {
+                    this.ProgressMonitor.OnPixelStarted(y, x);
                     var ray = this.RayForPixel(x, y);
                     var color = w.ColorAt(ray);
                     img[x, y] = color;
+                    this.ProgressMonitor.OnPixelFinished(y, x);
                 }
+
+                this.ProgressMonitor.OnRowFinished(y);
             }
 
             return img;

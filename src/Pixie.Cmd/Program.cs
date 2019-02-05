@@ -76,18 +76,6 @@
                 },
             };
 
-            var light = new PointLight(
-                Float4.Point(-10, 10, -10),
-                Color.White);
-
-            var camera = new Camera(200, 100, (float)Math.PI / 3)
-            {
-                Transform = Transform.View(
-                    Float4.Point(0, 1.5f, -5),
-                    Float4.Point(0, 1, 0),
-                    Float4.Vector(0, 1, 0)),
-            };
-
             var objects = new List<IShape>
             {
                 floor, 
@@ -96,6 +84,23 @@
                 left, 
                 middle, 
                 right,
+            };
+
+            var light = new PointLight(
+                Float4.Point(-10, 10, -10),
+                Color.White);
+
+            const int width = 400;
+            const int height = 200;
+
+            var camera = new Camera(width, height, (float)Math.PI / 3)
+            {
+                Transform = Transform.View(
+                    Float4.Point(0, 1.5f, -5),
+                    Float4.Point(0, 1, 0),
+                    Float4.Vector(0, 1, 0)),
+
+                ProgressMonitor = new ConsoleProgressMonitor(height),
             };
 
             var world = new World();

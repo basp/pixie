@@ -27,10 +27,11 @@ namespace Pixie.Core
             this.Color.Equals(other.Color);
 
         public Color Li(
-            PointLight light, 
-            Float4 point, 
-            Float4 eyev, 
-            Float4 normalv)
+            PointLight light,
+            Float4 point,
+            Float4 eyev,
+            Float4 normalv,
+            bool shadow = false)
         {
             Color ambient, diffuse, specular;
 
@@ -39,8 +40,13 @@ namespace Pixie.Core
             var lightDotNormal = Float4.Dot(lightv, normalv);
 
             ambient = effectiveColor * this.Ambient;
-            
-            if(lightDotNormal < 0)
+
+            if (shadow)
+            {
+                return ambient;
+            }
+
+            if (lightDotNormal < 0)
             {
                 diffuse = Color.Black;
                 specular = Color.Black;

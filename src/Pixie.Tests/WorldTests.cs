@@ -115,5 +115,31 @@ namespace Pixie.Tests
             var comparer = Color.GetEqualityComparer(eps);
             Assert.Equal(inner.Material.Color, c, comparer);
         }
+
+        [Fact]
+        public void ShadeIntersectionInShadow()
+        {
+            var w = new World();
+            w.Lights.Add(
+                new PointLight(
+                    Float4.Point(0, 0, -10), 
+                    Color.White));
+            
+            var s1 = new Sphere();
+            var s2 = new Sphere()
+            {
+                Transform = Transform.Translate(0, 0, 10),
+            };
+
+            w.Objects.Add(s1);
+            w.Objects.Add(s2);
+
+            var r = new Ray(Float4.Point(0, 0, 5), Float4.Vector(0, 0, 1));
+            var i = new Intersection(4, s2);
+            var comps = i.PrepareComputations(r);
+            var c = w.Shade(comps);
+            var expected = new Color(0.1f, 0.1f, 0.1f);
+            Assert.Equal(expected, c);
+        }
     }
 }

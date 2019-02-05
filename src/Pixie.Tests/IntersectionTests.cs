@@ -8,7 +8,7 @@ namespace Pixie.Tests
     public class IntersectionTests
     {
         [Fact]
-        public void TestIntersectionConstructor()
+        public void CreateIntersection()
         {
             var s = new Sphere();
             var i = new Intersection(3.5f, s);
@@ -17,7 +17,7 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestIntersectionList()
+        public void CreateIntersectionList()
         {
             var s = new Sphere();
             var i1 = new Intersection(1, s);
@@ -29,7 +29,7 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestHitWhenAllIntersectionsHavePositiveT()
+        public void HitWhenAllIntersectionsHavePositiveT()
         {
             var s = new Sphere();
             var i1 = new Intersection(1, s);
@@ -41,7 +41,7 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestHitWhenSomeIntersectionsHaveNegativeT()
+        public void HitWhenSomeIntersectionsHaveNegativeT()
         {
             var s = new Sphere();
             var i1 = new Intersection(-1, s);
@@ -53,7 +53,7 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestHitWhenAllIntersectionsHaveNegativeT()
+        public void HitWhenAllIntersectionsHaveNegativeT()
         {
             var s = new Sphere();
             var i1 = new Intersection(-2, s);
@@ -64,7 +64,7 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestHitIsAlwaysLowestNonNegativeIntersection()
+        public void HitIsAlwaysLowestNonNegativeIntersection()
         {
             var s = new Sphere();
             var i1 = new Intersection(5, s);
@@ -78,7 +78,7 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestPrecomputingIntersectionState()
+        public void PrecomputingIntersectionState()
         {
             var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
             var shape = new Sphere();
@@ -91,7 +91,7 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestHitWhenIntersectionOnOutside()
+        public void HitWhenIntersectionOnOutside()
         {
             var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
             var shape = new Sphere();
@@ -101,7 +101,7 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestHitWhenIntersectionOnInside()
+        public void HitWhenIntersectionOnInside()
         {
             var r = new Ray(Float4.Point(0, 0, 0), Float4.Vector(0, 0, 1));
             var shape = new Sphere();
@@ -111,6 +111,21 @@ namespace Pixie.Tests
             Assert.Equal(Float4.Vector(0, 0, -1), comps.Eyev);
             Assert.Equal(Float4.Vector(0, 0, -1), comps.Normalv);
             Assert.True(comps.Inside);
+        }
+
+        [Fact]
+        public void HitShouldOffsetThePoint()
+        {
+            var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
+            var shape = new Sphere
+            {
+                Transform = Transform.Translate(0, 0, 1),
+            };
+
+            var i = new Intersection(5, shape);
+            var comps = i.PrepareComputations(r);
+            Assert.True(comps.OverPoint.Z < (-Intersection.Epsilon / 2));
+            Assert.True(comps.Point.Z > comps.OverPoint.Z);
         }
     }
 }

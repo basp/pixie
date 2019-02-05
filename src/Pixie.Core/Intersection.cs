@@ -2,6 +2,8 @@ namespace Pixie.Core
 {
     public struct Intersection
     {
+        public const float Epsilon = 0.005f;
+
         public readonly float T;
 
         public readonly IShape Object;
@@ -27,11 +29,14 @@ namespace Pixie.Core
                 normalv = -normalv;
             }
 
+            var overPoint = point + normalv * Epsilon; 
+
             return new Computations
             {
                 T = t,
                 Object = obj,
                 Point = point,
+                OverPoint = overPoint,
                 Eyev = eyev,
                 Normalv = normalv,
                 Inside = inside,
