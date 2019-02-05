@@ -3,101 +3,48 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using Humanizer;
     using Pixie.Core;
 
     class Program
     {
         static void Main(string[] args)
         {
-            var floor = new Sphere
+            var s1 = new Sphere
             {
-                Transform = Transform.Scale(10, 0.01f, 10),
                 Material = new Material
                 {
-                    Color = new Color(1, 0.9f, 0.9f),
-                    Specular = 0,
+                    Color = new Color(0.1f, 0.5f, 0.7f),
+                    Ambient = 0,
                 },
             };
 
-            var leftWall = new Sphere
+            var s2 = new Sphere
             {
-                Transform =
-                    Transform.Translate(0, 0, 5) *
-                    Transform.RotateY(-(float)Math.PI / 4) *
-                    Transform.RotateX((float)Math.PI / 2) *
-                    Transform.Scale(10, 0.01f, 10),
-                Material = floor.Material,
-            };
-
-            var rightWall = new Sphere
-            {
-                Transform =
-                    Transform.Translate(0, 0, 5) *
-                    Transform.RotateY((float)Math.PI / 4) *
-                    Transform.RotateX((float)Math.PI / 2) *
-                    Transform.Scale(10, 0.01f, 10),
-                Material = floor.Material,
-            };
-
-            var middle = new Sphere
-            {
-                Transform = Transform.Translate(-0.5f, 1, 0.5f),
-                Material = new Material
-                {
-                    Color = new Color(0.1f, 1, 0.5f),
-                    Diffuse = 0.7f,
-                    Specular = 0.3f,
-                },
-            };
-
-            var right = new Sphere
-            {
-                Transform =
-                    Transform.Translate(1.5f, 0.5f, -0.5f) *
+                Transform = 
+                    Transform.Translate(0.065f, 0, -4.2f) *
                     Transform.Scale(0.5f, 0.5f, 0.5f),
-                Material = new Material
-                {
-                    Color = new Color(0.5f, 1, 0.1f),
-                    Diffuse = 0.7f,
-                    Specular = 0.3f,
-                },
             };
 
-            var left = new Sphere
+            var s3 = new Sphere
             {
                 Transform =
-                    Transform.Translate(-1.5f, 0.33f, -0.75f) *
-                    Transform.Scale(0.33f, 0.33f, 0.33f),
-                Material = new Material
-                {
-                    Color = new Color(1, 0.8f, 0.1f),
-                    Diffuse = 0.7f,
-                    Specular = 0.3f,
-                },
-            };
-
-            var objects = new List<IShape>
-            {
-                floor, 
-                leftWall, 
-                rightWall, 
-                left, 
-                middle, 
-                right,
+                    Transform.Translate(-0.4f, 0, -5.2f) *
+                    Transform.Scale(0.3f, 0.3f, 0.3f),
             };
 
             var light = new PointLight(
-                Float4.Point(-10, 10, -10),
+                Float4.Point(0, 0, -10),
                 Color.White);
 
             const int width = 400;
-            const int height = 200;
+            const int height = 400;
 
             var camera = new Camera(width, height, (float)Math.PI / 3)
             {
                 Transform = Transform.View(
-                    Float4.Point(0, 1.5f, -5),
-                    Float4.Point(0, 1, 0),
+                    Float4.Point(0, 0, -3),
+                    Float4.Point(0, 0, 0),
                     Float4.Vector(0, 1, 0)),
 
                 ProgressMonitor = new ConsoleProgressMonitor(height),
@@ -105,14 +52,14 @@
 
             var world = new World();
             world.Lights.Add(light);
-            world.Objects = objects;
+            world.Objects = new List<IShape> { s1, s2, s3 };
 
             var sw = new Stopwatch();
             sw.Start();
             var img = camera.Render(world);
             img.SavePpm(@"D:\temp\test.ppm");
             sw.Stop();
-            Console.WriteLine(sw.Elapsed.ToString());
+            Console.WriteLine($"Total: {sw.Elapsed.Humanize()}");
         }
     }
 }

@@ -2,6 +2,7 @@ namespace Pixie.Cmd
 {
     using System;
     using System.Diagnostics;
+    using Humanizer;
     using Pixie.Core;
 
     public class ConsoleProgressMonitor : ProgressMonitor
@@ -22,7 +23,7 @@ namespace Pixie.Cmd
         public override void OnRowFinished(int row)
         {
             this.sw.Stop();
-            Console.WriteLine($"{row++}/{rows} ({sw.Elapsed})");
+            Console.WriteLine($"{row++}/{rows} ({sw.Elapsed.Humanize()})");
             this.sw.Reset();
         }
     }

@@ -2,7 +2,7 @@ namespace Pixie.Core
 {
     public struct Intersection
     {
-        public const float Epsilon = 0.005f;
+        public const float Epsilon = 0.00001f;
 
         public readonly float T;
 
