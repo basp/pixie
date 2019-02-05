@@ -65,7 +65,7 @@ namespace Pixie.Tests
         {
             const float eps = 0.000000000001f;
             var s = new Sphere();
-            var comparer = new ApproxFloat4x4EqualityComparer(eps);
+            var comparer = Float4x4.GetEqualityComparer(eps);
             Assert.Equal(Float4x4.Identity, s.Transform, comparer);
         }
 
@@ -142,7 +142,7 @@ namespace Pixie.Tests
             var n = s.NormalAt(p);
             var expected = Float4.Vector(sqrt3over3, sqrt3over3, sqrt3over3);
             const float eps = 0.0000001f;
-            var comparer = new ApproxFloat4EqualityComparer(eps);
+            var comparer = Float4.GetEqualityComparer(eps);
             Assert.Equal(expected, n, comparer);
         }
 
@@ -156,7 +156,7 @@ namespace Pixie.Tests
                 (float)Math.Sqrt(3)/3);
             var n = s.NormalAt(p);
             const float eps = 0.0000001f;
-            var comparer = new ApproxFloat4EqualityComparer(eps);
+            var comparer = Float4.GetEqualityComparer(eps);
             Assert.Equal(n.Normalize(), n, comparer);
         }
 
@@ -172,7 +172,7 @@ namespace Pixie.Tests
             var n = s.NormalAt(p);
             var expected = Float4.Vector(0, 0.70711f, -0.70711f);
             const float eps = 0.00001f;
-            var comparer = new ApproxFloat4EqualityComparer(eps);
+            var comparer = Float4.GetEqualityComparer(eps);
             Assert.Equal(expected, n, comparer);
         }
 
@@ -189,7 +189,7 @@ namespace Pixie.Tests
             var n = s.NormalAt(p);
             var expected = Float4.Vector(0, 0.97014f, -0.24254f);
             const float eps = 0.00001f;
-            var comparer = new ApproxFloat4EqualityComparer(eps);
+            var comparer = Float4.GetEqualityComparer(eps);
             Assert.Equal(expected, n, comparer);
         }
 

@@ -58,8 +58,8 @@ namespace Pixie.Tests
             var comps = i.PrepareComputations(r);
             var c = w.Shade(comps);
             var expected = new Color(0.38066f, 0.47583f, 0.2855f);
-            const float epsilon = 0.00001f;
-            var comparer = new ApproxColorEqualityComparer(epsilon);
+            const float eps = 0.00001f;
+            var comparer = Color.GetEqualityComparer(eps);
             Assert.Equal(expected, c, comparer);
         }
 
@@ -75,8 +75,8 @@ namespace Pixie.Tests
             var comps = i.PrepareComputations(r);
             var c = w.Shade(comps);
             var expected = new Color(0.90498f, 0.90498f, 0.90498f);
-            const float epsilon = 0.00001f;
-            var comparer = new ApproxColorEqualityComparer(epsilon);
+            const float eps = 0.00001f;
+            var comparer = Color.GetEqualityComparer(eps);
             Assert.Equal(expected, c, comparer);
         }
 
@@ -96,8 +96,8 @@ namespace Pixie.Tests
             var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
             var c = w.ColorAt(r);
             var expected = new Color(0.38066f, 0.47583f, 0.2855f);
-            const float epsilon = 0.00001f;
-            var comparer = new ApproxColorEqualityComparer(epsilon);
+            const float eps = 0.00001f;
+            var comparer = Color.GetEqualityComparer(eps);
             Assert.Equal(expected, c, comparer);
         }
 
@@ -111,8 +111,8 @@ namespace Pixie.Tests
             inner.Material.Ambient = 1;
             var r = new Ray(Float4.Point(0, 0, 0.75f), Float4.Vector(0, 0, -1));
             var c = w.ColorAt(r);
-            const float epsilon = 0.00001f;
-            var comparer = new ApproxColorEqualityComparer(epsilon);
+            const float eps = 0.00001f;
+            var comparer = Color.GetEqualityComparer(eps);
             Assert.Equal(inner.Material.Color, c, comparer);
         }
     }

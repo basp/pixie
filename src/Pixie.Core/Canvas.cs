@@ -59,42 +59,4 @@ namespace Pixie.Core
                 Clamp((int)(c.G * 255), 0, 255),
                 Clamp((int)(c.B * 255), 0, 255));
     }
-
-    public static class CanvasExamples
-    {
-        public static Canvas Example1()
-        {
-            var eye = Float4.Point(0, 0, -5);
-            var wallZ = 10f;
-            var wallSize = 7.0f;
-            var nPixels = 100;
-            var pixelSize = wallSize / nPixels;
-            var half = wallSize / 2;
-            var canvas = new Canvas(nPixels, nPixels);
-            var color = new Color(1, 0, 0);
-            var s = new Sphere();
-            for (var y = 0; y < nPixels; y++)
-            {
-                var worldY = half - pixelSize * y;
-                for (var x = 0; x < nPixels; x++)
-                {
-                    var worldX = -half + pixelSize * x;
-                    var pos = Float4.Point(
-                        (float)worldX,
-                        (float)worldY,
-                        wallZ);
-
-                    var r = new Ray(eye, (pos - eye).Normalize());
-                    var xs = s.Intersect(r);
-
-                    if (xs.TryGetHit(out var i))
-                    {
-                        canvas[x, y] = color;
-                    }
-                }
-            }
-
-            return canvas;
-        }
-    }
 }

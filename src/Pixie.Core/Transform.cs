@@ -45,5 +45,20 @@ namespace Pixie.Core
                 yx, 1, yz, 0,
                 zx, zy, 1, 0,
                 0, 0, 0, 1);
+
+        public static Float4x4 View(Float4 from, Float4 to, Float4 up)
+        {
+            var forward = (to - from).Normalize();
+            var left = Float4.Cross(forward, up.Normalize());
+            var trueUp = Float4.Cross(left, forward);   
+            var orientation =         
+                new Float4x4(
+                    left.X, left.Y, left.Z, 0,
+                    trueUp.X, trueUp.Y, trueUp.Z, 0,
+                    -forward.X, -forward.Y, -forward.Z, 0,
+                    0, 0, 0, 1);
+
+            return orientation * Translate(-from.X, -from.Y, -from.Z);
+        }
     }
 }

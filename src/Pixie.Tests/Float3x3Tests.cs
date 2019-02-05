@@ -9,9 +9,6 @@ namespace Pixie.Tests
     {
         const float epsilon = 0.000000001f;
 
-        private static readonly IEqualityComparer<Float2x2> Float2x2Comparer =
-         new ApproxFloat2x2EqualityComparer(epsilon);
-
         [Fact]
         public void TestSubmatrix()
         {
@@ -24,7 +21,8 @@ namespace Pixie.Tests
                 -3, 2, 
                 0, 6);
 
-            Assert.Equal(expected, a.Submatrix(0, 2), Float2x2Comparer);
+            var comparer = Float2x2.GetEqualityComparer(epsilon);
+            Assert.Equal(expected, a.Submatrix(0, 2), comparer);
         }
 
         [Fact]

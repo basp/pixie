@@ -9,12 +9,6 @@ namespace Pixie.Tests
     {
         const float epsilon = 0.000000001f;
 
-        static readonly IEqualityComparer<Float4x4> Float4x4Comparer =
-            new ApproxFloat4x4EqualityComparer(epsilon);
-
-        static readonly IEqualityComparer<Float3x3> Float3x3Comparer =
-            new ApproxFloat3x3EqualityComparer(epsilon);
-
         [Fact]
         public void TestFloat4x4Construction()
         {
@@ -48,7 +42,8 @@ namespace Pixie.Tests
                 9, 8, 7, 6,
                 5, 4, 3, 2);
 
-            Assert.Equal(b, a, Float4x4Comparer);
+            var comparer = Float4x4.GetEqualityComparer(epsilon);
+            Assert.Equal(b, a, comparer);
         }
 
         [Fact]
@@ -66,7 +61,8 @@ namespace Pixie.Tests
                 8, 7, 6, 5,
                 4, 3, 2, 1);
 
-            Assert.NotEqual(b, a, Float4x4Comparer);
+            var comparer = Float4x4.GetEqualityComparer(epsilon);
+            Assert.NotEqual(b, a, comparer);
         }
 
         [Fact]
@@ -90,7 +86,8 @@ namespace Pixie.Tests
                 40, 58, 110, 102,
                 16, 26, 46, 42);
 
-            Assert.Equal(expected, a * b, Float4x4Comparer);
+            var comparer = Float4x4.GetEqualityComparer(epsilon);
+            Assert.Equal(expected, a * b, comparer);
         }
 
         [Fact]
@@ -105,7 +102,7 @@ namespace Pixie.Tests
             var t = new Float4(1, 2, 3, 1);
 
             var expected = new Float4(18, 24, 33, 1);
-            var comparer = new ApproxFloat4EqualityComparer(epsilon);
+            var comparer = Float4.GetEqualityComparer(epsilon);
             Assert.Equal(expected, a * t, comparer);
         }
 
@@ -118,14 +115,15 @@ namespace Pixie.Tests
                 2, 4, 8, 16,
                 4, 8, 16, 32);
 
-            Assert.Equal(a, a * Float4x4.Identity, Float4x4Comparer);
+            var comparer = Float4x4.GetEqualityComparer(epsilon);
+            Assert.Equal(a, a * Float4x4.Identity, comparer);
         }
 
         [Fact]
         public void TestMultiplyIdentityMatrixByTuple()
         {
             var t = new Float4(1, 2, 3, 4);
-            var comparer = new ApproxFloat4EqualityComparer(epsilon);
+            var comparer = Float4.GetEqualityComparer(epsilon);
             Assert.Equal(t, Float4x4.Identity * t, comparer);
         }
 
@@ -144,7 +142,8 @@ namespace Pixie.Tests
                 3, 0, 5, 5,
                 0, 8, 3, 8);
 
-            Assert.Equal(expected, m.Transpose(), Float4x4Comparer);
+            var comparer = Float4x4.GetEqualityComparer(epsilon);
+            Assert.Equal(expected, m.Transpose(), comparer);
         }
 
         [Fact]
@@ -161,7 +160,8 @@ namespace Pixie.Tests
                 -8, 8, 6,
                 -7, -1, 1);
 
-            Assert.Equal(expected, m.Submatrix(2, 1), Float3x3Comparer);
+            var comparer = Float3x3.GetEqualityComparer(epsilon);
+            Assert.Equal(expected, m.Submatrix(2, 1), comparer);
         }
 
 
@@ -228,7 +228,7 @@ namespace Pixie.Tests
             Assert.Equal(105, a.Cofactor(3, 2));
             Assert.Equal(105f / 532f, b[2, 3]);
 
-            var comparer = new ApproxFloat4x4EqualityComparer(0.00001f);
+            var comparer = Float4x4.GetEqualityComparer(0.00001f);
             Assert.Equal(expected, b, comparer);
         }
 
@@ -249,7 +249,7 @@ namespace Pixie.Tests
                 0.35897f, 0.35897f, 0.43590f, 0.92308f,
                 -0.69231f, -0.69231f, -0.76923f, -1.92308f);
 
-            var comparer = new ApproxFloat4x4EqualityComparer(0.00001f);
+            var comparer = Float4x4.GetEqualityComparer(0.00001f);
             Assert.Equal(expected, b, comparer);
         }
 
@@ -270,7 +270,7 @@ namespace Pixie.Tests
                 -0.02901f, -0.14630f, -0.10926f, 0.12963f,
                 0.17778f, 0.06667f, -0.26667f, 0.33333f);
 
-            var comparer = new ApproxFloat4x4EqualityComparer(0.00001f);
+            var comparer = Float4x4.GetEqualityComparer(0.00001f);
             Assert.Equal(expected, b, comparer);
         }
 
@@ -291,7 +291,7 @@ namespace Pixie.Tests
 
             var c = a * b;
 
-            var comparer = new ApproxFloat4x4EqualityComparer(0.00001f);
+            var comparer = Float4x4.GetEqualityComparer(0.00001f);
             Assert.Equal(a, c * b.Inverse(), comparer);
         }
     }

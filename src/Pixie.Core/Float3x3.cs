@@ -1,8 +1,8 @@
 namespace Pixie.Core
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices;
 
     public struct Float3x3
     {
@@ -10,7 +10,7 @@ namespace Pixie.Core
 
         public Float3x3(float v)
         {
-            this.data = new []
+            this.data = new[]
             {
                 v, v, v,
                 v, v, v,
@@ -22,7 +22,7 @@ namespace Pixie.Core
                         float m10, float m11, float m12,
                         float m20, float m21, float m22)
         {
-            this.data = new [] 
+            this.data = new[]
             {
                 m00, m01, m02,
                 m10, m11, m12,
@@ -35,6 +35,9 @@ namespace Pixie.Core
             get => this.data[row * 3 + col];
             set => this.data[row * 3 + col] = value;
         }
+
+        public static IEqualityComparer<Float3x3> GetEqualityComparer(float epsilon = 0.0f) =>
+            new ApproxFloat3x3EqualityComparer(epsilon);
     }
 
     public static class Float3x3Extensions
@@ -44,15 +47,15 @@ namespace Pixie.Core
             var rows = Enumerable.Range(0, 3)
                 .Where(x => x != dropRow)
                 .ToArray();
-            
+
             var cols = Enumerable.Range(0, 3)
                 .Where(x => x != dropCol)
                 .ToArray();
 
             var m = new Float2x2(0);
-            for(var i = 0; i < 2; i++)
+            for (var i = 0; i < 2; i++)
             {
-                for(var j = 0; j < 2; j++)
+                for (var j = 0; j < 2; j++)
                 {
                     m[i, j] = a[rows[i], cols[j]];
                 }
@@ -71,5 +74,37 @@ namespace Pixie.Core
             a[0, 0] * a.Cofactor(0, 0) +
             a[0, 1] * a.Cofactor(0, 1) +
             a[0, 2] * a.Cofactor(0, 2);
+    }
+
+    internal class ApproxFloat3x3EqualityComparer : ApproxEqualityComparer<Float3x3>
+    {
+        public ApproxFloat3x3EqualityComparer(float epsilon = 0.0f)
+            : base(epsilon)
+        {
+        }
+
+        public override bool Equals(Float3x3 x, Float3x3 y)
+        {
+            for (var j = 0; j < 3; j++)
+            {
+                for (var i = 0; i < 3; i++)
+                {
+                    if (!ApproxEqual(x[i, j], y[i, j]))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public override int GetHashCode(Float3x3 obj) =>
+            HashCode.Combine(
+                HashCode.Combine(
+                    obj[0, 0], obj[0, 1], obj[0, 2],
+                    obj[1, 0], obj[1, 1], obj[1, 2]),
+                HashCode.Combine(
+                    obj[2, 0], obj[2, 1], obj[2, 2]));
     }
 }

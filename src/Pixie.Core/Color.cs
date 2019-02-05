@@ -1,6 +1,7 @@
 namespace Pixie.Core
 {
     using System;
+    using System.Collections.Generic;
 
     public struct Color
     {
@@ -47,7 +48,26 @@ namespace Pixie.Core
                 c1.G * c2.G,
                 c1.B * c2.B);
 
+        public static IEqualityComparer<Color> GetEqualityComparer(float epsilon = 0.0f) =>
+            new ApproxColorEqualityComparer(epsilon);
+
         public override string ToString() =>
             $"({this.R}, {this.G}, {this.B})";
     }
+
+    internal class ApproxColorEqualityComparer : ApproxEqualityComparer<Color>
+    {
+        public ApproxColorEqualityComparer(float epsilon = 0.0f)
+            : base(epsilon)
+        {
+        }
+
+        public override bool Equals(Color x, Color y) =>
+            this.ApproxEqual(x.R, y.R) &&
+            this.ApproxEqual(x.G, y.G) &&
+            this.ApproxEqual(x.B, y.B);
+
+        public override int GetHashCode(Color obj) =>
+            HashCode.Combine(obj.R, obj.G, obj.B);
+    }    
 }

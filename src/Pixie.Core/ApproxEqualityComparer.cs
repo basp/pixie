@@ -3,7 +3,7 @@ namespace Pixie.Core
     using System;
     using System.Collections.Generic;
 
-    public abstract class ApproxEqualityComparer<T> : IEqualityComparer<T>
+    internal abstract class ApproxEqualityComparer<T> : IEqualityComparer<T>
     {
         private readonly float epsilon;
 

@@ -8,8 +8,10 @@ namespace Pixie.Tests
 
     public class ColorTests
     {
-        static IEqualityComparer<Color> Comparer =
-            new ApproxColorEqualityComparer(0.000001f);
+        const float epsilon = 0.000001f;
+
+        static readonly IEqualityComparer<Color> Comparer =
+            Color.GetEqualityComparer(epsilon);
 
         [Fact]
         public void TestAddColors()

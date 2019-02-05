@@ -77,7 +77,8 @@ namespace Pixie.Tests
             var fullQuarter = Transform.RotateX((float)Math.PI / 2);
             var halfExpected = Float4.Point(0, (float)Math.Sqrt(2) / 2, (float)Math.Sqrt(2) / 2);
             var fullExpected = Float4.Point(0, 0, 1);
-            var comparer = new ApproxFloat4EqualityComparer(0.0000001f);
+            const float eps = 0.0000001f;
+            var comparer = Float4.GetEqualityComparer(eps);
             Assert.Equal(halfExpected, halfQuarter * p, comparer);
             Assert.Equal(fullExpected, fullQuarter * p, comparer);
         }
@@ -88,7 +89,8 @@ namespace Pixie.Tests
             var p = Float4.Point(0, 1, 0);
             var halfQuarterInv = Transform.RotateX((float)Math.PI / 4).Inverse();
             var expected = Float4.Point(0, (float)Math.Sqrt(2) / 2, -(float)Math.Sqrt(2) / 2);
-            var comparer = new ApproxFloat4EqualityComparer(0.0000001f);
+            const float eps = 0.0000001f;
+            var comparer = Float4.GetEqualityComparer(eps);
             Assert.Equal(expected, halfQuarterInv * p, comparer);
         }
 
@@ -100,7 +102,8 @@ namespace Pixie.Tests
             var fullQuarter = Transform.RotateY((float)Math.PI / 2);
             var halfExpected = Float4.Point((float)Math.Sqrt(2) / 2, 0, (float)Math.Sqrt(2) / 2);
             var fullExpected = Float4.Point(1, 0, 0);
-            var comparer = new ApproxFloat4EqualityComparer(0.0000001f);
+            const float eps = 0.0000001f;
+            var comparer = Float4.GetEqualityComparer(eps);
             Assert.Equal(halfExpected, halfQuarter * p, comparer);
             Assert.Equal(fullExpected, fullQuarter * p, comparer);
         }
@@ -114,7 +117,8 @@ namespace Pixie.Tests
             var fullQuarter = Transform.RotateZ((float)Math.PI / 2);
             var halfExpected = Float4.Point(-(float)Math.Sqrt(2) / 2, (float)Math.Sqrt(2) / 2, 0);
             var fullExpected = Float4.Point(-1, 0, 0);
-            var comparer = new ApproxFloat4EqualityComparer(0.0000001f);
+            const float eps = 0.0000001f;
+            var comparer = Float4.GetEqualityComparer(eps);
             Assert.Equal(halfExpected, halfQuarter * p, comparer);
             Assert.Equal(fullExpected, fullQuarter * p, comparer);
         }
@@ -183,7 +187,8 @@ namespace Pixie.Tests
             var p2 = a * p1;
             var p3 = b * p2;
             var p4 = c * p3;
-            var comparer = new ApproxFloat4EqualityComparer(0.000001f);
+            const float eps = 0.000001f;
+            var comparer = Float4.GetEqualityComparer(eps);
             Assert.Equal(Float4.Point(1, -1, 0), p2, comparer);
             Assert.Equal(Float4.Point(5, -5, 0), p3, comparer);
             Assert.Equal(Float4.Point(15, 0, 7), p4, comparer);
@@ -200,8 +205,59 @@ namespace Pixie.Tests
             // Note that we can execute this with higher precision 
             // than if we would apply the transformations in sequence like
             // in the previous test case.
-            var comparer = new ApproxFloat4EqualityComparer(0.0000001f);
+            const float eps = 0.0000001f;
+            var comparer = Float4.GetEqualityComparer(eps);
             Assert.Equal(Float4.Point(15, 0, 7), t * p, comparer);
+        }
+
+        [Fact]
+        public void TestTransformationMatrixForDefaultOrientation()
+        {
+            var from = Float4.Point(0, 0, 0);
+            var to = Float4.Point(0, 0, -1);
+            var up = Float4.Vector(0, 1, 0);
+            var t = Transform.View(from, to, up);
+            Assert.Equal(Float4x4.Identity, t);
+        }
+
+        [Fact]
+        public void TestViewTransformLookingInPositiveZDirection()
+        {
+            var from = Float4.Point(0, 0, 0);
+            var to = Float4.Point(0, 0, 1);
+            var up = Float4.Vector(0, 1, 0);
+            var t = Transform.View(from, to, up);
+            var expected = Transform.Scale(-1, 1, -1);
+            Assert.Equal(expected, t);
+        }
+
+        [Fact]
+        public void TestViewTransformMovesTheWorld()
+        {
+            var from = Float4.Point(0, 0, 8);
+            var to = Float4.Point(0, 0, 0);
+            var up = Float4.Vector(0, 1, 0);
+            var t = Transform.View(from, to, up);
+            var expected = Transform.Translate(0, 0, -8);
+            Assert.Equal(expected, t);
+        }
+
+        [Fact]
+        public void TestAbitraryViewTransform()
+        {
+            var from = Float4.Point(1, 3, 2);
+            var to = Float4.Point(4, -2, 8);
+            var up = Float4.Vector(1, 1, 0);
+            var t = Transform.View(from, to, up);
+            var expected =
+                new Float4x4(
+                    -0.50709f, 0.50709f, 0.67612f, -2.36643f,
+                    0.76772f, 0.60609f, 0.12122f, -2.82843f,
+                    -0.35857f, 0.59761f, -0.71714f, 0.00000f,
+                    0.00000f, 0.00000f, 0.00000f, 1.00000f);
+            const float epsilon = 0.00001f;
+            var comparer = Float4x4.GetEqualityComparer(epsilon);
+            Assert.Equal(expected, t, comparer);
         }
     }
 }

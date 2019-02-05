@@ -176,7 +176,7 @@ namespace Pixie.Tests
             var r = v.Reflect(n);
             var expected = Float4.Vector(1, 0, 0);
             const float eps = 0.0000001f;
-            var comparer = new ApproxFloat4EqualityComparer(eps);
+            var comparer = Float4.GetEqualityComparer(eps);
             Assert.Equal(expected, r, comparer);
         }
     }

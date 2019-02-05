@@ -64,7 +64,7 @@ namespace Pixie.Tests
             var result = m.Li(light, position, eyev, normalv);
             var expected = new Color(0.7364f, 0.7364f, 0.7364f);
             const float eps = 0.00001f;
-            var comparer = new ApproxColorEqualityComparer(eps);
+            var comparer = Color.GetEqualityComparer(eps);
             Assert.Equal(expected, result, comparer);
         }
 
@@ -80,7 +80,7 @@ namespace Pixie.Tests
             var expected = new Color(1.6364f, 1.6364f, 1.6364f);
             // Reallyl low precision on this one.
             const float eps = 0.0001f;
-            var comparer = new ApproxColorEqualityComparer(eps);
+            var comparer = Color.GetEqualityComparer(eps);
             Assert.Equal(expected, result, comparer);
         }
 

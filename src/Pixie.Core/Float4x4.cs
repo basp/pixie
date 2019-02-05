@@ -1,6 +1,7 @@
 namespace Pixie.Core
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     public struct Float4x4 : IEquatable<Float4x4>
@@ -89,6 +90,9 @@ namespace Pixie.Core
 
         public Float4x4 Transpose() => Float4x4.Transpose(this);
 
+        public static IEqualityComparer<Float4x4> GetEqualityComparer(float epsilon = 0.0f) =>
+            new ApproxFloat4x4EqualityComparer(epsilon);
+
         public override string ToString() =>
             $"({string.Join(", ", this.data)})";
 
@@ -162,5 +166,38 @@ namespace Pixie.Core
 
             return m;
         }
+    }
+
+    internal class ApproxFloat4x4EqualityComparer : ApproxEqualityComparer<Float4x4>
+    {
+        public ApproxFloat4x4EqualityComparer(float epsilon = 0.0f)
+            : base(epsilon)
+        {
+        }
+
+        public override bool Equals(Float4x4 x, Float4x4 y)
+        {
+            for (var j = 0; j < 4; j++)
+            {
+                for (var i = 0; i < 4; i++)
+                {
+                    if (!ApproxEqual(x[i, j], y[i, j]))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public override int GetHashCode(Float4x4 obj) =>
+            HashCode.Combine(
+                HashCode.Combine(
+                    obj[0, 0], obj[0, 1], obj[0, 2], obj[0, 3],
+                    obj[1, 0], obj[1, 1], obj[1, 2], obj[1, 3]),
+                HashCode.Combine(
+                    obj[2, 0], obj[2, 1], obj[2, 2], obj[2, 3],
+                    obj[3, 0], obj[3, 1], obj[3, 2], obj[3, 3]));
     }
 }

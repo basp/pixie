@@ -1,6 +1,7 @@
 ﻿namespace Pixie.Core
 {
     using System;
+    using System.Collections.Generic;
 
     public struct Float4 : IEquatable<Float4>
     {
@@ -109,6 +110,9 @@
 
         public Float4 Reflect(Float4 n) => Float4.Reflect(this, n);
 
+        public static IEqualityComparer<Float4> GetEqualityComparer(float epsilon = 0.0f) =>
+            new ApproxFloat4EqualityComparer(epsilon);
+
         public override string ToString() =>
             $"({this.X}, {this.Y}, {this.Z}, {this.W})";
 
@@ -117,5 +121,22 @@
             this.Y == other.Y &&
             this.Z == other.Z &&
             this.W == other.W;
+    }
+
+    internal class ApproxFloat4EqualityComparer : ApproxEqualityComparer<Float4>
+    {
+        public ApproxFloat4EqualityComparer(float epsilon = 0.0f)
+            : base(epsilon)
+        {
+        }
+
+        public override bool Equals(Float4 a, Float4 b) =>
+            ApproxEqual(a.X, b.X) &&
+            ApproxEqual(a.Y, b.Y) &&
+            ApproxEqual(a.Z, b.Z) &&
+            ApproxEqual(a.W, b.W);
+
+        public override int GetHashCode(Float4 obj) =>
+            HashCode.Combine(obj.X, obj.Y, obj.Z, obj.W);
     }
 }
