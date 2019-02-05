@@ -1,6 +1,7 @@
 namespace Pixie.Core
 {
     using System;
+    using System.Threading.Tasks;
 
     public class Camera
     {
@@ -62,6 +63,25 @@ namespace Pixie.Core
             var direction = (pixel - origin).Normalize();
 
             return new Ray(origin, direction);
+        }
+
+        public Canvas ParallelRender(World w)
+        {
+            var img = new Canvas(this.hsize, this.vsize);
+            Parallel.For(0, this.vsize, y =>
+            {
+                this.ProgressMonitor.OnRowStarted(y);
+                for (var x = 0; x < this.hsize - 1; x++)
+                {
+                    var ray = this.RayForPixel(x, y);
+                    var color = w.ColorAt(ray);
+                    img[x, y] = color;
+                }
+
+                this.ProgressMonitor.OnRowFinished(y);
+            });
+
+            return img;
         }
 
         public Canvas Render(World w)

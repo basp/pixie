@@ -37,8 +37,8 @@
                 Float4.Point(0, 0, -10),
                 Color.White);
 
-            const int width = 400;
-            const int height = 400;
+            const int width = 3000;
+            const int height = 1600;
 
             var camera = new Camera(width, height, (float)Math.PI / 3)
             {
@@ -56,7 +56,7 @@
 
             var sw = new Stopwatch();
             sw.Start();
-            var img = camera.Render(world);
+            var img = camera.ParallelRender(world);
             img.SavePpm(@"D:\temp\test.ppm");
             sw.Stop();
             Console.WriteLine($"Total: {sw.Elapsed.Humanize()}");
