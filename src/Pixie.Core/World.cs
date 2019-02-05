@@ -18,14 +18,19 @@ namespace Pixie.Core
 
         public Color Shade(Computations comps)
         {
-            var light = this.Lights[0];
-            var shadow = IsShadowed(comps.OverPoint, light);
-            return comps.Object.Material.Li(
-                light,
-                comps.OverPoint,
-                comps.Eyev,
-                comps.Normalv,
-                shadow);
+            Color res = Color.Black;
+            foreach(var light in this.Lights)
+            {
+                var shadow = IsShadowed(comps.OverPoint, light);
+                res += comps.Object.Material.Li(
+                    light,
+                    comps.OverPoint,
+                    comps.Eyev,
+                    comps.Normalv,
+                    shadow);
+            }
+
+            return res;
         }
 
         public Color ColorAt(Ray ray)

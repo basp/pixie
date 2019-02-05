@@ -65,7 +65,7 @@ namespace Pixie.Core
             return new Ray(origin, direction);
         }
 
-        public Canvas ParallelRender(World w)
+        public Canvas Render(World w)
         {
             var img = new Canvas(this.hsize, this.vsize);
             Parallel.For(0, this.vsize, y =>
@@ -80,28 +80,6 @@ namespace Pixie.Core
 
                 this.ProgressMonitor.OnRowFinished(y);
             });
-
-            return img;
-        }
-
-        public Canvas Render(World w)
-        {
-            this.ProgressMonitor.OnStarted();
-            var img = new Canvas(this.hsize, this.vsize);
-            for (var y = 0; y < this.vsize - 1; y++)
-            {
-                this.ProgressMonitor.OnRowStarted(y);
-                for (var x = 0; x < this.hsize - 1; x++)
-                {
-                    this.ProgressMonitor.OnPixelStarted(y, x);
-                    var ray = this.RayForPixel(x, y);
-                    var color = w.ColorAt(ray);
-                    img[x, y] = color;
-                    this.ProgressMonitor.OnPixelFinished(y, x);
-                }
-
-                this.ProgressMonitor.OnRowFinished(y);
-            }
 
             return img;
         }
