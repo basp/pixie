@@ -6,24 +6,20 @@ namespace Pixie.Core
 
     public class World
     {
-        private readonly IList<PointLight> lights = new List<PointLight>();
+        public IList<PointLight> Lights { get; set; } = new List<PointLight>();
 
-        private readonly IList<IShape> objects = new List<IShape>();
-
-        public IList<PointLight> Lights => this.lights;
-
-        public IList<IShape> Objects => this.objects;
+        public IList<IShape> Objects { get; set; } = new List<IShape>();
 
         public IntersectionList Intersect(Ray ray)
         {
-            var xs = this.objects.SelectMany(x => x.Intersect(ray));
+            var xs = this.Objects.SelectMany(x => x.Intersect(ray));
             return IntersectionList.Create(xs.ToArray());
         }
 
         public Color Shade(Computations comps)
         {
             return comps.Object.Material.Li(
-                this.lights[0],
+                this.Lights[0],
                 comps.Point,
                 comps.Eyev,
                 comps.Normalv);
