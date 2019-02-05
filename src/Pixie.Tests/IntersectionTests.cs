@@ -76,5 +76,41 @@ namespace Pixie.Tests
             Assert.True(hit);
             Assert.Equal(i4, i);
         }
+
+        [Fact]
+        public void TestPrecomputingIntersectionState()
+        {
+            var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
+            var shape = new Sphere();
+            var i = new Intersection(4, shape);
+            var comps = i.PrepareComputations(r);
+            Assert.Equal(i.T, comps.T);
+            Assert.Equal(Float4.Point(0, 0, -1), comps.Point);
+            Assert.Equal(Float4.Vector(0, 0, -1), comps.Eyev);
+            Assert.Equal(Float4.Vector(0, 0, -1), comps.Normalv);
+        }
+
+        [Fact]
+        public void TestHitWhenIntersectionOnOutside()
+        {
+            var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
+            var shape = new Sphere();
+            var i = new Intersection(4, shape);
+            var comps = i.PrepareComputations(r);
+            Assert.False(comps.Inside);
+        }
+
+        [Fact]
+        public void TestHitWhenIntersectionOnInside()
+        {
+            var r = new Ray(Float4.Point(0, 0, 0), Float4.Vector(0, 0, 1));
+            var shape = new Sphere();
+            var i = new Intersection(1, shape);
+            var comps = i.PrepareComputations(r);
+            Assert.Equal(Float4.Point(0, 0, 1), comps.Point);
+            Assert.Equal(Float4.Vector(0, 0, -1), comps.Eyev);
+            Assert.Equal(Float4.Vector(0, 0, -1), comps.Normalv);
+            Assert.True(comps.Inside);
+        }
     }
 }

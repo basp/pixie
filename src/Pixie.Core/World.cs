@@ -19,6 +19,15 @@ namespace Pixie.Core
             var xs = this.objects.SelectMany(x => x.Intersect(ray));
             return IntersectionList.Create(xs.ToArray());
         }
+
+        public Color Shade(Computations comps)
+        {
+            return comps.Object.Material.Li(
+                this.lights[0], 
+                comps.Point, 
+                comps.Eyev, 
+                comps.Normalv);
+        }
     }
 
     public class DefaultWorld : World
