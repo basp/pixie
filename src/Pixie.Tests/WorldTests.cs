@@ -79,5 +79,41 @@ namespace Pixie.Tests
             var comparer = new ApproxColorEqualityComparer(epsilon);
             Assert.Equal(expected, c, comparer);
         }
+
+        [Fact]
+        public void TestColorWhenRayMisses()
+        {
+            var w = new DefaultWorld();
+            var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 1, 0));
+            var c = w.ColorAt(r);
+            Assert.Equal(Color.Black, c);
+        }
+
+        [Fact]
+        public void TestColorWhenRayHits()
+        {
+            var w = new DefaultWorld();
+            var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
+            var c = w.ColorAt(r);
+            var expected = new Color(0.38066f, 0.47583f, 0.2855f);
+            const float epsilon = 0.00001f;
+            var comparer = new ApproxColorEqualityComparer(epsilon);
+            Assert.Equal(expected, c, comparer);
+        }
+
+        [Fact]
+        public void TestColorWithIntersectionBehindRay()
+        {
+            var w = new DefaultWorld();
+            var outer = w.Objects[0];
+            outer.Material.Ambient = 1;
+            var inner = w.Objects[1];
+            inner.Material.Ambient = 1;
+            var r = new Ray(Float4.Point(0, 0, 0.75f), Float4.Vector(0, 0, -1));
+            var c = w.ColorAt(r);
+            const float epsilon = 0.00001f;
+            var comparer = new ApproxColorEqualityComparer(epsilon);
+            Assert.Equal(inner.Material.Color, c, comparer);
+        }
     }
 }

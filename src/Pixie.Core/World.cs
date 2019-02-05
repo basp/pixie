@@ -7,7 +7,7 @@ namespace Pixie.Core
     public class World
     {
         private readonly IList<PointLight> lights = new List<PointLight>();
-        
+
         private readonly IList<IShape> objects = new List<IShape>();
 
         public IList<PointLight> Lights => this.lights;
@@ -23,10 +23,22 @@ namespace Pixie.Core
         public Color Shade(Computations comps)
         {
             return comps.Object.Material.Li(
-                this.lights[0], 
-                comps.Point, 
-                comps.Eyev, 
+                this.lights[0],
+                comps.Point,
+                comps.Eyev,
                 comps.Normalv);
+        }
+
+        public Color ColorAt(Ray ray)
+        {
+            var xs = this.Intersect(ray);
+            if (xs.TryGetHit(out var i))
+            {
+                var comps = i.PrepareComputations(ray);
+                return this.Shade(comps);
+            }
+
+            return Color.Black;
         }
     }
 
