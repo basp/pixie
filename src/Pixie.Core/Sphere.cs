@@ -4,12 +4,12 @@ namespace Pixie.Core
 
     public class Sphere : Shape, IEquatable<Sphere>
     {
-        public override Float4 NormalAt(Float4 point)
+        public override Double4 NormalAt(Double4 point)
         {
             var objectPoint = this.inv * point;
-            var objectNormal = objectPoint - Float4.Zero;
+            var objectNormal = objectPoint - Double4.Zero;
             var worldNormal = this.inv.Transpose() * objectNormal;
-            worldNormal.W = 0f; // hacky fix
+            worldNormal.W = 0; // hacky fix
             return worldNormal.Normalize();
         }
 
@@ -17,11 +17,11 @@ namespace Pixie.Core
         {
             // ray = this.Transform.Inverse() * ray;
 
-            var sphereToRay = ray.Origin - Float4.Point(0, 0, 0);
+            var sphereToRay = ray.Origin - Double4.Point(0, 0, 0);
 
-            var a = Float4.Dot(ray.Direction, ray.Direction);
-            var b = 2 * Float4.Dot(ray.Direction, sphereToRay);
-            var c = Float4.Dot(sphereToRay, sphereToRay) - 1;
+            var a = Double4.Dot(ray.Direction, ray.Direction);
+            var b = 2 * Double4.Dot(ray.Direction, sphereToRay);
+            var c = Double4.Dot(sphereToRay, sphereToRay) - 1;
 
             var discriminant = b * b - 4 * a * c;
 
@@ -34,8 +34,8 @@ namespace Pixie.Core
 
             // Otherwise, we have two intersections which we can
             // solve for t using the quadratic formula.
-            var t1 = (-b - (float)Math.Sqrt(discriminant)) / (2 * a);
-            var t2 = (-b + (float)Math.Sqrt(discriminant)) / (2 * a);
+            var t1 = (-b - Math.Sqrt(discriminant)) / (2 * a);
+            var t2 = (-b + Math.Sqrt(discriminant)) / (2 * a);
             var xs = new[]
             {
                 new Intersection(t1, this),

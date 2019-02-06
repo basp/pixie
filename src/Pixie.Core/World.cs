@@ -45,7 +45,7 @@ namespace Pixie.Core
             return Color.Black;
         }
 
-        public bool IsShadowed(Float4 point, PointLight light)
+        public bool IsShadowed(Double4 point, PointLight light)
         {
             var v = light.Position - point;
             var distance = v.Magnitude();

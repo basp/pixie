@@ -2,16 +2,16 @@ namespace Pixie.Core
 {
     public struct Ray
     {
-        public readonly Float4 Origin;
-        public readonly Float4 Direction;
+        public readonly Double4 Origin;
+        public readonly Double4 Direction;
 
-        public Ray(Float4 origin, Float4 direction)
+        public Ray(Double4 origin, Double4 direction)
         {
             this.Origin = origin;
             this.Direction = direction;
         }
 
-        public Float4 Position(float t) =>
+        public Double4 Position(double t) =>
             this.Origin + this.Direction * t;
     }
 }

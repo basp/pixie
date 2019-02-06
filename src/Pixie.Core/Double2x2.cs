@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Pixie.Core
 {
-    public struct Float2x2
+    public struct Double2x2
     {
-        private readonly float[] data;
+        private readonly double[] data;
 
-        public Float2x2(float v)
+        public Double2x2(double v)
         {
             this.data = new[]
             {
@@ -16,8 +16,8 @@ namespace Pixie.Core
             };
         }
 
-        public Float2x2(float m00, float m01,
-                        float m10, float m11)
+        public Double2x2(double m00, double m01,
+                        double m10, double m11)
         {
             this.data = new[]
             {
@@ -26,33 +26,33 @@ namespace Pixie.Core
             };
         }
 
-        public float this[int row, int col]
+        public double this[int row, int col]
         {
             get => this.data[row * 2 + col];
             set => this.data[row * 2 + col] = value;
         }
 
-        public static IEqualityComparer<Float2x2> GetEqualityComparer(float epsilon = 0.0f) =>
-            new ApproxFloat2x2EqualityComparer(epsilon);
+        public static IEqualityComparer<Double2x2> GetEqualityComparer(double epsilon = 0.0) =>
+            new ApproxDouble2x2EqualityComparer(epsilon);
 
         public override string ToString() =>
             $"({string.Join(", ", data)})";
     }
 
-    public static class Float2x2Extensions
+    public static class Double2x2Extensions
     {
-        public static float Determinant(this Float2x2 m) =>
+        public static double Determinant(this Double2x2 m) =>
             m[0, 0] * m[1, 1] - m[0, 1] * m[1, 0];
     }
 
-    internal class ApproxFloat2x2EqualityComparer : ApproxEqualityComparer<Float2x2>
+    internal class ApproxDouble2x2EqualityComparer : ApproxEqualityComparer<Double2x2>
     {
-        public ApproxFloat2x2EqualityComparer(float epsilon = 0.0f)
+        public ApproxDouble2x2EqualityComparer(double epsilon = 0.0)
             : base(epsilon)
         {
         }
 
-        public override bool Equals(Float2x2 x, Float2x2 y)
+        public override bool Equals(Double2x2 x, Double2x2 y)
         {
             for (var j = 0; j < 2; j++)
             {
@@ -68,7 +68,7 @@ namespace Pixie.Core
             return true;
         }
 
-        public override int GetHashCode(Float2x2 obj) =>
+        public override int GetHashCode(Double2x2 obj) =>
             HashCode.Combine(
                 obj[0, 0], obj[0, 1],
                 obj[1, 0], obj[1, 1]);

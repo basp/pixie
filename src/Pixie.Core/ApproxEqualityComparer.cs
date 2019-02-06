@@ -5,9 +5,9 @@ namespace Pixie.Core
 
     internal abstract class ApproxEqualityComparer<T> : IEqualityComparer<T>
     {
-        private readonly float epsilon;
+        private readonly double epsilon;
 
-        public ApproxEqualityComparer(float epsilon = 0.000001f)
+        public ApproxEqualityComparer(double epsilon = 0.000001)
         {
             this.epsilon = epsilon;
         }
@@ -16,7 +16,7 @@ namespace Pixie.Core
 
         public abstract int GetHashCode(T obj);
 
-        protected bool ApproxEqual(float v1, float v2) =>
+        protected bool ApproxEqual(double v1, double v2) =>
             Math.Abs(v1 - v2) < this.epsilon;
     }
 }

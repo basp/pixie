@@ -11,11 +11,11 @@ namespace Pixie.Core
         public static Color Black =>
             new Color(0, 0, 0);
 
-        public readonly float R;
-        public readonly float G;
-        public readonly float B;
+        public readonly double R;
+        public readonly double G;
+        public readonly double B;
 
-        public Color(float r, float g, float b)
+        public Color(double r, double g, double b)
         {
             this.R = r;
             this.G = g;
@@ -34,13 +34,13 @@ namespace Pixie.Core
                 a.G - b.G,
                 a.B - b.B);
 
-        public static Color operator *(Color a, float s) =>
+        public static Color operator *(Color a, double s) =>
             new Color(
                 a.R * s,
                 a.G * s,
                 a.B * s);
 
-        public static Color operator *(float s, Color a) => a * s;
+        public static Color operator *(double s, Color a) => a * s;
 
         public static Color operator *(Color c1, Color c2) =>
             new Color(
@@ -48,7 +48,7 @@ namespace Pixie.Core
                 c1.G * c2.G,
                 c1.B * c2.B);
 
-        public static IEqualityComparer<Color> GetEqualityComparer(float epsilon = 0.0f) =>
+        public static IEqualityComparer<Color> GetEqualityComparer(double epsilon = 0.0) =>
             new ApproxColorEqualityComparer(epsilon);
 
         public override string ToString() =>
@@ -57,7 +57,7 @@ namespace Pixie.Core
 
     internal class ApproxColorEqualityComparer : ApproxEqualityComparer<Color>
     {
-        public ApproxColorEqualityComparer(float epsilon = 0.0f)
+        public ApproxColorEqualityComparer(double epsilon = 0.0)
             : base(epsilon)
         {
         }

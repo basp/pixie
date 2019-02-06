@@ -6,12 +6,15 @@ namespace Pixie.Tests
 
     class TestShape : Shape
     {
+        public Ray SavedRay { get; set; }
+
         public override IntersectionList LocalIntersect(Ray ray)
         {
-            throw new System.NotImplementedException();
+            this.SavedRay = ray;
+            return IntersectionList.Empty();
         }
 
-        public override Float4 NormalAt(Float4 point)
+        public override Double4 NormalAt(Double4 point)
         {
             throw new System.NotImplementedException();
         }
@@ -23,7 +26,7 @@ namespace Pixie.Tests
         public void DefaultTransformation()
         {
             var s = new TestShape();
-            Assert.Equal(Float4x4.Identity, s.Transform);
+            Assert.Equal(Double4x4.Identity, s.Transform);
         }
 
         [Fact]
@@ -60,6 +63,28 @@ namespace Pixie.Tests
             };
 
             Assert.Equal(m, s.Material);
+        }
+
+        [Fact]
+        public void IntersectScaledShapeWithRay()
+        {
+            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var s = new TestShape();
+            s.Transform = Transform.Scale(2, 2, 2);
+            var xs = s.Intersect(r);
+            Assert.Equal(Double4.Point(0, 0, -2.5), s.SavedRay.Origin);
+            Assert.Equal(Double4.Vector(0, 0, 0.5), s.SavedRay.Direction);
+        }
+
+        [Fact]
+        public void IntersectTranslatedShapeWithRay()
+        {
+            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var s = new TestShape();
+            s.Transform = Transform.Translate(5, 0, 0);
+            var xs = s.Intersect(r);
+            Assert.Equal(Double4.Point(-5, 0, -5), s.SavedRay.Origin);
+            Assert.Equal(Double4.Vector(0, 0, 1), s.SavedRay.Direction);
         }
     }
 }

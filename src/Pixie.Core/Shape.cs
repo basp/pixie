@@ -2,13 +2,13 @@ namespace Pixie.Core
 {
     public abstract class Shape
     {
-        protected Float4x4 transform = Float4x4.Identity;
+        protected Double4x4 transform = Double4x4.Identity;
 
-        protected Float4x4 inv = Float4x4.Identity;
+        protected Double4x4 inv = Double4x4.Identity;
 
         public Material Material { get; set; } = new Material();
 
-        public Float4x4 Transform
+        public Double4x4 Transform
         {
             get => this.transform;
             set 
@@ -18,7 +18,7 @@ namespace Pixie.Core
             }
         }
 
-        public Float4x4 Inverse => this.inv;
+        public Double4x4 Inverse => this.inv;
 
         public virtual IntersectionList Intersect(Ray ray)
         {
@@ -28,6 +28,6 @@ namespace Pixie.Core
 
         public abstract IntersectionList LocalIntersect(Ray ray);
 
-        public abstract Float4 NormalAt(Float4 point);
+        public abstract Double4 NormalAt(Double4 point);
     }
 }

@@ -2,13 +2,13 @@ namespace Pixie.Core
 {
     public struct Intersection
     {
-        public const float Epsilon = 0.00001f;
+        public const double Epsilon = 0.00001;
 
-        public readonly float T;
+        public readonly double T;
 
         public readonly Shape Object;
 
-        public Intersection(float t, Shape shape)
+        public Intersection(double t, Shape shape)
         {
             this.T = t;
             this.Object = shape;

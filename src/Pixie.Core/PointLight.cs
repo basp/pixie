@@ -4,10 +4,10 @@ namespace Pixie.Core
 
     public class PointLight : IEquatable<PointLight>
     {
-        public readonly Float4 Position;
+        public readonly Double4 Position;
         public readonly Color Intensity;
 
-        public PointLight(Float4 position, Color intensity)
+        public PointLight(Double4 position, Color intensity)
         {
             this.Position = position;
             this.Intensity = intensity;

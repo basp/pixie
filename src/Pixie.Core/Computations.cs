@@ -2,12 +2,12 @@ namespace Pixie.Core
 {
     public struct Computations
     {
-        public float T;
+        public double T;
         public Shape Object;
-        public Float4 Point;
-        public Float4 OverPoint;
-        public Float4 Eyev;
-        public Float4 Normalv;
+        public Double4 Point;
+        public Double4 OverPoint;
+        public Double4 Eyev;
+        public Double4 Normalv;
         public bool Inside;
     }
 }

@@ -17,25 +17,25 @@
             {
                 Material = new Material
                 {
-                    Color = new Pixie.Core.Color(0.1f, 0.5f, 0.7f),
+                    Color = new Pixie.Core.Color(0.1, 0.5, 0.7),
                 },
             };
 
             world.Objects.Add(s1);
 
-            var piOver4 = (float)Math.PI / 4;            
+            var piOver4 = Math.PI / 4;            
             for(var i = 0; i < 8; i++)
             {
                 var s = new Sphere()
                 {
                     Transform = 
                         Transform.RotateY(i * piOver4) *
-                        Transform.Translate(0, 0, 1.35f) *
-                        Transform.Scale(0.3f, 0.3f, 0.3f),
+                        Transform.Translate(0, 0, 1.35) *
+                        Transform.Scale(0.3, 0.3, 0.3),
 
                     Material = new Material
                     {
-                        Color = new Pixie.Core.Color(0.3f, 0.7f, 0.4f),
+                        Color = new Pixie.Core.Color(0.3, 0.7, 0.4),
                     },
                 };
 
@@ -43,7 +43,7 @@
             }
 
             var l1 = new PointLight(
-                Float4.Point(0, 2, -10),
+                Double4.Point(0, 2, -10),
                 Pixie.Core.Color.White);
 
             world.Lights.Add(l1);
@@ -51,12 +51,12 @@
             const int width = 1280;
             const int height = 1024;
 
-            var camera = new Camera(width, height, (float)Math.PI / 3)
+            var camera = new Camera(width, height, Math.PI / 3)
             {
                 Transform = Transform.View(
-                    Float4.Point(3, 3, -3),
-                    Float4.Point(0, 0, 0),
-                    Float4.Vector(0, 1, 0)),
+                    Double4.Point(3, 3, -3),
+                    Double4.Point(0, 0, 0),
+                    Double4.Vector(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };

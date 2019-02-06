@@ -10,18 +10,18 @@ namespace Pixie.Tests
         [Fact]
         public void TestRayIntersectsSphereAtTwoPoints()
         {
-            var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
+            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Equal(2, xs.Count);
             Assert.Equal(4, xs[0].T);
-            Assert.Equal(6, xs[1].T);   
+            Assert.Equal(6, xs[1].T);
         }
 
         [Fact]
         public void TestRayIntersectsSphereAtTangent()
         {
-            var r = new Ray(Float4.Point(0, 1, -5), Float4.Vector(0, 0, 1));
+            var r = new Ray(Double4.Point(0, 1, -5), Double4.Vector(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Equal(2, xs.Count);
@@ -32,7 +32,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestRayMissesSphere()
         {
-            var r = new Ray(Float4.Point(0, 2, -5), Float4.Vector(0, 0, 1));
+            var r = new Ray(Double4.Point(0, 2, -5), Double4.Vector(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Empty(xs);
@@ -41,7 +41,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestRayOriginatesInsideSphere()
         {
-            var r = new Ray(Float4.Point(0, 0, 0), Float4.Vector(0, 0, 1));
+            var r = new Ray(Double4.Point(0, 0, 0), Double4.Vector(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Equal(2, xs.Count);
@@ -52,7 +52,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestSphereIsBehindRay()
         {
-            var r = new Ray(Float4.Point(0, 0, 5), Float4.Vector(0, 0, 1));
+            var r = new Ray(Double4.Point(0, 0, 5), Double4.Vector(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Equal(2, xs.Count);
@@ -60,28 +60,10 @@ namespace Pixie.Tests
             Assert.Equal(-4.0, xs[1].T);
         }
 
-        // [Fact]
-        // public void TestSphereDefaultTransformation()
-        // {
-        //     const float eps = 0.000000000001f;
-        //     var s = new Sphere();
-        //     var comparer = Float4x4.GetEqualityComparer(eps);
-        //     Assert.Equal(Float4x4.Identity, s.Transform, comparer);
-        // }
-
-        // [Fact]
-        // public void TestChangeSphereTransformation()
-        // {
-        //     var s = new Sphere();
-        //     var t = Transform.Translate(2, 3, 4);
-        //     s.Transform = t;
-        //     Assert.Equal(t, s.Transform);
-        // }
-
         [Fact]
         public void TestIntersectScaledSphere()
         {
-            var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
+            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
             var s = new Sphere()
             {
                 Transform = Transform.Scale(2, 2, 2),
@@ -96,7 +78,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestIntersectTranslatedSphere()
         {
-            var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
+            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
             var s = new Sphere()
             {
                 Transform = Transform.Translate(5, 0, 0),
@@ -110,8 +92,8 @@ namespace Pixie.Tests
         public void TestNormalOnSphereAtPointOnXAxis()
         {
             var s = new Sphere();
-            var n = s.NormalAt(Float4.Point(1, 0, 0));
-            var expected = Float4.Vector(1, 0, 0);
+            var n = s.NormalAt(Double4.Point(1, 0, 0));
+            var expected = Double4.Vector(1, 0, 0);
             Assert.Equal(expected, n);
         }
 
@@ -119,8 +101,8 @@ namespace Pixie.Tests
         public void TestNormalOnSphereAtPointOnYAxis()
         {
             var s = new Sphere();
-            var n = s.NormalAt(Float4.Point(0, 1, 0));
-            var expected = Float4.Vector(0, 1, 0);
+            var n = s.NormalAt(Double4.Point(0, 1, 0));
+            var expected = Double4.Vector(0, 1, 0);
             Assert.Equal(expected, n);
         }
 
@@ -128,21 +110,21 @@ namespace Pixie.Tests
         public void TestNormalOnSphereAtPointOnZAxis()
         {
             var s = new Sphere();
-            var n = s.NormalAt(Float4.Point(0, 0, 1));
-            var expected = Float4.Vector(0, 0, 1);
+            var n = s.NormalAt(Double4.Point(0, 0, 1));
+            var expected = Double4.Vector(0, 0, 1);
             Assert.Equal(expected, n);
         }
 
         [Fact]
         public void TestNormalOnSphereAtNonAxialPoint()
         {
-            var sqrt3over3 = (float)Math.Sqrt(3)/3;
-            var s = new Sphere();            
-            var p = Float4.Point(sqrt3over3, sqrt3over3, sqrt3over3);
+            var sqrt3over3 = Math.Sqrt(3) / 3;
+            var s = new Sphere();
+            var p = Double4.Point(sqrt3over3, sqrt3over3, sqrt3over3);
             var n = s.NormalAt(p);
-            var expected = Float4.Vector(sqrt3over3, sqrt3over3, sqrt3over3);
-            const float eps = 0.0000001f;
-            var comparer = Float4.GetEqualityComparer(eps);
+            var expected = Double4.Vector(sqrt3over3, sqrt3over3, sqrt3over3);
+            const double eps = 0.0000001;
+            var comparer = Double4.GetEqualityComparer(eps);
             Assert.Equal(expected, n, comparer);
         }
 
@@ -150,13 +132,13 @@ namespace Pixie.Tests
         public void TestNormalIsNormalized()
         {
             var s = new Sphere();
-            var p = Float4.Point(
-                (float)Math.Sqrt(3)/3,
-                (float)Math.Sqrt(3)/3,
-                (float)Math.Sqrt(3)/3);
+            var p = Double4.Point(
+                Math.Sqrt(3) / 3,
+                Math.Sqrt(3) / 3,
+                Math.Sqrt(3) / 3);
             var n = s.NormalAt(p);
-            const float eps = 0.0000001f;
-            var comparer = Float4.GetEqualityComparer(eps);
+            const double eps = 0.0000001;
+            var comparer = Double4.GetEqualityComparer(eps);
             Assert.Equal(n.Normalize(), n, comparer);
         }
 
@@ -168,11 +150,11 @@ namespace Pixie.Tests
                 Transform = Transform.Translate(0, 1, 0),
             };
 
-            var p = Float4.Point(0, 1.70711f, -0.70711f);
+            var p = Double4.Point(0, 1.70711, -0.70711);
             var n = s.NormalAt(p);
-            var expected = Float4.Vector(0, 0.70711f, -0.70711f);
-            const float eps = 0.00001f;
-            var comparer = Float4.GetEqualityComparer(eps);
+            var expected = Double4.Vector(0, 0.70711, -0.70711);
+            const double eps = 0.00001;
+            var comparer = Double4.GetEqualityComparer(eps);
             Assert.Equal(expected, n, comparer);
         }
 
@@ -181,15 +163,15 @@ namespace Pixie.Tests
         {
             var s = new Sphere()
             {
-                Transform = 
-                    Transform.Scale(1, 0.5f, 1) * Transform.RotateZ((float)Math.PI/5),
+                Transform =
+                    Transform.Scale(1, 0.5, 1) * Transform.RotateZ(Math.PI / 5),
             };
 
-            var p = Float4.Point(0, (float)Math.Sqrt(2)/2, -(float)Math.Sqrt(2)/2);
+            var p = Double4.Point(0, Math.Sqrt(2) / 2, -Math.Sqrt(2) / 2);
             var n = s.NormalAt(p);
-            var expected = Float4.Vector(0, 0.97014f, -0.24254f);
-            const float eps = 0.00001f;
-            var comparer = Float4.GetEqualityComparer(eps);
+            var expected = Double4.Vector(0, 0.97014, -0.24254);
+            const double eps = 0.00001;
+            var comparer = Double4.GetEqualityComparer(eps);
             Assert.Equal(expected, n, comparer);
         }
 

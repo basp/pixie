@@ -4,11 +4,11 @@ namespace Pixie.Core
     using System.Collections.Generic;
     using System.Linq;
 
-    public struct Float3x3
+    public struct Double3x3
     {
-        private readonly float[] data;
+        private readonly double[] data;
 
-        public Float3x3(float v)
+        public Double3x3(double v)
         {
             this.data = new[]
             {
@@ -18,9 +18,9 @@ namespace Pixie.Core
             };
         }
 
-        public Float3x3(float m00, float m01, float m02,
-                        float m10, float m11, float m12,
-                        float m20, float m21, float m22)
+        public Double3x3(double m00, double m01, double m02,
+                        double m10, double m11, double m12,
+                        double m20, double m21, double m22)
         {
             this.data = new[]
             {
@@ -30,19 +30,19 @@ namespace Pixie.Core
             };
         }
 
-        public float this[int row, int col]
+        public double this[int row, int col]
         {
             get => this.data[row * 3 + col];
             set => this.data[row * 3 + col] = value;
         }
 
-        public static IEqualityComparer<Float3x3> GetEqualityComparer(float epsilon = 0.0f) =>
-            new ApproxFloat3x3EqualityComparer(epsilon);
+        public static IEqualityComparer<Double3x3> GetEqualityComparer(double epsilon = 0.0) =>
+            new ApproxDouble3x3EqualityComparer(epsilon);
     }
 
-    public static class Float3x3Extensions
+    public static class Double3x3Extensions
     {
-        public static Float2x2 Submatrix(this Float3x3 a, int dropRow, int dropCol)
+        public static Double2x2 Submatrix(this Double3x3 a, int dropRow, int dropCol)
         {
             var rows = Enumerable.Range(0, 3)
                 .Where(x => x != dropRow)
@@ -52,7 +52,7 @@ namespace Pixie.Core
                 .Where(x => x != dropCol)
                 .ToArray();
 
-            var m = new Float2x2(0);
+            var m = new Double2x2(0);
             for (var i = 0; i < 2; i++)
             {
                 for (var j = 0; j < 2; j++)
@@ -64,26 +64,26 @@ namespace Pixie.Core
             return m;
         }
 
-        public static float Minor(this Float3x3 a, int row, int col) =>
+        public static double Minor(this Double3x3 a, int row, int col) =>
             a.Submatrix(row, col).Determinant();
 
-        public static float Cofactor(this Float3x3 a, int row, int col) =>
+        public static double Cofactor(this Double3x3 a, int row, int col) =>
             (row + col) % 2 == 0 ? a.Minor(row, col) : -a.Minor(row, col);
 
-        public static float Determinant(this Float3x3 a) =>
+        public static double Determinant(this Double3x3 a) =>
             a[0, 0] * a.Cofactor(0, 0) +
             a[0, 1] * a.Cofactor(0, 1) +
             a[0, 2] * a.Cofactor(0, 2);
     }
 
-    internal class ApproxFloat3x3EqualityComparer : ApproxEqualityComparer<Float3x3>
+    internal class ApproxDouble3x3EqualityComparer : ApproxEqualityComparer<Double3x3>
     {
-        public ApproxFloat3x3EqualityComparer(float epsilon = 0.0f)
+        public ApproxDouble3x3EqualityComparer(double epsilon = 0.0)
             : base(epsilon)
         {
         }
 
-        public override bool Equals(Float3x3 x, Float3x3 y)
+        public override bool Equals(Double3x3 x, Double3x3 y)
         {
             for (var j = 0; j < 3; j++)
             {
@@ -99,7 +99,7 @@ namespace Pixie.Core
             return true;
         }
 
-        public override int GetHashCode(Float3x3 obj) =>
+        public override int GetHashCode(Double3x3 obj) =>
             HashCode.Combine(
                 HashCode.Combine(
                     obj[0, 0], obj[0, 1], obj[0, 2],

@@ -11,9 +11,9 @@ namespace Pixie.Tests
         public void CreateIntersection()
         {
             var s = new Sphere();
-            var i = new Intersection(3.5f, s);
+            var i = new Intersection(3.5, s);
             Assert.Equal(s, i.Object);
-            Assert.Equal(3.5f, i.T);
+            Assert.Equal(3.5, i.T);
         }
 
         [Fact]
@@ -80,20 +80,20 @@ namespace Pixie.Tests
         [Fact]
         public void PrecomputingIntersectionState()
         {
-            var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
+            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
             var shape = new Sphere();
             var i = new Intersection(4, shape);
             var comps = i.PrepareComputations(r);
             Assert.Equal(i.T, comps.T);
-            Assert.Equal(Float4.Point(0, 0, -1), comps.Point);
-            Assert.Equal(Float4.Vector(0, 0, -1), comps.Eyev);
-            Assert.Equal(Float4.Vector(0, 0, -1), comps.Normalv);
+            Assert.Equal(Double4.Point(0, 0, -1), comps.Point);
+            Assert.Equal(Double4.Vector(0, 0, -1), comps.Eyev);
+            Assert.Equal(Double4.Vector(0, 0, -1), comps.Normalv);
         }
 
         [Fact]
         public void HitWhenIntersectionOnOutside()
         {
-            var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
+            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
             var shape = new Sphere();
             var i = new Intersection(4, shape);
             var comps = i.PrepareComputations(r);
@@ -103,20 +103,20 @@ namespace Pixie.Tests
         [Fact]
         public void HitWhenIntersectionOnInside()
         {
-            var r = new Ray(Float4.Point(0, 0, 0), Float4.Vector(0, 0, 1));
+            var r = new Ray(Double4.Point(0, 0, 0), Double4.Vector(0, 0, 1));
             var shape = new Sphere();
             var i = new Intersection(1, shape);
             var comps = i.PrepareComputations(r);
-            Assert.Equal(Float4.Point(0, 0, 1), comps.Point);
-            Assert.Equal(Float4.Vector(0, 0, -1), comps.Eyev);
-            Assert.Equal(Float4.Vector(0, 0, -1), comps.Normalv);
+            Assert.Equal(Double4.Point(0, 0, 1), comps.Point);
+            Assert.Equal(Double4.Vector(0, 0, -1), comps.Eyev);
+            Assert.Equal(Double4.Vector(0, 0, -1), comps.Normalv);
             Assert.True(comps.Inside);
         }
 
         [Fact]
         public void HitShouldOffsetThePoint()
         {
-            var r = new Ray(Float4.Point(0, 0, -5), Float4.Vector(0, 0, 1));
+            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
             var shape = new Sphere
             {
                 Transform = Transform.Translate(0, 0, 1),

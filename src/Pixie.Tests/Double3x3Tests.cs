@@ -5,30 +5,30 @@ namespace Pixie.Tests
     using Xunit;
     using Pixie.Core;
 
-    public class Float3x3Tests
+    public class Double3x3Tests
     {
-        const float epsilon = 0.000000001f;
+        const double epsilon = 0.000000001;
 
         [Fact]
         public void TestSubmatrix()
         {
-            var a = new Float3x3(
+            var a = new Double3x3(
                 1, 5, 0,
                 -3, 2, 7,
                 0, 6, -3);
 
-            var expected = new Float2x2(
+            var expected = new Double2x2(
                 -3, 2, 
                 0, 6);
 
-            var comparer = Float2x2.GetEqualityComparer(epsilon);
+            var comparer = Double2x2.GetEqualityComparer(epsilon);
             Assert.Equal(expected, a.Submatrix(0, 2), comparer);
         }
 
         [Fact]
         public void TestCalculateMinorOf3x3Matrix()
         {
-            var a = new Float3x3(
+            var a = new Double3x3(
                 3, 5, 0,
                 2, -1, -7,
                 6, -1, 5);
@@ -42,7 +42,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestCalculateCofactorOf3x3Matrix()
         {
-            var a = new Float3x3(
+            var a = new Double3x3(
                 3, 5, 0,
                 2, -1, -7,
                 6, -1, 5);
@@ -56,7 +56,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestCalculateDeterminantOf3x3Matrix()
         {
-            var a = new Float3x3(
+            var a = new Double3x3(
                 1, 2, 6,
                 -5, 8, -4,
                 2, 6, 4);
