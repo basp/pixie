@@ -102,27 +102,40 @@ namespace Pixie.Cmd
         {
             var world = new World();
 
-            var floorPattern = new RingPattern(
-                new Color(0.7, 0.7, 0.7),
-                new Color(0.6, 0.6, 0.6))
+            var ringPattern1 = new RingPattern(
+                new Color(0.4, 0.4, 0.4),
+                new Color(0.7, 0.7, 0.7))
             {
                 Transform =
                     Transform.Scale(4, 4, 4),
             };
 
-            var floorPattern2 = new RadialGradientPattern(
-                Color.Black, 
-                Color.White)
+            var stripePattern1 = new StripePattern(
+                new Color(0.2, 0.2, 0.2),
+                new Color(0.5, 0.5, 1.0))
             {
                 Transform =
-                    Transform.Scale(4, 4, 4),
+                    Transform.Scale(0.1, 0.1, 0.1),
             };
+
+            var checkers = new CheckersPattern(
+                Color.White, 
+                Color.Black)
+            {
+                Transform =
+                    Transform.Scale(1, 1, 1),
+            };
+
+            var nestedPattern = new NestedPattern(
+                checkers,
+                ringPattern1,
+                stripePattern1);
 
             var floor = new Plane
             {
                 Material = new Material
                 {
-                    Pattern = floorPattern2,
+                    Pattern = nestedPattern,
                 },
             };
 
@@ -194,8 +207,9 @@ namespace Pixie.Cmd
                 {
                     Transform =
                         Transform.RotateY(i * arc) *
-                        Transform.Translate(0, r, 1.75) *
+                        Transform.Translate(0, r, 2 - r) *
                         Transform.Scale(r, r, r),
+
                     Material = new Material
                     {
                         Pattern = gradients[gi],
