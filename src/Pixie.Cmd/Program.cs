@@ -11,51 +11,16 @@
     {
         static void Main(string[] args)
         {
-            var world = new World();
+            var world = Scenes.Example2();
 
-            var s1 = new Sphere
-            {
-                Material = new Material
-                {
-                    Color = new Pixie.Core.Color(0.1, 0.5, 0.7),
-                },
-            };
-
-            world.Objects.Add(s1);
-
-            var piOver4 = Math.PI / 4;            
-            for(var i = 0; i < 8; i++)
-            {
-                var s = new Sphere()
-                {
-                    Transform = 
-                        Transform.RotateY(i * piOver4) *
-                        Transform.Translate(0, 0, 1.35) *
-                        Transform.Scale(0.3, 0.3, 0.3),
-
-                    Material = new Material
-                    {
-                        Color = new Pixie.Core.Color(0.3, 0.7, 0.4),
-                    },
-                };
-
-                world.Objects.Add(s);
-            }
-
-            var l1 = new PointLight(
-                Double4.Point(0, 2, -10),
-                Pixie.Core.Color.White);
-
-            world.Lights.Add(l1);
-
-            const int width = 1280;
-            const int height = 1024;
+            const int width = 640;
+            const int height = 480;
 
             var camera = new Camera(width, height, Math.PI / 3)
             {
                 Transform = Transform.View(
-                    Double4.Point(3, 3, -3),
-                    Double4.Point(0, 0, 0),
+                    Double4.Point(0, 2, -3),
+                    Double4.Point(0, 1, 0),
                     Double4.Vector(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),

@@ -6,14 +6,9 @@ namespace Pixie.Tests
 
     public class MaterialTests
     {
-        private Material m;
-        private Double4 position;
-
-        public MaterialTests()
-        {
-            this.m = new Material();
-            this.position = Double4.Point(0, 0, 0);
-        }
+        private Material m = new Material();
+        private Double4 position = Double4.Point(0, 0, 0);
+        private Shape sphere = new Sphere();
 
 
         [Fact]
@@ -35,7 +30,7 @@ namespace Pixie.Tests
             var light = new PointLight(
                 Double4.Point(0, 0, -10),
                 Color.White);
-            var result = m.Li(light, position, eyev, normalv);
+            var result = m.Li(sphere, light, position, eyev, normalv);
             var expected = new Color(1.9, 1.9, 1.9);
             Assert.Equal(expected, result);
         }
@@ -48,7 +43,7 @@ namespace Pixie.Tests
             var light = new PointLight(
                 Double4.Point(0, 0, -10),
                 Color.White);
-            var result = m.Li(light, position, eyev, normalv);
+            var result = m.Li(sphere, light, position, eyev, normalv);
             var expected = Color.White;
             Assert.Equal(expected, result);
         }
@@ -61,7 +56,7 @@ namespace Pixie.Tests
             var light = new PointLight(
                 Double4.Point(0, 10, -10),
                 Color.White);
-            var result = m.Li(light, position, eyev, normalv);
+            var result = m.Li(sphere, light, position, eyev, normalv);
             var expected = new Color(0.7364, 0.7364, 0.7364);
             const double eps = 0.00001;
             var comparer = Color.GetEqualityComparer(eps);
@@ -76,7 +71,7 @@ namespace Pixie.Tests
             var light = new PointLight(
                 Double4.Point(0, 10, -10),
                 Color.White);
-            var result = m.Li(light, position, eyev, normalv);
+            var result = m.Li(sphere, light, position, eyev, normalv);
             var expected = new Color(1.6364, 1.6364, 1.6364);
             // Reallyl low precision on this one.
             const double eps = 0.0001;
@@ -92,7 +87,7 @@ namespace Pixie.Tests
             var light = new PointLight(
                 Double4.Point(0, 0, 10),
                 Color.White);
-            var result = m.Li(light, position, eyev, normalv);
+            var result = m.Li(sphere, light, position, eyev, normalv);
             var expected = new Color(0.1, 0.1, 0.1);
             Assert.Equal(expected, result);
         }
@@ -103,7 +98,7 @@ namespace Pixie.Tests
             var eyev = Double4.Vector(0, 0, -1);
             var normalv = Double4.Vector(0, 0, -1);
             var light = new PointLight(Double4.Point(0, 0, -10), Color.White);
-            var c = m.Li(light, position, eyev, normalv, shadow: true);
+            var c = m.Li(sphere, light, position, eyev, normalv, shadow: true);
             var expected = new Color(0.1, 0.1, 0.1);
             Assert.Equal(expected, c);
         }
@@ -138,6 +133,22 @@ namespace Pixie.Tests
             var w = new DefaultWorld();
             var p = Double4.Point(-2, 2, -2);
             Assert.False(w.IsShadowed(p, w.Lights[0]));
+        }
+
+        [Fact]
+        public void LightingWithAPatternApplied()
+        {
+            m.Pattern = new StripePattern(Color.White, Color.Black);
+            m.Ambient = 1;
+            m.Diffuse = 0;
+            m.Specular = 0;
+            var eyev = Double4.Vector(0, 0, -1);
+            var normalv = Double4.Vector(0, 0, -1);
+            var light = new PointLight(Double4.Point(0, 0, -10), Color.White);
+            var c1 = m.Li(sphere, light, Double4.Point(0.9, 0, 0), eyev, normalv);
+            var c2 = m.Li(sphere, light, Double4.Point(1.1, 0, 0), eyev, normalv);
+            Assert.Equal(Color.White, c1);
+            Assert.Equal(Color.Black, c2);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Pixie.Core
         public double Specular;
         public double Shininess;
         public Color Color;
+        public Pattern Pattern;
 
         public Material()
         {
@@ -27,15 +28,25 @@ namespace Pixie.Core
             this.Color.Equals(other.Color);
 
         public Color Li(
+            Shape obj,
             PointLight light,
             Double4 point,
             Double4 eyev,
             Double4 normalv,
             bool shadow = false)
         {
-            Color ambient, diffuse, specular;
+            Color color, ambient, diffuse, specular;
 
-            var effectiveColor = this.Color * light.Intensity;
+            if (this.Pattern != null)
+            {
+                color = this.Pattern.PattenAt(obj, point);
+            }
+            else
+            {
+                color = this.Color;
+            }
+
+            var effectiveColor = color * light.Intensity;
             var lightv = (light.Position - point).Normalize();
             var lightDotNormal = Double4.Dot(lightv, normalv);
 

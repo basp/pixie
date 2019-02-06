@@ -23,6 +23,7 @@ namespace Pixie.Core
             {
                 var shadow = IsShadowed(comps.OverPoint, light);
                 res += comps.Object.Material.Li(
+                    comps.Object,
                     light,
                     comps.OverPoint,
                     comps.Eyev,
