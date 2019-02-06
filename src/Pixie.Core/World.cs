@@ -8,7 +8,7 @@ namespace Pixie.Core
     {
         public IList<PointLight> Lights { get; set; } = new List<PointLight>();
 
-        public IList<IShape> Objects { get; set; } = new List<IShape>();
+        public IList<Shape> Objects { get; set; } = new List<Shape>();
 
         public IntersectionList Intersect(Ray ray)
         {

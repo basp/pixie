@@ -6,9 +6,9 @@ namespace Pixie.Core
 
         public readonly float T;
 
-        public readonly IShape Object;
+        public readonly Shape Object;
 
-        public Intersection(float t, IShape shape)
+        public Intersection(float t, Shape shape)
         {
             this.T = t;
             this.Object = shape;

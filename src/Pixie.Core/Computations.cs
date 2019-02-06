@@ -3,7 +3,7 @@ namespace Pixie.Core
     public struct Computations
     {
         public float T;
-        public IShape Object;
+        public Shape Object;
         public Float4 Point;
         public Float4 OverPoint;
         public Float4 Eyev;

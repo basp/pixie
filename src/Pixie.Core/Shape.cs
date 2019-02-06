@@ -1,10 +1,10 @@
 namespace Pixie.Core
 {
-    public abstract class Shape : IShape
+    public abstract class Shape
     {
-        private Float4x4 transform = Float4x4.Identity;
+        protected Float4x4 transform = Float4x4.Identity;
 
-        private Float4x4 inv = Float4x4.Identity;
+        protected Float4x4 inv = Float4x4.Identity;
 
         public Material Material { get; set; } = new Material();
 

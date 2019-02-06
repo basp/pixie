@@ -2,31 +2,9 @@ namespace Pixie.Core
 {
     using System;
 
-    public class Sphere : IShape, IEquatable<Sphere>
+    public class Sphere : Shape, IEquatable<Sphere>
     {
-        private Float4x4 transform = Float4x4.Identity;
-        private Float4x4 inv = Float4x4.Identity;
-
-        public Sphere()
-        {
-            this.Material = new Material();
-        }
-
-        public Material Material { get; set; }
-
-        public Float4x4 Transform
-        {
-            get => this.transform;
-            set 
-            {
-                this.inv = value.Inverse();
-                this.transform = value;
-            }
-        }
-
-        public Float4x4 Inverse => this.inv;
-
-        public Float4 NormalAt(Float4 point)
+        public override Float4 NormalAt(Float4 point)
         {
             var objectPoint = this.inv * point;
             var objectNormal = objectPoint - Float4.Zero;
@@ -35,9 +13,9 @@ namespace Pixie.Core
             return worldNormal.Normalize();
         }
 
-        public IntersectionList Intersect(Ray ray)
+        public override IntersectionList LocalIntersect(Ray ray)
         {
-            ray = this.Transform.Inverse() * ray;
+            // ray = this.Transform.Inverse() * ray;
 
             var sphereToRay = ray.Origin - Float4.Point(0, 0, 0);
 
