@@ -60,23 +60,23 @@ namespace Pixie.Tests
             Assert.Equal(-4.0, xs[1].T);
         }
 
-        [Fact]
-        public void TestSphereDefaultTransformation()
-        {
-            const float eps = 0.000000000001f;
-            var s = new Sphere();
-            var comparer = Float4x4.GetEqualityComparer(eps);
-            Assert.Equal(Float4x4.Identity, s.Transform, comparer);
-        }
+        // [Fact]
+        // public void TestSphereDefaultTransformation()
+        // {
+        //     const float eps = 0.000000000001f;
+        //     var s = new Sphere();
+        //     var comparer = Float4x4.GetEqualityComparer(eps);
+        //     Assert.Equal(Float4x4.Identity, s.Transform, comparer);
+        // }
 
-        [Fact]
-        public void TestChangeSphereTransformation()
-        {
-            var s = new Sphere();
-            var t = Transform.Translate(2, 3, 4);
-            s.Transform = t;
-            Assert.Equal(t, s.Transform);
-        }
+        // [Fact]
+        // public void TestChangeSphereTransformation()
+        // {
+        //     var s = new Sphere();
+        //     var t = Transform.Translate(2, 3, 4);
+        //     s.Transform = t;
+        //     Assert.Equal(t, s.Transform);
+        // }
 
         [Fact]
         public void TestIntersectScaledSphere()

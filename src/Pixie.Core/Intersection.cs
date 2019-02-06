@@ -2,11 +2,6 @@ namespace Pixie.Core
 {
     public struct Intersection
     {
-        // NOTE: This eps is pretty influential.
-        // We need it to be low for tests but in conjunction with planes
-        // this value will give lots of nice floating point error 
-        // visualizations.
-        // TODO: Look into this.
         public const float Epsilon = 0.00001f;
 
         public readonly float T;

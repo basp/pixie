@@ -53,7 +53,7 @@ namespace Pixie.Core
             return v;
         }
 
-        private static Tuple<int, int, int> GetColorBytes(Color c) =>
+        public static Tuple<int, int, int> GetColorBytes(Color c) =>
             Tuple.Create(
                 Clamp((int)(c.R * 255), 0, 255),
                 Clamp((int)(c.G * 255), 0, 255),
