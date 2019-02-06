@@ -126,5 +126,42 @@ namespace Pixie.Tests
             Assert.Equal(new Color(0.5, 0.5, 0.5), pat.PatternAt(Double4.Point(0.5, 0, 0)));
             Assert.Equal(new Color(0.25, 0.25, 0.25), pat.PatternAt(Double4.Point(0.75, 0, 0)));
         }
+
+        [Fact]
+        public void RingShouldExtendInXAndY()
+        {
+            var pat = new RingPattern(white, black);
+            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
+            Assert.Equal(black, pat.PatternAt(Double4.Point(1, 0, 0)));
+            Assert.Equal(black, pat.PatternAt(Double4.Point(0, 0, 1)));
+            Assert.Equal(black, pat.PatternAt(Double4.Point(0.708, 0, 0.708)));
+        }
+
+        [Fact]
+        public void CheckersShouldRepeatInX()
+        {
+            var pat = new CheckersPattern(white, black);
+            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Double4.Point(0.99, 0, 0)));
+            Assert.Equal(black, pat.PatternAt(Double4.Point(1.01, 0, 0)));
+        }
+
+        [Fact]
+        public void CheckersShouldRepeatInY()
+        {
+            var pat = new CheckersPattern(white, black);
+            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0.99, 0)));
+            Assert.Equal(black, pat.PatternAt(Double4.Point(0, 1.01, 0)));
+        }
+
+        [Fact]
+        public void CheckersShouldRepeatInZ()
+        {
+            var pat = new CheckersPattern(white, black);
+            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0.99)));
+            Assert.Equal(black, pat.PatternAt(Double4.Point(0, 0, 1.01)));
+        }
     }
 }

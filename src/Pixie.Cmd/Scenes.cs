@@ -5,6 +5,8 @@ namespace Pixie.Cmd
 
     public class Scenes
     {
+        private static Random Rng = new Random();
+
         public static World Example1()
         {
             var world = new World();
@@ -13,7 +15,7 @@ namespace Pixie.Cmd
             {
                 Material = new Material
                 {
-                    Color = new Pixie.Core.Color(0.2, 0.5, 0.6),
+                    Color = new Color(0.2, 0.5, 0.6),
                     Specular = 0,
                 },
             };
@@ -36,7 +38,7 @@ namespace Pixie.Cmd
 
                     Material = new Material
                     {
-                        Color = new Pixie.Core.Color(0.1, g, 0.4),
+                        Color = new Color(0.1, g, 0.4),
                     },
                 };
 
@@ -60,7 +62,7 @@ namespace Pixie.Cmd
             {
                 Material = new Material
                 {
-                    Color = new Pixie.Core.Color(0.2, 0.5, 0.6),
+                    Color = new Color(0.2, 0.5, 0.6),
                     Specular = 0,
                 },
             };
@@ -69,16 +71,18 @@ namespace Pixie.Cmd
 
             var sphere = new Sphere
             {
-                Transform = 
+                Transform =
                     Transform.Translate(0, 1, 0) *
                     Transform.RotateY(Math.PI / 5),
-                
+
                 Material = new Material
                 {
-                    Pattern = new StripePattern(Color.White, Color.Black)
+                    Pattern = new StripePattern(
+                        new Color(0.05, 0.3, 0.4),
+                        new Color(0.05, 0.33, 0.6))
                     {
-                        Transform = 
-                            Transform.Scale(0.33, 1, 1),
+                        Transform =
+                            Transform.Scale(0.23, 1, 1),
                     },
                 },
             };
@@ -88,6 +92,122 @@ namespace Pixie.Cmd
             var light = new PointLight(
                 Double4.Point(-10, 10, -10),
                 Pixie.Core.Color.White);
+
+            world.Lights.Add(light);
+
+            return world;
+        }
+
+        public static World Example3()
+        {
+            var world = new World();
+
+            var floorPattern = new RingPattern(
+                new Color(0.7, 0.7, 0.7),
+                new Color(0.6, 0.6, 0.6))
+            {
+                Transform =
+                    Transform.Scale(4, 4, 4),
+            };
+
+            var floorPattern2 = new RadialGradientPattern(
+                Color.Black, 
+                Color.White)
+            {
+                Transform =
+                    Transform.Scale(4, 4, 4),
+            };
+
+            var floor = new Plane
+            {
+                Material = new Material
+                {
+                    Pattern = floorPattern2,
+                },
+            };
+
+            world.Objects.Add(floor);
+
+            var gradientTransform =
+                Transform.Translate(1, 0, 0) *
+                Transform.Scale(2, 1, 1);
+
+            var sphere = new Sphere
+            {
+                Transform =
+                    Transform.Translate(0, 1, 0),
+
+                Material = new Material
+                {
+                    Pattern = new GradientPattern(
+                        new Color(1.0, 0.0, 0.0),
+                        new Color(0.0, 0.0, 1.0))
+                    {
+                        Transform = gradientTransform,
+                    },
+                },
+            };
+
+            world.Objects.Add(sphere);
+
+            var gradients = new[]
+            {
+                new GradientPattern(
+                    new Color(1.0, 0.0, 0.0),
+                    new Color(0.0, 0.0, 1.0))
+                {
+                    Transform = gradientTransform,
+                },
+                new GradientPattern(
+                    new Color(1.0, 0.0, 0.0),
+                    new Color(0.0, 1.0, 0.0))
+                {
+                    Transform = gradientTransform,
+                },
+                new GradientPattern(
+                    new Color(0.0, 1.0, 0.0),
+                    new Color(0.0, 0.0, 1.0))
+                {
+                    Transform = gradientTransform,
+                },
+                new GradientPattern(
+                    new Color(0.5, 0.5, 0.0),
+                    new Color(0.0, 0.5, 0.5))
+                {
+                    Transform = gradientTransform,
+                },
+                new GradientPattern(
+                    new Color(0.5, 0.0, 0.5),
+                    new Color(0.0, 1.0, 0.0))
+                {
+                    Transform = gradientTransform,
+                },
+            };
+
+            const int n = 32;
+            var arc = 2 * Math.PI / n;
+            for (var i = 0; i < n; i++)
+            {
+                const double r = 0.15;
+                var gi = i % gradients.Length;
+                var s = new Sphere
+                {
+                    Transform =
+                        Transform.RotateY(i * arc) *
+                        Transform.Translate(0, r, 1.75) *
+                        Transform.Scale(r, r, r),
+                    Material = new Material
+                    {
+                        Pattern = gradients[gi],
+                    },
+                };
+
+                world.Objects.Add(s);
+            }
+
+            var light = new PointLight(
+                Double4.Point(-10, 10, -10),
+                Color.White);
 
             world.Lights.Add(light);
 
