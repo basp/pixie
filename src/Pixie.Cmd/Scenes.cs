@@ -1,8 +1,8 @@
 namespace Pixie.Cmd
 {
     using System;
+    using SharpNoise;
     using Pixie.Core;
-
     public class Scenes
     {
         private static Random Rng = new Random();
@@ -131,11 +131,19 @@ namespace Pixie.Cmd
                 ringPattern1,
                 stripePattern1);
 
+            var pertubedPattern = new PertubedPattern(
+                new SolidPattern(Color.Black),
+                new SolidPattern(new Color(0.1, 0.2, 0.3)))
+            {
+                Transform = Transform.Scale(5.5, 5.5, 5.5),
+            };
+
             var floor = new Plane
             {
                 Material = new Material
                 {
-                    Pattern = nestedPattern,
+                    Pattern = pertubedPattern,
+                    Specular = 0,
                 },
             };
 
@@ -197,17 +205,21 @@ namespace Pixie.Cmd
                 },
             };
 
-            const int n = 32;
+            const int n = 1024 * 10;
             var arc = 2 * Math.PI / n;
             for (var i = 0; i < n; i++)
             {
                 const double r = 0.15;
                 var gi = i % gradients.Length;
+                
+                var ni = (double)i / n;
+                const double scatter = 15;
+                var q = scatter * Rng.NextDouble();     
                 var s = new Sphere
                 {
                     Transform =
                         Transform.RotateY(i * arc) *
-                        Transform.Translate(0, r, 2 - r) *
+                        Transform.Translate(0, r, 2 - r + q) *
                         Transform.Scale(r, r, r),
 
                     Material = new Material
