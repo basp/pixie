@@ -39,7 +39,7 @@ namespace Pixie.Core
 
             if (this.Pattern != null)
             {
-                color = this.Pattern.PattenAt(obj, point);
+                color = this.Pattern.PatternAt(obj, point);
             }
             else
             {

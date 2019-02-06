@@ -20,7 +20,7 @@ namespace Pixie.Core
 
         public Double4x4 Inverse => this.inv;
 
-        public virtual Color PattenAt(Shape obj, Double4 point)
+        public virtual Color PatternAt(Shape obj, Double4 point)
         {
             point = obj.Inverse * point;
             point = this.Inverse * point;

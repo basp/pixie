@@ -80,7 +80,7 @@ namespace Pixie.Tests
             };
 
             var pat = new TestPattern();
-            var c = pat.PattenAt(obj, Double4.Point(2, 3, 4));
+            var c = pat.PatternAt(obj, Double4.Point(2, 3, 4));
             var expected = new Color(1, 1.5, 2);
             Assert.Equal(expected, c);
         }
@@ -94,7 +94,7 @@ namespace Pixie.Tests
                 Transform = Transform.Scale(2, 2, 2),
             };
 
-            var c = pat.PattenAt(obj, Double4.Point(2, 3, 4));
+            var c = pat.PatternAt(obj, Double4.Point(2, 3, 4));
             var expected = new Color(1, 1.5, 2);
             Assert.Equal(expected, c);
         }
@@ -112,9 +112,19 @@ namespace Pixie.Tests
                 Transform = Transform.Translate(0.5, 1, 1.5),
             };
 
-            var c = pat.PattenAt(obj, Double4.Point(2.5, 3, 3.5));
+            var c = pat.PatternAt(obj, Double4.Point(2.5, 3, 3.5));
             var expected = new Color(0.75, 0.5, 0.25);
             Assert.Equal(expected, c);
+        }
+
+        [Fact]
+        public void GradientLinearlyInterpolatesBetweenColors()
+        {
+            var pat = new GradientPattern(white, black);
+            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
+            Assert.Equal(new Color(0.75, 0.75, 0.75), pat.PatternAt(Double4.Point(0.25, 0, 0)));
+            Assert.Equal(new Color(0.5, 0.5, 0.5), pat.PatternAt(Double4.Point(0.5, 0, 0)));
+            Assert.Equal(new Color(0.25, 0.25, 0.25), pat.PatternAt(Double4.Point(0.75, 0, 0)));
         }
     }
 }
