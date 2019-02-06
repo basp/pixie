@@ -143,39 +143,6 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestNormalOnTranslatedSphere()
-        {
-            var s = new Sphere()
-            {
-                Transform = Transform.Translate(0, 1, 0),
-            };
-
-            var p = Double4.Point(0, 1.70711, -0.70711);
-            var n = s.NormalAt(p);
-            var expected = Double4.Vector(0, 0.70711, -0.70711);
-            const double eps = 0.00001;
-            var comparer = Double4.GetEqualityComparer(eps);
-            Assert.Equal(expected, n, comparer);
-        }
-
-        [Fact]
-        public void TestNormalOnTransformedSphere()
-        {
-            var s = new Sphere()
-            {
-                Transform =
-                    Transform.Scale(1, 0.5, 1) * Transform.RotateZ(Math.PI / 5),
-            };
-
-            var p = Double4.Point(0, Math.Sqrt(2) / 2, -Math.Sqrt(2) / 2);
-            var n = s.NormalAt(p);
-            var expected = Double4.Vector(0, 0.97014, -0.24254);
-            const double eps = 0.00001;
-            var comparer = Double4.GetEqualityComparer(eps);
-            Assert.Equal(expected, n, comparer);
-        }
-
-        [Fact]
         public void TestSphereDefaultMaterial()
         {
             var s = new Sphere();

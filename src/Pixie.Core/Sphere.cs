@@ -4,14 +4,17 @@ namespace Pixie.Core
 
     public class Sphere : Shape, IEquatable<Sphere>
     {
-        public override Double4 NormalAt(Double4 point)
-        {
-            var objectPoint = this.inv * point;
-            var objectNormal = objectPoint - Double4.Zero;
-            var worldNormal = this.inv.Transpose() * objectNormal;
-            worldNormal.W = 0; // hacky fix
-            return worldNormal.Normalize();
-        }
+        public override Double4 LocalNormalAt(Double4 point) =>
+            point - Double4.Zero;
+
+        // public override Double4 LocalNormalAt(Double4 point)
+        // {
+        //     var objectPoint = this.inv * point;
+        //     var objectNormal = objectPoint - Double4.Zero;
+        //     var worldNormal = this.inv.Transpose() * objectNormal;
+        //     worldNormal.W = 0; // hacky fix
+        //     return worldNormal.Normalize();
+        // }
 
         public override IntersectionList LocalIntersect(Ray ray)
         {

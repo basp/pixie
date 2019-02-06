@@ -14,10 +14,8 @@ namespace Pixie.Tests
             return IntersectionList.Empty();
         }
 
-        public override Double4 NormalAt(Double4 point)
-        {
-            throw new System.NotImplementedException();
-        }
+        public override Double4 LocalNormalAt(Double4 point) =>
+            Double4.Vector(point.X, point.Y, point.Z);
     }
 
     public class ShapeTests
@@ -85,6 +83,38 @@ namespace Pixie.Tests
             var xs = s.Intersect(r);
             Assert.Equal(Double4.Point(-5, 0, -5), s.SavedRay.Origin);
             Assert.Equal(Double4.Vector(0, 0, 1), s.SavedRay.Direction);
+        }
+
+        [Fact]
+        public void ComputeNormalOnTranslatedShape()
+        {
+            var s = new TestShape()
+            {
+                Transform = Transform.Translate(0, 1, 0),
+            };
+
+            var n = s.NormalAt(Double4.Point(0, 1.70711, -0.70711));
+            var expected = Double4.Vector(0, 0.70711, -0.70711);
+            const double eps = 0.00001;
+            var comparer = Double4.GetEqualityComparer(eps);
+            Assert.Equal(expected, n, comparer);
+        }
+
+        [Fact]
+        public void ComputeNormalOnTransformedShape()
+        {
+            var s = new TestShape()
+            {
+                Transform = 
+                    Transform.Scale(1, 0.5, 1) *
+                    Transform.RotateZ(Math.PI / 5),
+            };
+
+            var n = s.NormalAt(Double4.Point(0, Math.Sqrt(2)/2, -Math.Sqrt(2)/2));
+            var expected = Double4.Vector(0, 0.97014, -0.24254);
+            const double eps = 0.00001;
+            var comparer = Double4.GetEqualityComparer(eps);
+            Assert.Equal(expected, n, comparer);
         }
     }
 }
