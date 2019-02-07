@@ -196,5 +196,50 @@ namespace Pixie.Tests
             Assert.True(comps.UnderPoint.Z > Intersection.Epsilon / 2);
             Assert.True(comps.Point.Z < comps.UnderPoint.Z);
         }
+
+        [Fact]
+        public void SchlickApproxUnderTotalInternalReflection()
+        {
+            var shape = new GlassSphere();
+            var r = new Ray(
+                Double4.Point(0, 0, Math.Sqrt(2)/2), 
+                Double4.Vector(0, 1, 0));
+            
+            var xs = IntersectionList.Create(
+                new Intersection(-Math.Sqrt(2)/2, shape),
+                new Intersection(Math.Sqrt(2)/2, shape));
+            
+            var comps = xs[1].PrepareComputations(r, xs);
+            var reflectance = comps.Schlick();
+            Assert.Equal(1.0, reflectance);
+        }
+
+        [Fact]
+        public void SchlickApproxWithPerpendicularViewingAngle()
+        {
+            var shape = new GlassSphere();
+            var r = new Ray(Double4.Point(0, 0, 0), Double4.Vector(0, 1, 0));
+            var xs = IntersectionList.Create(
+                new Intersection(-1, shape),
+                new Intersection(1, shape));
+
+            var comps = xs[1].PrepareComputations(r, xs);
+            var reflectance = comps.Schlick();
+            const int prec = 8;
+            Assert.Equal(0.04, reflectance, prec);
+        }
+
+        [Fact]
+        public void SchlickApproxWithSmallAngleAndN2GreaterThanN1()
+        {
+            var shape = new GlassSphere();
+            var r = new Ray(Double4.Point(0, 0.99, -2), Double4.Vector(0, 0, 1));
+            var xs = IntersectionList.Create(
+                new Intersection(1.8589, shape));
+            var comps = xs[0].PrepareComputations(r, xs);
+            var reflectance = comps.Schlick();
+            const int prec = 5;
+            Assert.Equal(0.48873, reflectance, prec);
+        }
     }
 }

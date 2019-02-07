@@ -353,5 +353,38 @@ namespace Pixie.Tests
             var comparer = Color.GetEqualityComparer(eps);
             Assert.Equal(expected, c, comparer);
         }
+
+        [Fact]
+        public void ShadeWithReflectiveTransparentMaterial()
+        {
+            var w = new DefaultWorld();
+            var r = new Ray(
+                Double4.Point(0, 0, -3), 
+                Double4.Vector(0, -Math.Sqrt(2)/2, Math.Sqrt(2)/2));
+            
+            var floor = new Plane();
+            floor.Transform = Transform.Translate(0, -1, 0);
+            floor.Material.Reflective = 0.5;
+            floor.Material.Transparency = 0.5;
+            floor.Material.RefractiveIndex = 1.5;
+
+            var ball = new Sphere();
+            ball.Transform = Transform.Translate(0, -3.5, -0.5);
+            ball.Material.Color = new Color(1, 0, 0);
+            ball.Material.Ambient = 0.5;
+
+            w.Objects.Add(floor);
+            w.Objects.Add(ball);
+
+            var xs = IntersectionList.Create(
+                new Intersection(Math.Sqrt(2), floor));
+
+            var comps = xs[0].PrepareComputations(r, xs);
+            var c = w.Shade(comps, 5);
+            var expected = new Color(0.93391, 0.69643, 0.69243);
+            const double eps = 0.00001;
+            var comparer = Color.GetEqualityComparer(eps);
+            Assert.Equal(expected, c, comparer);
+        }
     }
 }

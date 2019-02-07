@@ -65,11 +65,12 @@ namespace Pixie.Core
         public Color Shade(Computations comps, int remaining = 5)
         {
             Color res = Color.Black;
+
             foreach (var light in this.Lights)
             {
                 var shadow = this.IsShadowed(comps.OverPoint, light);
 
-                res += comps.Object.Material.Li(
+                var surface = comps.Object.Material.Li(
                     comps.Object,
                     light,
                     comps.OverPoint,
@@ -77,11 +78,49 @@ namespace Pixie.Core
                     comps.Normalv,
                     shadow);
 
-                res += this.ReflectedColor(comps, remaining);
-                res += this.RefractedColor(comps, remaining);
+                var reflected = this.ReflectedColor(comps, remaining);
+                var refracted = this.RefractedColor(comps, remaining);
+
+                var material = comps.Object.Material;
+                if (material.Reflective > 0 && material.Transparency > 0)
+                {
+                    var reflectance = comps.Schlick();
+                    res += surface + reflected * reflectance +
+                                     refracted * (1 - reflectance);
+                }
+                else
+                {
+                    res += surface + reflected + refracted;
+                }
             }
 
             return res;
+
+            // var light = this.Lights[0];
+            // // TODO: Support multiple light sources
+
+            // var shadow = this.IsShadowed(comps.OverPoint, light);
+
+            // var surface = comps.Object.Material.Li(
+            //     comps.Object,
+            //     light,
+            //     comps.OverPoint,
+            //     comps.Eyev,
+            //     comps.Normalv,
+            //     shadow);
+
+            // var reflected = this.ReflectedColor(comps, remaining);
+            // var refracted = this.RefractedColor(comps, remaining);
+
+            // var material = comps.Object.Material;
+            // if (material.Reflective > 0 && material.Transparency > 0)
+            // {
+            //     var reflectance = comps.Schlick();
+            //     return surface + reflected * reflectance +
+            //                      refracted * (1 - reflectance);
+            // }
+
+            // return surface + reflected + refracted;
         }
 
         public Color ColorAt(Ray ray, int remaining = 5)

@@ -301,5 +301,124 @@ namespace Pixie.Cmd
 
             return world;
         }
+    
+        public static World Example5()
+        {
+            var world = new World();
+
+            var w0 = new Plane
+            {
+                Material = new Material
+                {
+                    Specular = 0,
+                    Pattern = new CheckersPattern(Color.White, Color.Black)
+                    {
+                    },
+                },
+            };
+
+            world.Objects.Add(w0);
+
+            var w1 = new Plane
+            {
+                Material = w0.Material,
+                Transform =
+                    Transform.Translate(0, 0, 6) *
+                    Transform.RotateX(-Math.PI / 2),
+            };
+
+            world.Objects.Add(w1);
+
+            var w2 = new Plane
+            {
+                Material = w0.Material,
+                Transform =
+                    Transform.Translate(-6, 0, 0) *
+                    Transform.RotateZ(-Math.PI / 2),
+            };
+
+            world.Objects.Add(w2);
+
+            var w3 = new Plane
+            {
+                Material = w0.Material,
+                Transform =
+                    Transform.Translate(6, 0, 0) *
+                    Transform.RotateZ(Math.PI / 2),
+            };
+
+            world.Objects.Add(w3);
+
+            var w4 = new Plane
+            {
+                Material = w0.Material,
+                Transform =
+                    Transform.Translate(0, 0, -6) *
+                    Transform.RotateX(Math.PI / 2),
+            };
+
+            world.Objects.Add(w4);
+
+            var w5 = new Plane
+            {
+                Material = w0.Material,
+                Transform =
+                    Transform.Translate(0, 6, 0) *
+                    Transform.RotateZ(-Math.PI),
+            };
+
+            world.Objects.Add(w5);
+
+            var sphere = new Sphere
+            {
+                Transform =
+                    Transform.Translate(0, 1, 0),
+
+                Material = new Material
+                {
+                    Color = new Color(0.1, 0.2, 0.3),
+                    Ambient = 0.001,
+                    Diffuse = 0.001,
+                    // Transparency = 0.1,
+                    // RefractiveIndex = 1.000029, // air
+                    // RefractiveIndex = 1.333, // water
+                    // RefractiveIndex = 1.52, // glass
+                    Reflective = 1.0,
+                    Specular = 0.9,
+                    Shininess = 250,
+                },
+            };
+
+            world.Objects.Add(sphere);
+
+            const int n = 16;
+            var arc = 2 * Math.PI / n;
+            for(var i = 0; i < n; i++)
+            {
+                var s = new Sphere
+                {
+                    Transform = 
+                        Transform.RotateY(i * arc) *
+                        Transform.Translate(0, 0.15, 1.3) *
+                        Transform.Scale(0.15, 0.15, 0.15),
+
+                    Material = new Material
+                    {
+                        Color = new Color(0.1, 0.6, 0.7),
+                    },
+                };
+
+                world.Objects.Add(s);
+            }
+
+
+            var l1 = new PointLight(Double4.Point(-3, 3, -3), new Color(1.0, 1.0, 1.0));
+            world.Lights.Add(l1);
+
+            // var l2 = new PointLight(Double4.Point(3, 2.5, -3), new Color(1.0, 0.2, 0.2));
+            // world.Lights.Add(l2);
+
+            return world;
+        }
     }
 }
