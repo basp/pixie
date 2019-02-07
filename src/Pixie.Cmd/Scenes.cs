@@ -1,8 +1,8 @@
 namespace Pixie.Cmd
 {
     using System;
-    using SharpNoise;
     using Pixie.Core;
+    
     public class Scenes
     {
         private static Random Rng = new Random();
@@ -205,7 +205,7 @@ namespace Pixie.Cmd
                 },
             };
 
-            const int n = 1024 * 10;
+            const int n = 1024;
             var arc = 2 * Math.PI / n;
             for (var i = 0; i < n; i++)
             {

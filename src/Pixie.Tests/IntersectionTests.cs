@@ -127,5 +127,16 @@ namespace Pixie.Tests
             Assert.True(comps.OverPoint.Z < (-Intersection.Epsilon / 2));
             Assert.True(comps.Point.Z > comps.OverPoint.Z);
         }
+
+        [Fact]
+        public void PrecomputingTheReflectionVector()
+        {
+            var shape = new Plane();
+            var r = new Ray(Double4.Point(0, 1, -1), Double4.Vector(0, -Math.Sqrt(2)/2, Math.Sqrt(2)/2));
+            var i = new Intersection(Math.Sqrt(2), shape);
+            var comps = i.PrepareComputations(r);
+            var expected = Double4.Vector(0, Math.Sqrt(2)/2, Math.Sqrt(2)/2);
+            Assert.Equal(expected, comps.Reflectv);
+        }        
     }
 }

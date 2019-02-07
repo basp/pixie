@@ -30,6 +30,7 @@ namespace Pixie.Core
             }
 
             var overPoint = point + normalv * Epsilon; 
+            var reflectv = r.Direction.Reflect(normalv);
 
             return new Computations
             {
@@ -39,6 +40,7 @@ namespace Pixie.Core
                 OverPoint = overPoint,
                 Eyev = eyev,
                 Normalv = normalv,
+                Reflectv = reflectv,
                 Inside = inside,
             };
         }

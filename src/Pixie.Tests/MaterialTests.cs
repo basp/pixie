@@ -155,18 +155,7 @@ namespace Pixie.Tests
         public void ReflectivityForTheDefaultMaterial()
         {
             var m = new Material();
-            // Assert.Equal(0.0, m.Reflectivity);
-        }
-
-        [Fact]
-        public void PrecomputingTheReflectionVector()
-        {
-            var shape = new Plane();
-            var r = new Ray(Double4.Point(0, 1, -1), Double4.Vector(0, -Math.Sqrt(2)/2, Math.Sqrt(2)/2));
-            var i = new Intersection(Math.Sqrt(2), shape);
-            var comps = i.PrepareComputations(r);
-            var expected = Double4.Vector(0, Math.Sqrt(2)/2, Math.Sqrt(2)/2);
-            Assert.Equal(expected, comps.Reflectv):
+            Assert.Equal(0.0, m.Reflective);
         }
     }
 }

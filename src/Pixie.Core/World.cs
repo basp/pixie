@@ -16,12 +16,31 @@ namespace Pixie.Core
             return IntersectionList.Create(xs.ToArray());
         }
 
-        public Color Shade(Computations comps)
+        public Color ReflectedColor(Computations comps, int remaining = 5)
+        {
+            if (remaining <= 0)
+            {
+                return Color.Black;
+            }
+
+            if (comps.Object.Material.Reflective == 0)
+            {
+                return Color.Black;
+            }
+
+            var reflectRay = new Ray(comps.OverPoint, comps.Reflectv);
+            var color = this.ColorAt(reflectRay, remaining - 1);
+            return color * comps.Object.Material.Reflective;
+        }
+
+        public Color Shade(Computations comps, int remaining = 5)
         {
             Color res = Color.Black;
-            foreach(var light in this.Lights)
+            foreach (var light in this.Lights)
             {
-                var shadow = IsShadowed(comps.OverPoint, light);
+                var shadow = this.IsShadowed(comps.OverPoint, light);
+
+                // surface
                 res += comps.Object.Material.Li(
                     comps.Object,
                     light,
@@ -29,18 +48,21 @@ namespace Pixie.Core
                     comps.Eyev,
                     comps.Normalv,
                     shadow);
+
+                // reflected
+                res += this.ReflectedColor(comps, remaining);
             }
 
             return res;
         }
 
-        public Color ColorAt(Ray ray)
+        public Color ColorAt(Ray ray, int remaining = 5)
         {
             var xs = this.Intersect(ray);
             if (xs.TryGetHit(out var i))
             {
                 var comps = i.PrepareComputations(ray);
-                return this.Shade(comps);
+                return this.Shade(comps, remaining);
             }
 
             return Color.Black;

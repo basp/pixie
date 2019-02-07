@@ -1,7 +1,6 @@
 namespace Pixie.Cmd
 {
     using Pixie.Core;
-    using SharpNoise;
 
     public class PertubedPattern : Pattern
     {
@@ -17,10 +16,12 @@ namespace Pixie.Cmd
 
         public override Color PatternAt(Double4 point)
         {
-            var n = NoiseGenerator.GradientCoherentNoise3D(
-                point.X,
-                point.Y,
-                point.Z);
+            // var n = NoiseGenerator.GradientCoherentNoise3D(
+            //     point.X,
+            //     point.Y,
+            //     point.Z);
+
+            var n = 0;
 
             var ta = n;
             var tb = 1.0 - n;

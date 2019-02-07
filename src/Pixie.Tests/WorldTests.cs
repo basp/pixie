@@ -141,5 +141,94 @@ namespace Pixie.Tests
             var expected = new Color(0.1, 0.1, 0.1);
             Assert.Equal(expected, c);
         }
+
+        [Fact]
+        public void ReflectedColorForNonReflectiveMaterial()
+        {
+            var w = new DefaultWorld();
+            var r = new Ray(Double4.Point(0, 0, 0), Double4.Vector(0, 0, 1));
+            var shape = w.Objects[1];
+            shape.Material.Ambient = 1;
+            var i = new Intersection(1, shape);
+            var comps = i.PrepareComputations(r);
+            var c = w.ReflectedColor(comps);
+            Assert.Equal(Color.Black, c);
+        }
+
+        [Fact]
+        public void ReflectedColorForReflectiveMaterial()
+        {
+            var w = new DefaultWorld();
+            var plane = new Plane();
+            plane.Material.Reflective = 0.5;
+            plane.Transform = Transform.Translate(0, -1, 0);
+            w.Objects.Add(plane);
+            var r = new Ray(
+                Double4.Point(0, 0, -3), 
+                Double4.Vector(0, -Math.Sqrt(2)/2, Math.Sqrt(2)/2));
+            var i = new Intersection(Math.Sqrt(2), plane);
+            var comps = i.PrepareComputations(r);
+            var c = w.ReflectedColor(comps);
+            var expected = new Color(0.19032, 0.2379, 0.14274);
+            const double eps = 0.0001;
+            var comparer = Color.GetEqualityComparer(eps);
+            Assert.Equal(expected, c, comparer);
+        }
+
+        [Fact]
+        public void ShadeWithReflectiveMaterial()
+        {
+            var w = new DefaultWorld();
+            var plane = new Plane();
+            plane.Material.Reflective = 0.5;
+            plane.Transform = Transform.Translate(0, -1, 0);
+            w.Objects.Add(plane);
+            var r = new Ray(
+                Double4.Point(0, 0, -3),
+                Double4.Vector(0, -Math.Sqrt(2)/2, Math.Sqrt(2)/2));
+            var i = new Intersection(Math.Sqrt(2), plane);
+            var comps = i.PrepareComputations(r);
+            var c = w.Shade(comps);
+            var expected = new Color(0.87677, 0.92436, 0.82918);
+            const double eps = 0.0001;
+            var comparer = Color.GetEqualityComparer(eps);
+            Assert.Equal(expected, c, comparer);
+        }
+
+        [Fact]
+        public void ColorAtWithMutuallyReflectiveSurfaces()
+        {
+            var w = new World();
+            var light = new PointLight(Double4.Point(0, 0, 0), Color.White);
+            w.Lights.Add(light);
+            var lower = new Plane();
+            lower.Material.Reflective = 1;
+            lower.Transform = Transform.Translate(0, -1, 0);
+            w.Objects.Add(lower);
+            var upper = new Plane();
+            upper.Material.Reflective = 1;
+            upper.Transform = Transform.Translate(0, 1, 0);
+            w.Objects.Add(upper);
+            var r = new Ray(Double4.Point(0, 0, 0), Double4.Vector(0, 1, 0));
+            var c = w.ColorAt(r);
+            Assert.True(true);
+        }
+
+        [Fact]
+        public void ReflectedColorAtMaxRecursiveDepth()
+        {
+            var w = new DefaultWorld();
+            var plane = new Plane();
+            plane.Material.Reflective = 0.5;
+            plane.Transform = Transform.Translate(0, -1, 0);
+            w.Objects.Add(plane);
+            var r = new Ray(
+                Double4.Point(0, 0, -3),
+                Double4.Vector(0, -Math.Sqrt(2)/2, Math.Sqrt(2)/2));
+            var i = new Intersection(Math.Sqrt(2), plane);
+            var comps = i.PrepareComputations(r);
+            var c = w.ReflectedColor(comps, 0);
+            Assert.Equal(Color.Black, c);
+        }
     }
 }

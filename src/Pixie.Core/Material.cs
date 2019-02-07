@@ -8,6 +8,7 @@ namespace Pixie.Core
         public double Diffuse;
         public double Specular;
         public double Shininess;
+        public double Reflective;
         public Color Color;
         public Pattern Pattern;
 
@@ -17,6 +18,7 @@ namespace Pixie.Core
             this.Diffuse = 0.9;
             this.Specular = 0.9;
             this.Shininess = 200.0;
+            this.Reflective = 0.0;
             this.Color = Color.White;
         }
 
