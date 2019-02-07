@@ -4,12 +4,6 @@ namespace Pixie.Tests
     using Xunit;
     using Pixie.Core;
 
-    class TestPattern : Pattern
-    {
-        public override Color PatternAt(Double4 point) =>
-            new Color(point.X, point.Y, point.Z);
-    }
-
     public class PatternTests
     {
         private static readonly Color black = new Color(0, 0, 0);

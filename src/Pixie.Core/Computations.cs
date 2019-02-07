@@ -10,6 +10,8 @@ namespace Pixie.Core
         
         public Double4 OverPoint;
         
+        public Double4 UnderPoint;
+        
         public Double4 Eyev;
         
         public Double4 Normalv;
@@ -17,5 +19,9 @@ namespace Pixie.Core
         public Double4 Reflectv;
         
         public bool Inside;
+
+        public double N1;
+
+        public double N2;
     }
 }

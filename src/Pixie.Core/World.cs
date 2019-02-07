@@ -33,6 +33,35 @@ namespace Pixie.Core
             return color * comps.Object.Material.Reflective;
         }
 
+        public Color RefractedColor(Computations comps, int remaining = 5)
+        {
+            if (remaining <= 0)
+            {
+                return Color.Black;
+            }
+
+            if (comps.Object.Material.Transparency == 0)
+            {
+                return Color.Black;
+            }
+
+            var nRatio = comps.N1 / comps.N2;
+            var cosi = comps.Eyev.Dot(comps.Normalv);
+            var sin2t = nRatio * nRatio * (1 - cosi * cosi);
+
+            if (sin2t > 1)
+            {
+                return Color.Black;
+            }
+
+            var cost = Math.Sqrt(1.0 - sin2t);
+            var direction = comps.Normalv * (nRatio * cosi - cost) - comps.Eyev * nRatio;
+            var refractRay = new Ray(comps.UnderPoint, direction);
+
+            return this.ColorAt(refractRay, remaining - 1) *
+                comps.Object.Material.Transparency;
+        }
+
         public Color Shade(Computations comps, int remaining = 5)
         {
             Color res = Color.Black;
@@ -40,7 +69,6 @@ namespace Pixie.Core
             {
                 var shadow = this.IsShadowed(comps.OverPoint, light);
 
-                // surface
                 res += comps.Object.Material.Li(
                     comps.Object,
                     light,
@@ -49,8 +77,8 @@ namespace Pixie.Core
                     comps.Normalv,
                     shadow);
 
-                // reflected
                 res += this.ReflectedColor(comps, remaining);
+                res += this.RefractedColor(comps, remaining);
             }
 
             return res;
@@ -61,7 +89,7 @@ namespace Pixie.Core
             var xs = this.Intersect(ray);
             if (xs.TryGetHit(out var i))
             {
-                var comps = i.PrepareComputations(ray);
+                var comps = i.PrepareComputations(ray, xs);
                 return this.Shade(comps, remaining);
             }
 

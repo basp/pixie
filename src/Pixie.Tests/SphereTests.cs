@@ -163,5 +163,14 @@ namespace Pixie.Tests
             s.Material = m;
             Assert.Equal(m, s.Material);
         }
+
+        [Fact]
+        public void HelperForSphereWithGlassyMaterial()
+        {
+            var s = new GlassSphere();
+            Assert.Equal(Double4x4.Identity, s.Transform);
+            Assert.Equal(1.0, s.Material.Transparency);
+            Assert.Equal(1.5, s.Material.RefractiveIndex);
+        }
     }
 }

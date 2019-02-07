@@ -5,11 +5,21 @@ namespace Pixie.Core
     public class Material : IEquatable<Material>
     {
         public double Ambient;
+        
         public double Diffuse;
+        
         public double Specular;
+        
         public double Shininess;
+        
         public double Reflective;
+        
+        public double Transparency;
+        
+        public double RefractiveIndex;
+        
         public Color Color;
+        
         public Pattern Pattern;
 
         public Material()
@@ -19,6 +29,8 @@ namespace Pixie.Core
             this.Specular = 0.9;
             this.Shininess = 200.0;
             this.Reflective = 0.0;
+            this.Transparency = 0.0;
+            this.RefractiveIndex = 1.0;
             this.Color = Color.White;
         }
 

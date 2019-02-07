@@ -230,5 +230,128 @@ namespace Pixie.Tests
             var c = w.ReflectedColor(comps, 0);
             Assert.Equal(Color.Black, c);
         }
+
+        [Fact]
+        public void RefractedColorWithOpaqueSurface()
+        {
+            var w = new DefaultWorld();
+            var shape = w.Objects[0];
+            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var xs = IntersectionList.Create(
+                new Intersection(4, shape),
+                new Intersection(6, shape));
+            var comps = xs[0].PrepareComputations(r, xs);
+            var c = w.RefractedColor(comps, 5);
+            Assert.Equal(Color.Black, c);
+        }
+
+        [Fact]
+        public void RefractedColorAtMaxRecursiveDepth()
+        {
+            var w = new DefaultWorld();
+            
+            var shape = w.Objects[0];
+            shape.Material.Transparency = 1.0;
+            shape.Material.RefractiveIndex = 1.5;
+
+            var r = new Ray(
+                Double4.Point(0, 0, -5),
+                Double4.Vector(0, 0, 1));
+
+            var xs = IntersectionList.Create(
+                new Intersection(4, shape),
+                new Intersection(6, shape));
+
+            var comps = xs[0].PrepareComputations(r, xs);
+            var c = w.RefractedColor(comps, 0);
+            Assert.Equal(Color.Black, c);
+        }
+
+        [Fact]
+        public void RefractedColorUnderTotalInternalReflection()
+        {
+            var w = new DefaultWorld();
+
+            var shape = w.Objects[0];
+            shape.Material.Transparency = 1.0;
+            shape.Material.RefractiveIndex = 1.5;
+
+            var r = new Ray(
+                Double4.Point(0, 0, Math.Sqrt(2)/2), 
+                Double4.Vector(0, 1, 0));
+
+            var xs = IntersectionList.Create(
+                new Intersection(-Math.Sqrt(2)/2, shape),
+                new Intersection(Math.Sqrt(2)/2, shape));
+            
+            var comps = xs[1].PrepareComputations(r, xs);
+            var c = w.RefractedColor(comps, 5);
+            Assert.Equal(Color.Black, c);
+        }
+
+        [Fact]
+        public void RefractedColorWithRefractedRay()
+        {
+            var w = new DefaultWorld();
+
+            var a = w.Objects[0];
+            a.Material.Ambient = 1.0;
+            a.Material.Pattern = new TestPattern();
+
+            var b = w.Objects[1];
+            b.Material.Transparency = 1.0;
+            b.Material.RefractiveIndex = 1.5;
+
+            var r = new Ray(
+                Double4.Point(0, 0, 0.1),
+                Double4.Vector(0, 1, 0));
+
+            var xs = IntersectionList.Create(
+                new Intersection(-0.9899, a),
+                new Intersection(-0.4899, b),
+                new Intersection(0.4899, b),
+                new Intersection(0.9899, a));
+            
+            var comps = xs[2].PrepareComputations(r, xs);
+            var c = w.RefractedColor(comps, 5);
+            var expected = new Color(0, 0.99888, 0.04725);
+
+            const double eps = 0.0001;
+            var comparer = Color.GetEqualityComparer(eps);
+            Assert.Equal(expected, c, comparer);
+        }
+
+        [Fact]
+        public void ShadeWithTransparentMaterial()
+        {
+            var w = new DefaultWorld();
+            var floor = new Plane();
+            floor.Transform = Transform.Translate(0, -1, 0);
+            floor.Material.Transparency = 0.5;
+            floor.Material.RefractiveIndex = 1.5;
+
+            var ball = new Sphere();
+            ball.Transform = Transform.Translate(0, -3.5, -0.5);
+            ball.Material.Color = new Color(1, 0, 0);
+            ball.Material.Ambient = 0.5;
+
+            w.Objects.Add(floor);
+            w.Objects.Add(ball);
+
+            var r = new Ray(
+                Double4.Point(0, 0, -3), 
+                Double4.Vector(0, -Math.Sqrt(2)/2, Math.Sqrt(2)/2));
+
+            var xs = IntersectionList.Create(
+                new Intersection(Math.Sqrt(2), floor));
+            
+            var comps = xs[0].PrepareComputations(r, xs);
+            var c = w.Shade(comps, 5);
+            var expected = new Color(0.93642, 0.68642, 0.68642);
+
+            const double eps = 0.00001;
+            var comparer = Color.GetEqualityComparer(eps);
+            Assert.Equal(expected, c, comparer);
+        }
     }
 }

@@ -132,11 +132,69 @@ namespace Pixie.Tests
         public void PrecomputingTheReflectionVector()
         {
             var shape = new Plane();
-            var r = new Ray(Double4.Point(0, 1, -1), Double4.Vector(0, -Math.Sqrt(2)/2, Math.Sqrt(2)/2));
+            var r = new Ray(Double4.Point(0, 1, -1), Double4.Vector(0, -Math.Sqrt(2) / 2, Math.Sqrt(2) / 2));
             var i = new Intersection(Math.Sqrt(2), shape);
             var comps = i.PrepareComputations(r);
-            var expected = Double4.Vector(0, Math.Sqrt(2)/2, Math.Sqrt(2)/2);
+            var expected = Double4.Vector(0, Math.Sqrt(2) / 2, Math.Sqrt(2) / 2);
             Assert.Equal(expected, comps.Reflectv);
-        }        
+        }
+
+        [Theory]
+        [InlineData(0, 1.0, 1.5)]
+        [InlineData(1, 1.5, 2.0)]
+        [InlineData(2, 2.0, 2.5)]
+        [InlineData(3, 2.5, 2.5)]
+        [InlineData(4, 2.5, 1.5)]
+        [InlineData(5, 1.5, 1.0)]
+        public void FindingN1AndN2AtVariousIntersections(int index, double n1, double n2)
+        {
+            var a = new GlassSphere()
+            {
+                Transform = Transform.Scale(2, 2, 2),
+            };
+
+            var b = new GlassSphere()
+            {
+                Transform = Transform.Translate(0, 0, -0.25),
+            };
+
+            var c = new GlassSphere()
+            {
+                Transform = Transform.Translate(0, 0, 25),
+            };
+
+            a.Material.RefractiveIndex = 1.5;
+            b.Material.RefractiveIndex = 2.0;
+            c.Material.RefractiveIndex = 2.5;
+
+            var r = new Ray(Double4.Point(0, 0, -4), Double4.Vector(0, 0, 1));
+            var xs = IntersectionList.Create(
+                new Intersection(2, a),
+                new Intersection(2.75, b),
+                new Intersection(3.25, c),
+                new Intersection(4.75, b),
+                new Intersection(5.25, c),
+                new Intersection(6, a));
+
+            var comps = xs[index].PrepareComputations(r, xs);
+            Assert.Equal(n1, comps.N1);
+            Assert.Equal(n2, comps.N2);
+        }
+
+        [Fact]
+        public void UnderPointIsOffsetBelowTheSurface()
+        {
+            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var shape = new GlassSphere()
+            {
+                Transform = Transform.Translate(0, 0, 1),
+            };
+
+            var i = new Intersection(5, shape);
+            var xs = IntersectionList.Create(i);
+            var comps = i.PrepareComputations(r, xs);
+            Assert.True(comps.UnderPoint.Z > Intersection.Epsilon / 2);
+            Assert.True(comps.Point.Z < comps.UnderPoint.Z);
+        }
     }
 }

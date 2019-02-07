@@ -157,5 +157,13 @@ namespace Pixie.Tests
             var m = new Material();
             Assert.Equal(0.0, m.Reflective);
         }
+
+        [Fact]
+        public void TransparencyAndRefractiveIndexForDefaultMaterial()
+        {
+            var m = new Material();
+            Assert.Equal(0, m.Transparency);
+            Assert.Equal(1.0, m.RefractiveIndex);
+        }
     }
 }
