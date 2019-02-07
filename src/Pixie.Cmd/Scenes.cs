@@ -2,7 +2,7 @@ namespace Pixie.Cmd
 {
     using System;
     using Pixie.Core;
-    
+
     public class Scenes
     {
         private static Random Rng = new Random();
@@ -119,7 +119,7 @@ namespace Pixie.Cmd
             };
 
             var checkers = new CheckersPattern(
-                Color.White, 
+                Color.White,
                 Color.Black)
             {
                 Transform =
@@ -211,10 +211,10 @@ namespace Pixie.Cmd
             {
                 const double r = 0.15;
                 var gi = i % gradients.Length;
-                
+
                 var ni = (double)i / n;
                 const double scatter = 15;
-                var q = scatter * Rng.NextDouble();     
+                var q = scatter * Rng.NextDouble();
                 var s = new Sphere
                 {
                     Transform =
@@ -235,6 +235,68 @@ namespace Pixie.Cmd
                 Double4.Point(-10, 10, -10),
                 Color.White);
 
+            world.Lights.Add(light);
+
+            return world;
+        }
+
+        public static World Example4()
+        {
+            var world = new World();
+
+            var plane = new Plane
+            {
+                Material = new Material
+                {
+                    Specular = 0,
+                    Pattern = new CheckersPattern(Color.White, Color.Black)
+                    {
+                        Transform = Transform.Scale(2, 2, 2),
+                    },
+                },
+            };
+
+            world.Objects.Add(plane);
+
+            var sphere = new Sphere
+            {
+                Transform =
+                    Transform.Translate(0, 1, 0),
+
+                Material = new Material
+                {
+                    Color = new Color(0.1, 0.4, 0.5),
+                    Reflective = 0.6,
+                    Specular = 0.95,
+                    Shininess = 300,
+                },
+            };
+
+            world.Objects.Add(sphere);
+
+            const int n = 16;
+            var arc = 2 * Math.PI / n;
+            for (var i = 0; i < n; i++)
+            {
+                var s = new Sphere
+                {
+                    Transform =
+                        Transform.RotateY(i * arc) *
+                        Transform.Translate(0, 0.2, 1.5) *
+                        Transform.Scale(0.2, 0.2, 0.2),
+
+                    Material = new Material
+                    {
+                        Color = new Color(0.57, 0.1, 0.2),
+                        Reflective = 0.4,
+                    },
+                };
+
+                world.Objects.Add(s);
+            }
+
+
+            var light = new PointLight(Double4.Point(-10, 10, -10), Color.White);
             world.Lights.Add(light);
 
             return world;

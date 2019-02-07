@@ -10,16 +10,16 @@
     {
         static void Main(string[] args)
         {
-            var world = Scenes.Example3();
+            var world = Scenes.Example4();
 
-            const int width = 640;
-            const int height = 480;
+            const int width = 1280;
+            const int height = 1024;
 
-            var camera = new Camera(width, height, Math.PI / 4)
+            var camera = new Camera(width, height, Math.PI / 3)
             {
                 Transform = Transform.View(
-                    Double4.Point(3.78, 1.1, -2.1),
-                    Double4.Point(3.5, 0, 0),
+                    Double4.Point(-1, 1.2, -3.5),
+                    Double4.Point(0, 0.4, -1),
                     Double4.Vector(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
