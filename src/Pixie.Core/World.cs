@@ -123,7 +123,7 @@ namespace Pixie.Core
             // return surface + reflected + refracted;
         }
 
-        public Color ColorAt(Ray ray, int remaining = 5)
+        public Color ColorAt(Ray ray, int remaining = 10)
         {
             var xs = this.Intersect(ray);
             if (xs.TryGetHit(out var i))
