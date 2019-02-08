@@ -5,6 +5,13 @@ namespace Pixie.Cmd
 
     public class Scenes
     {
+        public const double Vacuum = 1.0;
+        public const double Air = 1.000293;
+        public const double Water = 1.333;
+        public const double Ice = 1.31;
+        public const double Diamond = 2.42;
+        public const double Glass = 1.52;
+
         private static Random Rng = new Random();
 
         public static World Example1()
@@ -301,7 +308,7 @@ namespace Pixie.Cmd
 
             return world;
         }
-    
+
         public static World Example5()
         {
             var world = new World();
@@ -394,11 +401,11 @@ namespace Pixie.Cmd
 
             const int n = 8;
             var arc = 2 * Math.PI / n;
-            for(var i = 0; i < n; i++)
+            for (var i = 0; i < n; i++)
             {
                 var s = new Sphere
                 {
-                    Transform = 
+                    Transform =
                         Transform.RotateY(i * arc) *
                         Transform.Translate(0, 0.5, 1.75) *
                         Transform.Scale(0.4, 0.4, 0.4),
@@ -423,8 +430,8 @@ namespace Pixie.Cmd
 
             return world;
         }
-    
-        public static Tuple<World,Camera> Example6(int width, int height)
+
+        public static Tuple<World, Camera> Example6(int width, int height)
         {
             var world = new World();
 
@@ -437,7 +444,7 @@ namespace Pixie.Cmd
                         new Color(0.1, 0.55, 0.2),
                         new Color(0.1, 0.65, 0.3))
                     {
-                        Transform = 
+                        Transform =
                             Transform.Scale(0.6, 0.6, 0.6),
                     },
                     Specular = 0,
@@ -480,7 +487,7 @@ namespace Pixie.Cmd
                         new Color(0.1, 0.3, 0.4),
                         new Color(0.1, 0.6, 0.8))
                     {
-                        Transform = 
+                        Transform =
                             Transform.Scale(0.25, 1, 1) *
                             Transform.RotateZ(Math.PI / 3),
                     },
@@ -537,14 +544,14 @@ namespace Pixie.Cmd
                     Double4.Point(0, 0.3, 0),
                     Double4.Vector(0, 1, 0)),
 
-                ProgressMonitor = 
+                ProgressMonitor =
                     new ParallelConsoleProgressMonitor(height),
             };
 
             return Tuple.Create(world, camera);
         }
-    
-        public static Tuple<World,Camera> Example7(int width, int height)
+
+        public static Tuple<World, Camera> Example7(int width, int height)
         {
             var world = new World();
 
@@ -591,7 +598,7 @@ namespace Pixie.Cmd
                 Transform =
                     Transform.Translate(0, 0.25, -1.0) *
                     Transform.Scale(0.25, 0.25, 0.25),
-                
+
                 Material = new Material()
                 {
                     Ambient = 0.2,
@@ -623,7 +630,7 @@ namespace Pixie.Cmd
             world.Objects.Add(s2);
 
             var light = new PointLight(
-                Double4.Point(0, 10, -2), 
+                Double4.Point(0, 10, -2),
                 Color.White);
 
             world.Lights.Add(light);
@@ -637,7 +644,268 @@ namespace Pixie.Cmd
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };
-            
+
+            return Tuple.Create(world, camera);
+        }
+
+        public static Tuple<World, Camera> Example8(int width, int height)
+        {
+            var world = new World();
+
+            var skyblue = new Color(181.0 / 255, 228.0 / 255, 231.0 / 255);
+
+            var sky = new Material
+            {
+                Color = skyblue,
+                Specular = 0,
+                Ambient = 0.2,
+                Diffuse = 0.3,
+            };
+
+            var floor = new Plane()
+            {
+                Material = new Material()
+                {
+                    Specular = 0,
+                    Ambient = 0.4,
+                    Diffuse = 0.5,
+                    Pattern = new CheckersPattern(
+                        new Color(0.925, 0.870, 0.670),
+                        new Color(0.886, 0.804, 0.610))
+                    {
+                        Transform =
+                            Transform.Scale(0.25, 0.25, 0.25),
+                    },
+                },
+            };
+
+            world.Objects.Add(floor);
+
+            var w1 = new Plane()
+            {
+                Transform =
+                    Transform.Translate(0, 0, 100) *
+                    Transform.RotateX(-Math.PI / 2),
+
+                Material = sky,
+            };
+
+            world.Objects.Add(w1);
+
+            var w2 = new Plane()
+            {
+                Transform =
+                    Transform.Translate(0, 0, -100) *
+                    Transform.RotateX(Math.PI / 2),
+
+                Material = sky,
+            };
+
+            world.Objects.Add(w2);
+
+            var w3 = new Plane()
+            {
+                Transform =
+                    Transform.Translate(100, 0, 0) *
+                    Transform.RotateZ(Math.PI / 2),
+
+                Material = sky,
+            };
+
+            world.Objects.Add(w3);
+
+            var w4 = new Plane()
+            {
+                Transform =
+                    Transform.Translate(-100, 0, 0) *
+                    Transform.RotateZ(-Math.PI / 2),
+
+                Material = sky,
+            };
+
+            world.Objects.Add(w4);
+
+            var w5 = new Plane()
+            {
+                Transform =
+                    Transform.Translate(0, 100, 0) *
+                    Transform.RotateZ(-Math.PI),
+
+                Material = sky,
+            };
+
+            world.Objects.Add(w5);
+
+            var metallic1 = new Material()
+            {
+                Color = new Color(96.0 / 255, 93.0 / 255, 82.0 / 255),
+                Reflective = 0.17,
+                Ambient = 0.2,
+                Diffuse = 0.54,
+                Shininess = 10,
+                Specular = 0.3,
+            };
+
+            var metallic2 = new Material()
+            {
+                Color = new Color(59.0 / 255, 47.0 / 255, 57.0 / 255),
+                Reflective = 0.1,
+                Diffuse = 0.8,
+                Shininess = 5,
+                Specular = 0.3,
+            };
+
+            var metallic3 = new Material()
+            {
+                Color = new Color(32.0 / 255, 132.0 / 255, 70.0 / 255),
+                Reflective = 0.14,
+                Diffuse = 0.7,
+                Shininess = 20,
+                Specular = 0.4,
+            };
+
+            var glass = new Material()
+            {
+                Color = new Color(0.1, 0.05, 0.2),
+                Reflective = 0.72,
+                Transparency = 0.72,
+                RefractiveIndex = Water,
+                Diffuse = 0.32,
+                Ambient = 0.01,
+                Specular = 1.0,
+                Shininess = 350,
+            };
+
+            glass.Pattern = new GradientPattern(
+                new Color(231.0 / 255, 128.0 / 255, 102.0 / 255),
+                new Color(70.0 / 255, 143.0 / 255, 30.0 / 255))
+            {
+                Transform =
+                    Transform.Translate(1.0, 0, 0) *
+                    Transform.Scale(2.0, 1, 1),
+            };
+
+            var s1 = new Sphere()
+            {
+                Transform =
+                    Transform.Translate(0, 1, 0),
+
+                Material = metallic1,
+            };
+
+            world.Objects.Add(s1);
+
+            var s2 = new Sphere()
+            {
+                Transform =
+                    Transform.Translate(-1.8, 0.5, -0.7) *
+                    Transform.Scale(0.5, 0.5, 0.5),
+
+                Material = glass,
+            };
+
+            world.Objects.Add(s2);
+
+            var s3 = new Sphere()
+            {
+                Transform =
+                    Transform.Translate(-0.2, 0.3, -1.5) *
+                    Transform.Scale(0.3, 0.3, 0.3),
+
+                Material = glass,
+            };
+
+            world.Objects.Add(s3);
+
+            var s4 = new Sphere()
+            {
+                Transform =
+                    Transform.Translate(-3.0, 0.7, 1.0) *
+                    Transform.Scale(0.7, 0.7, 0.7),
+
+                Material = metallic3,
+            };
+
+            world.Objects.Add(s4);
+
+            var s5 = new Sphere()
+            {
+                Transform =
+                    Transform.Translate(1.2, 0.5, -0.85) *
+                    Transform.Scale(0.5, 0.5, 0.5),
+
+                Material = metallic2,
+            };
+
+            world.Objects.Add(s5);
+
+            var c1 = new Cube()
+            {
+                Transform =
+                    Transform.Translate(0, 0.999, -7) *
+                    Transform.Scale(2, 2, 2) *
+                    Transform.RotateY(Math.PI / 5),
+
+                Material = new Material
+                {
+                    Color = new Color(0.8, 0.2, 0.6),
+                    Reflective = 0.1,
+                    Diffuse = 0.8,
+                },
+            };
+
+            world.Objects.Add(c1);
+
+            var c2 = new Cube()
+            {
+                Transform =
+                    Transform.Translate(6, 0.999, -5) *
+                    Transform.Scale(1.5, 1.5, 1.5) *
+                    Transform.RotateY(-Math.PI / 7),
+
+                Material = new Material
+                {
+                    Color = new Color(0.1, 0.5, 0.5),
+                    Reflective = 0.1,
+                    Diffuse = 0.8,
+                },
+            };
+
+            world.Objects.Add(c2);
+
+            var c3 = new Cube()
+            {
+                Transform =
+                    Transform.Translate(-4, 0.999, -6) *
+                    Transform.Scale(1.5, 1.5, 1.5) *
+                    Transform.RotateY(-Math.PI / 5),
+
+                Material = new Material
+                {
+                    Color = new Color(0.1, 0.5, 0.5),
+                    Reflective = 0.1,
+                    Diffuse = 0.8,
+                },
+            };
+
+            world.Objects.Add(c3);
+
+            var light = new PointLight(
+                Double4.Point(-5, 10, -2),
+                Color.White);
+
+            world.Lights.Add(light);
+
+            var camera = new Camera(width, height, Math.PI / 4)
+            {
+                Transform = Transform.View(
+                    Double4.Point(2.5, 2.5, -5.5),
+                    Double4.Point(0.1, 0.9, -1.0),
+                    Double4.Vector(0, 1, 0)),
+
+                ProgressMonitor = new ParallelConsoleProgressMonitor(height),
+            };
+
             return Tuple.Create(world, camera);
         }
     }
