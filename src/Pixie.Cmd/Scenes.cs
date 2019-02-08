@@ -908,5 +908,134 @@ namespace Pixie.Cmd
 
             return Tuple.Create(world, camera);
         }
+
+        public static Tuple<World, Camera> Example9(int width, int height)
+        {
+            var world = new World();
+
+            var solidBlack = new SolidPattern(Color.Black);
+
+            var stripes1 = new StripePattern(
+                new Color(0.0, 0.0, 0.0),
+                new Color(0.0, 0.0, 0.5))
+            {
+            };
+
+            var stripes2 = new StripePattern(
+                new Color(0.0, 0.0, 0.0),
+                new Color(0.5, 0.0, 0.0))
+            {
+                Transform = Transform.RotateY(Math.PI / 2),
+            };
+
+            var stripes3 = new StripePattern(
+                new Color(0.6, 0.6, 0.6),
+                new Color(0.3, 0.3, 0.3))
+            {
+                Transform = Transform.RotateY(Math.PI / 4),
+            };
+
+            var stripes4 = new StripePattern(
+                new Color(0.6, 0.6, 0.6),
+                new Color(0.3, 0.3, 0.3))
+            {
+                Transform = Transform.RotateY(-Math.PI / 4),
+            };
+
+            var blended1 = new BlendedPattern(stripes1, stripes2)
+            {
+                Transform =
+                    Transform.Scale(0.5, 0.5, 0.5),
+            };
+
+            var blended2 = new BlendedPattern(stripes3, stripes4)
+            {
+                Transform =
+                    Transform.Scale(0.5, 0.5, 0.5),
+            };
+
+            var blended = new BlendedPattern(blended1, blended2);
+
+            var floor = new Plane
+            {
+                Material = new Material
+                {
+                    Ambient = 0.6,
+                    Diffuse = 0.2,
+                    Specular = 0,
+                    Pattern = blended,
+                },
+            };
+
+            world.Objects.Add(floor);
+
+            var ceil = new Plane
+            {
+                Transform =
+                    Transform.Translate(0, 10, 0) *
+                    Transform.RotateX(Math.PI),
+
+                Material = new Material
+                {
+                    Ambient = 0.3,
+                    Diffuse = 0.6,
+                    Specular = 0,
+                    Pattern = blended,
+                },
+            };
+
+            world.Objects.Add(ceil);
+
+            const int n = 48;
+
+            for (var i = 0; i < n; i++)
+            {
+                var s0 = new Sphere
+                {
+                    Material = new Material
+                    {
+                        Reflective = 1.0,
+                        Transparency = 1.0,
+                        RefractiveIndex = 1.52,
+                        Diffuse = 0.1,
+                        Ambient = 0,
+                        Pattern = new GradientPattern(
+                            new Color(0.6, 0.1, 0.1),
+                            new Color(0.1, 0.1, 0.6))
+                        {
+                            Transform =
+                                Transform.Scale(2, 1, 1),
+                        }
+                    },
+
+                    Transform =
+                        Transform.Translate(-8.0 + i * (64.0 / n), 0.5, 0) *
+                        Transform.Scale(0.3, 0.3, 0.3),
+                };
+
+                world.Objects.Add(s0);
+            }
+
+            var cyl = new Cylinder()
+            {
+                Transform =
+                    Transform.Scale(20, 1, 20),
+            };
+
+            var light = new PointLight(Double4.Point(0, 5, 0), Color.White);
+            world.Lights.Add(light);
+
+            var camera = new Camera(width, height, Math.PI / 4.2)
+            {
+                Transform = Transform.View(
+                    Double4.Point(-5, 5, -5),
+                    Double4.Point(0, 0, 0),
+                    Double4.Vector(0, 0, 1)),
+
+                ProgressMonitor = new ParallelConsoleProgressMonitor(height),
+            };
+
+            return Tuple.Create(world, camera);
+        }
     }
 }

@@ -10,10 +10,10 @@
     {
         static void Main(string[] args)
         {
-            const int width = 4096;
-            const int height = 2160;
+            const int width = 800;
+            const int height = 600;
 
-            var t = Scenes.Example8(width, height);
+            var t = Scenes.Example9(width, height);
 
             // var camera = new Camera(width, height, Math.PI / 3)
             // {

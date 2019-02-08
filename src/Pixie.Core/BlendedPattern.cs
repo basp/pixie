@@ -32,8 +32,8 @@ namespace Pixie.Core
 
         public override Color PatternAt(Double4 point)
         {
-            var ca = this.A.PatternAt(point);
-            var cb = this.B.PatternAt(point);
+            var ca = this.A.PatternAt(this.A.Inverse * point);
+            var cb = this.B.PatternAt(this.B.Inverse * point);
             return this.blender(ca, cb);
         }
     }

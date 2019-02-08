@@ -81,6 +81,11 @@ namespace Pixie.Tests
 
         [Theory]
         [InlineData(0, 1.5, 0, 0.1, 1, 0, 0)]
+        [InlineData(0, 3, -5, 0, 0, 1, 0)]
+        [InlineData(0, 0, -5, 0, 0, 1, 0)]
+        [InlineData(0, 2, -5, 0, 0, 1, 0)]
+        [InlineData(0, 1, -5, 0, 0, 1, 0)]
+        [InlineData(0, 1.5, -2, 0, 0, 1, 2)]
         public void IntersectConstrainedCylinder(
             double px,
             double py,
@@ -108,6 +113,56 @@ namespace Pixie.Tests
         {
             var cyl = new Cylinder();
             Assert.False(cyl.IsClosed);
+        }
+
+        [Theory]
+        [InlineData(0, 3, 0, 0, -1, 0, 2)]
+        public void IntersectCapsOfClosedCylinder(
+            double ox,
+            double oy,
+            double oz,
+            double dx,
+            double dy,
+            double dz,
+            int count)
+        {
+            var cyl = new Cylinder();
+            cyl.Minimum = 1;
+            cyl.Maximum = 2;
+            cyl.IsClosed = true;
+            var direction = Double4.Vector(dx, dy, dz).Normalize();
+            var point = Double4.Point(ox, oy, oz);
+            var r = new Ray(point, direction);
+            var xs = cyl.LocalIntersect(r);
+            Assert.Equal(count, xs.Count);
+        }
+
+        [Theory]
+        [InlineData(0, 1, 0, 0, -1, 0)]
+        [InlineData(0.5, 1, 0, 0, -1, 0)]
+        [InlineData(0, 1, 0.5, 0, -1, 0)]
+        [InlineData(0, 2, 0f, 0, 1, 0)]
+        [InlineData(0.5, 2, 0, 0, 1, 0)]
+        [InlineData(0, 2, 0.5, 0, 1, 0)]
+        public void NormalVectorOnCylinderEndCaps(
+            double px,
+            double py,
+            double pz,
+            double nx,
+            double ny,
+            double nz)
+        {
+            var cyl = new Cylinder
+            {
+                Minimum = 1,
+                Maximum = 2,
+                IsClosed = true,
+            };
+
+            var p = Double4.Point(px, py, pz);
+            var n = cyl.LocalNormalAt(p);
+            var expected = Double4.Vector(nx, ny, nz);
+            Assert.Equal(expected, n);
         }
     }
 }

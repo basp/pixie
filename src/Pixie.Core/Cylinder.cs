@@ -13,6 +13,40 @@ namespace Pixie.Core
 
         public bool IsClosed { get; set; } = false;
 
+        private bool CheckCap(Ray ray, double t)
+        {
+            var x = ray.Origin.X + t * ray.Direction.X;
+            var z = ray.Origin.Z + t * ray.Direction.Z;
+            return (x * x + z * z) <= 1;
+        }
+
+        private void IntersectCaps(Ray ray, List<Intersection> xs)
+        {
+            if (!this.IsClosed)
+            {
+                return;
+            }
+
+            if (Math.Abs(ray.Direction.Y) < Epsilon)
+            {
+                return;
+            }
+
+            double t;
+
+            t = (this.Minimum - ray.Origin.Y) / ray.Direction.Y;
+            if (this.CheckCap(ray, t))
+            {
+                xs.Add(new Intersection(t, this));
+            }
+
+            t = (this.Maximum - ray.Origin.Y) / ray.Direction.Y;
+            if (this.CheckCap(ray, t))
+            {
+                xs.Add(new Intersection(t, this));
+            }
+        }
+
         public override IntersectionList LocalIntersect(Ray ray)
         {
             var a = Math.Pow(ray.Direction.X, 2) + Math.Pow(ray.Direction.Z, 2);
@@ -20,7 +54,9 @@ namespace Pixie.Core
             // ray is parallel to the y-axis
             if (Math.Abs(a) < Epsilon)
             {
-                return IntersectionList.Empty();
+                var caps = new List<Intersection>();
+                this.IntersectCaps(ray, caps);
+                return IntersectionList.Create(caps.ToArray());
             }
 
             var b =
@@ -60,10 +96,25 @@ namespace Pixie.Core
                 xs.Add(new Intersection(t1, this));
             }
 
+            this.IntersectCaps(ray, xs);
+
             return IntersectionList.Create(xs.ToArray());
         }
 
-        public override Double4 LocalNormalAt(Double4 point) =>
-            Double4.Vector(point.X, 0, point.Z);
+        public override Double4 LocalNormalAt(Double4 point)
+        {
+            var dist = point.X * point.X + point.Z * point.Z;
+            if (dist < 1 && point.Y >= this.Maximum - Epsilon)
+            {
+                return Double4.Vector(0, 1, 0);
+            }
+
+            if (dist < 1 && point.Y <= this.Minimum + Epsilon)
+            {
+                return Double4.Vector(0, -1, 0);
+            }
+
+            return Double4.Vector(point.X, 0, point.Z);
+        }
     }
 }
