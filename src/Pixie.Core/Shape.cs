@@ -26,7 +26,6 @@ namespace Pixie.Core
 
         public virtual IntersectionList Intersect(Ray ray)
         {
-            // ray = this.Transform.Inverse() * ray;
             ray = this.inv * ray;
             return this.LocalIntersect(ray);
         }
@@ -42,7 +41,8 @@ namespace Pixie.Core
 
         public abstract Double4 LocalNormalAt(Double4 point);
 
-        public abstract Bounds3 Bounds();
+        public virtual Bounds3 Bounds() =>
+            Bounds3.Infinity;
 
         public Double4 WorldToObject(Double4 point)
         {

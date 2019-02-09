@@ -8,11 +8,6 @@ namespace Pixie.Tests
     {
         public Ray SavedRay { get; set; }
 
-        public override Bounds3 Bounds()
-        {
-            throw new NotImplementedException();
-        }
-
         public override IntersectionList LocalIntersect(Ray ray)
         {
             this.SavedRay = ray;

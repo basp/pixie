@@ -5,6 +5,17 @@ namespace Pixie.Core
 
     public struct Bounds3
     {
+        public static Bounds3 Infinity =>
+            new Bounds3(
+                Double4.Point(
+                    double.NegativeInfinity,
+                    double.NegativeInfinity,
+                    double.NegativeInfinity),
+                Double4.Point(
+                    double.PositiveInfinity,
+                    double.PositiveInfinity,
+                    double.PositiveInfinity));
+
         public readonly Double4 Min;
         public readonly Double4 Max;
 

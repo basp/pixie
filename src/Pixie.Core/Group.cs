@@ -7,6 +7,8 @@ namespace Pixie.Core
 
     public class Group : Shape, IList<Shape>
     {
+        private Bounds3 bounds = Bounds3.Infinity;
+
         private List<Shape> children = new List<Shape>();
 
         public Shape this[int index]
@@ -96,19 +98,11 @@ namespace Pixie.Core
             return true;
         }
 
-        public override Bounds3 Bounds()
+        private void UpdateBounds()
         {
             if (this.children.Count == 0)
             {
-                return new Bounds3(
-                    Double4.Point(
-                        double.NegativeInfinity,
-                        double.NegativeInfinity,
-                        double.NegativeInfinity),
-                    Double4.Point(
-                        double.PositiveInfinity,
-                        double.PositiveInfinity,
-                        double.PositiveInfinity));
+                this.bounds = Bounds3.Infinity;
             }
 
             var corners = this.children
@@ -125,8 +119,10 @@ namespace Pixie.Core
                 corners.Max(c => c.Y),
                 corners.Max(c => c.Z));
 
-            return new Bounds3(min, max);
+            this.bounds = new Bounds3(min, max);
         }
+
+        public override Bounds3 Bounds() => this.bounds;
 
         public override IntersectionList LocalIntersect(Ray ray)
         {
@@ -148,10 +144,14 @@ namespace Pixie.Core
         {
             item.Parent = this;
             this.children.Add(item);
+            this.UpdateBounds();
         }
 
-        public void Clear() =>
+        public void Clear()
+        {
             this.children.Clear();
+            this.UpdateBounds();
+        }
 
         public bool Contains(Shape item) =>
             this.children.Contains(item);
@@ -169,6 +169,7 @@ namespace Pixie.Core
         {
             item.Parent = this;
             this.children.Insert(index, item);
+            this.UpdateBounds();
         }
 
         public bool Remove(Shape item)
@@ -177,6 +178,7 @@ namespace Pixie.Core
             if (removed)
             {
                 item.Parent = null;
+                this.UpdateBounds();
             }
 
             return removed;
@@ -186,6 +188,7 @@ namespace Pixie.Core
         {
             this.children[index].Parent = null;
             this.children.RemoveAt(index);
+            this.UpdateBounds();
         }
 
         IEnumerator IEnumerable.GetEnumerator() =>
