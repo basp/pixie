@@ -66,6 +66,8 @@ namespace Pixie.Core
         {
             Color res = Color.Black;
 
+
+            // TODO: We should probably acculate outside the loop (perhaps?)
             foreach (var light in this.Lights)
             {
                 var shadow = this.IsShadowed(comps.OverPoint, light);
@@ -95,35 +97,11 @@ namespace Pixie.Core
             }
 
             return res;
-
-            // var light = this.Lights[0];
-            // // TODO: Support multiple light sources
-
-            // var shadow = this.IsShadowed(comps.OverPoint, light);
-
-            // var surface = comps.Object.Material.Li(
-            //     comps.Object,
-            //     light,
-            //     comps.OverPoint,
-            //     comps.Eyev,
-            //     comps.Normalv,
-            //     shadow);
-
-            // var reflected = this.ReflectedColor(comps, remaining);
-            // var refracted = this.RefractedColor(comps, remaining);
-
-            // var material = comps.Object.Material;
-            // if (material.Reflective > 0 && material.Transparency > 0)
-            // {
-            //     var reflectance = comps.Schlick();
-            //     return surface + reflected * reflectance +
-            //                      refracted * (1 - reflectance);
-            // }
-
-            // return surface + reflected + refracted;
         }
 
-        public Color ColorAt(Ray ray, int remaining = 10)
+        const int RecursiveDepth = 5;
+
+        public Color ColorAt(Ray ray, int remaining = RecursiveDepth)
         {
             var xs = this.Intersect(ray);
             if (xs.TryGetHit(out var i))

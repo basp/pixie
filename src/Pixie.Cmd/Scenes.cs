@@ -1103,7 +1103,7 @@ namespace Pixie.Cmd
         {
             var world = new World();
 
-            var hex = Hexagon();
+            var hex = Hexagon.Create();
             world.Objects.Add(hex);
 
             var light = new PointLight(
@@ -1125,45 +1125,207 @@ namespace Pixie.Cmd
             return Tuple.Create(world, camera);
         }
 
-        static Shape HexagonCorner() =>
-            new Sphere()
-            {
-                Transform =
-                    Transform.Translate(0, 0, -1) *
-                    Transform.Scale(0.25, 0.25, 0.25),
-            };
-
-        static Shape HexagonEdge() =>
-            new Cylinder()
-            {
-                Minimum = 0,
-                Maximum = 1,
-                Transform =
-                    Transform.Translate(0, 0, -1) *
-                        Transform.RotateY(-Math.PI / 6) *
-                        Transform.RotateZ(-Math.PI / 2) *
-                        Transform.Scale(0.25, 1, 0.25),
-            };
-
-        static Shape HexagonSide() =>
-            new Pixie.Core.Group()
-            {
-                HexagonCorner(),
-                HexagonEdge(),
-            };
-
-        static Shape Hexagon()
+        public static Tuple<World, Camera> Example12(int width, int height)
         {
-            var hex = new Pixie.Core.Group();
-            for (var n = 0; n < 6; n++)
-            {
-                var side = HexagonSide();
-                side.Transform = Transform.RotateY(n * Math.PI / 3);
+            var world = new World();
 
-                hex.Add(side);
+            var gray1 = new Color(0.12, 0.12, 0.12);
+            var gray2 = new Color(0.3, 0.3, 0.3);
+
+            var stripes1 = new StripePattern(gray1, gray2)
+            {
+                Transform = Transform.RotateY(-Math.PI / 4),
+            };
+
+            var stripes2 = new StripePattern(gray1, gray2)
+            {
+                Transform = Transform.RotateY(Math.PI / 4),
+            };
+
+            var blended = new BlendedPattern(stripes1, stripes2)
+            {
+                Transform = Transform.Scale(0.5, 0.5, 0.5),
+            };
+
+            var plane = new Plane()
+            {
+                Material = new Material()
+                {
+                    Reflective = 0.1,
+                    Specular = 0,
+                    Ambient = 0.17,
+                    Diffuse = 0.8,
+                    Pattern = blended,
+                },
+            };
+
+            world.Objects.Add(plane);
+
+            var gradTransform =                         
+                Transform.Translate(0, 1, 0) *
+                Transform.RotateZ(Math.PI / 2) *
+                Transform.Scale(2, 1, 1);
+
+            var grad1 = new Material
+            {
+                Reflective = 0.2,
+                Ambient = 0.21,
+                Diffuse = 0.81,
+                Pattern = new GradientPattern(
+                    new Color(0.13, 0.58, 0.69), 
+                    new Color(0.43, 0.84, 0.93))
+                {
+                    Transform = gradTransform,
+                }
+            };
+
+            var grad2 = new Material
+            {
+                Reflective = 0.2,
+                Ambient = 0.21,
+                Diffuse = 0.81,
+                Pattern = new GradientPattern(
+                    new Color(0.74, 0.76, 0.78), 
+                    new Color(0.17, 0.24, 0.31))
+                {
+                    Transform = gradTransform,
+                }
+            };
+
+            var grad3 = new Material
+            {
+                Reflective = 0.2,
+                Ambient = 0.21,
+                Diffuse = 0.81,
+                Pattern = new GradientPattern(
+                    new Color(0.80, 0.17, 0.37), 
+                    new Color(0.46, 0.23, 0.53))
+                {
+                    Transform = gradTransform,
+                }
+            };
+
+            var grad4 = new Material
+            {
+                Reflective = 0.2,
+                Ambient = 0.21,
+                Diffuse = 0.81,
+                Pattern = new GradientPattern(
+                    new Color(0.0, 0.2, 0.16), 
+                    new Color(0.0, 0.31, 0.57))
+                {
+                    Transform = gradTransform,
+                }
+            };
+
+            var grads = new []
+            {
+                grad2,
+                grad1,
+                grad3,
+                grad2,
+                grad4,
+                grad2,
+                grad3,
+                grad1,
+                grad2,
+                grad4,
+                grad3,
+                grad4,
+                grad3,
+                grad1,
+                grad2,
+                grad1,
+            };
+            
+            const int nx = 32;
+            // const int nz = 8;
+
+            var stridex = 20.0 / nx;
+            // var stridez = 20.0 / nz;
+
+            for (var i = 0; i < nx; i++)
+            {
+                var sx = 0.1 + Rng.NextDouble() * 0.1;
+                var sy = (0.2 + 1.5 * Rng.NextDouble()) * (1 + sx);
+                var sz = sx;
+                var dx = -10.0 + i * stridex;
+                var grad = grads[i % grads.Length];
+                var c = new Cube()
+                {
+                    Material = grad,
+                    Transform =
+                        Transform.Translate(dx, sy, 0) *
+                        Transform.Scale(sx, sy, sz),
+
+                };
+
+                world.Objects.Add(c);
             }
 
-            return hex;
+            for (var i = 0; i < nx; i++)
+            {
+                var sx = 0.2 + Rng.NextDouble() * 0.1;
+                var sy = (0.2 + 1.0 * Rng.NextDouble()) * (1 + sx);
+                var sz = sx;
+                var dx = -9.3 + i * stridex;
+                var dz = 1.7;
+                var grad = grads[(i + 3) % grads.Length];
+                var c = new Cube()
+                {
+                    Material = grad,
+                    Transform =
+                        Transform.Translate(dx, sy, dz) *
+                        Transform.Scale(sx, sy, sz),
+
+                };
+
+                world.Objects.Add(c);
+            }
+
+            for (var i = 0; i < nx; i++)
+            {
+                var sx = 0.15 + Rng.NextDouble() * 0.1;
+                var sy = (0.2 + 0.5 * Rng.NextDouble()) * (1 + sx);
+                var sz = sx;
+                var dx = -9.3 + i * stridex;
+                var dz = 2.5;
+                var grad = grads[(i + 3) % grads.Length];
+                var c = new Cube()
+                {
+                    Material = grad,
+                    Transform =
+                        Transform.Translate(dx, sy, dz) *
+                        Transform.Scale(sx, sy, sz),
+
+                };
+
+                world.Objects.Add(c);
+            }
+
+            var l1 = new PointLight(
+                Double4.Point(-10, 10, -10),
+                new Color(0.6, 0.6, 0.6));
+
+            world.Lights.Add(l1);
+
+            var l2 = new PointLight(
+                Double4.Point(10, 10, -10),
+                new Color(0.6, 0.6, 0.6));
+
+            world.Lights.Add(l2);
+
+            var camera = new Camera(width, height, Math.PI / 2)
+            {
+                Transform = Transform.View(
+                    Double4.Point(0.0, 3.2, -4),
+                    Double4.Point(0, 0.5, 0),
+                    Double4.Vector(0, 1, 0)),
+
+                ProgressMonitor = new ParallelConsoleProgressMonitor(height),
+            };
+
+            return Tuple.Create(world, camera);
         }
     }
 }
