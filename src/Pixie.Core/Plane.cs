@@ -6,6 +6,11 @@ namespace Pixie.Core
     {
         const double Epsilon = 0.00001;
 
+        public override Bounds3 Bounds()
+        {
+            throw new NotImplementedException();
+        }
+
         public override IntersectionList LocalIntersect(Ray ray)
         {
             if (Math.Abs(ray.Direction.Y) < Epsilon)

@@ -7,19 +7,8 @@ namespace Pixie.Core
         public override Double4 LocalNormalAt(Double4 point) =>
             point - Double4.Zero;
 
-        // public override Double4 LocalNormalAt(Double4 point)
-        // {
-        //     var objectPoint = this.inv * point;
-        //     var objectNormal = objectPoint - Double4.Zero;
-        //     var worldNormal = this.inv.Transpose() * objectNormal;
-        //     worldNormal.W = 0; // hacky fix
-        //     return worldNormal.Normalize();
-        // }
-
         public override IntersectionList LocalIntersect(Ray ray)
         {
-            // ray = this.Transform.Inverse() * ray;
-
             var sphereToRay = ray.Origin - Double4.Point(0, 0, 0);
 
             var a = Double4.Dot(ray.Direction, ray.Direction);
@@ -52,5 +41,12 @@ namespace Pixie.Core
             this.Material.Equals(other.Material) &&
             this.transform.Equals(other.transform) &&
             this.inv.Equals(other.inv);
+
+        public override Bounds3 Bounds()
+        {
+            var min = Double4.Point(-1, -1, -1);
+            var max = Double4.Point(1, 1, 1);
+            return new Bounds3(min, max);
+        }
     }
 }

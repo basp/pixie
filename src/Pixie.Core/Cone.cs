@@ -130,5 +130,10 @@ namespace Pixie.Core
             }
 
             return Double4.Vector(point.X, y, point.Z);        }
+
+        public override Bounds3 Bounds()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

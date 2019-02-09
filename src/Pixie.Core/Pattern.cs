@@ -22,7 +22,8 @@ namespace Pixie.Core
 
         public virtual Color PatternAt(Shape obj, Double4 point)
         {
-            point = obj.Inverse * point;
+            // point = obj.Inverse * point;
+            point = obj.WorldToObject(point);
             point = this.Inverse * point;
             return this.PatternAt(point);
         }

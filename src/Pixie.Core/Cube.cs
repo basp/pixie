@@ -75,5 +75,12 @@ namespace Pixie.Core
                 return Double4.Vector(0, 0, point.Z);
             }
         }
+
+        public override Bounds3 Bounds()
+        {
+            var min = Double4.Point(-1, -1, -1);
+            var max = Double4.Point(1, 1, 1);
+            return new Bounds3(min, max);
+        }
     }
 }

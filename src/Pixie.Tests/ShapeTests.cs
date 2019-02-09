@@ -8,6 +8,11 @@ namespace Pixie.Tests
     {
         public Ray SavedRay { get; set; }
 
+        public override Bounds3 Bounds()
+        {
+            throw new NotImplementedException();
+        }
+
         public override IntersectionList LocalIntersect(Ray ray)
         {
             this.SavedRay = ray;
@@ -115,6 +120,13 @@ namespace Pixie.Tests
             const double eps = 0.00001;
             var comparer = Double4.GetEqualityComparer(eps);
             Assert.Equal(expected, n, comparer);
+        }
+
+        [Fact]
+        public void ShapeHasParentAttribute()
+        {
+            var s = new TestShape();
+            Assert.Null(s.Parent);
         }
     }
 }

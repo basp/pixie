@@ -8,10 +8,14 @@ namespace Pixie.Core
 
         public Material Material { get; set; } = new Material();
 
+        public Shape Parent { get; set; } = null;
+
+        public bool HasParent => this.Parent != null;
+
         public Double4x4 Transform
         {
             get => this.transform;
-            set 
+            set
             {
                 this.inv = value.Inverse();
                 this.transform = value;
@@ -29,15 +33,39 @@ namespace Pixie.Core
 
         public virtual Double4 NormalAt(Double4 point)
         {
-            var localPoint = this.inv * point;
+            var localPoint = this.WorldToObject(point);
             var localNormal = this.LocalNormalAt(localPoint);
-            var worldNormal = inv.Transpose() * localNormal;
-            worldNormal.W = 0;
-            return worldNormal.Normalize();
+            return this.NormalToWorld(localNormal);
         }
 
         public abstract IntersectionList LocalIntersect(Ray ray);
 
         public abstract Double4 LocalNormalAt(Double4 point);
+
+        public abstract Bounds3 Bounds();
+
+        public Double4 WorldToObject(Double4 point)
+        {
+            if (this.HasParent)
+            {
+                point = this.Parent.WorldToObject(point);
+            }
+
+            return this.inv * point;
+        }
+
+        public Double4 NormalToWorld(Double4 n)
+        {
+            n = this.Inverse.Transpose() * n;
+            n.W = 0;
+            n = n.Normalize();
+
+            if(this.HasParent)
+            {
+                n = this.Parent.NormalToWorld(n);
+            }
+
+            return n;
+        }
     }
 }
