@@ -113,16 +113,15 @@ namespace Pixie.Core
         public override Double4 LocalNormalAt(Double4 point)
         {
             var dist = point.X * point.X + point.Z * point.Z;
-            if (dist < this.Maximum && point.Y >= this.Maximum - Epsilon)
+            if (dist < 1 && point.Y >= this.Maximum - Epsilon)
             {
                 return Double4.Vector(0, 1, 0);
             }
 
-            if (dist < this.Minimum && point.Y <= this.Minimum + Epsilon)
+            if (dist < 1 && point.Y <= this.Minimum + Epsilon)
             {
                 return Double4.Vector(0, -1, 0);
             }
-
 
             var y = Math.Sqrt(dist);
             if(point.Y > 0)

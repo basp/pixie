@@ -1042,31 +1042,55 @@ namespace Pixie.Cmd
         {
             var world = new World();
 
+            var floor = new Plane
+            {
+                Material = new Material
+                {
+                    Specular = 0,
+                    Ambient = 0.1,
+                    Color = new Color(0.05, 0.4, 0.2),
+                },
+            };
+
+            world.Objects.Add(floor);
+
             var cone = new Cone()
             {
                 Material = new Material()
                 {
-                    Color = Color.White,
+                    Color = new Color(0.8, 0.2, 0.2),
                     Specular = 0,
                 },
                 Minimum = -1,
                 Maximum = 0,
                 IsClosed = true,
                 Transform =
-                    Transform.RotateX(Math.PI) *
+                    Transform.RotateX(Math.PI / 2) *
                     Transform.Translate(0, 1, 0),
+            };
+
+            var cyl = new Cylinder
+            {
+                Material = new Material
+                {
+                    Color = new Color(0.8, 0.2, 0.2),
+                    Specular = 0,
+                },
+                Minimum = 0,
+                Maximum = 1,
+                IsClosed = true,
             };
 
             world.Objects.Add(cone);
 
-            var light = new PointLight(Double4.Point(0, 10, -10), Color.White);
+            var light = new PointLight(Double4.Point(-2, 2, -5), Color.White);
             world.Lights.Add(light);
 
             var camera = new Camera(width, height, Math.PI / 3)
             {
                 Transform = Transform.View(
-                    Double4.Point(0, 0, -5),
-                    Double4.Point(0, 0, 0),
+                    Double4.Point(0, 3, -3),
+                    Double4.Point(0, 0.5, 0),
                     Double4.Vector(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
