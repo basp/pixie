@@ -1098,5 +1098,72 @@ namespace Pixie.Cmd
 
             return Tuple.Create(world, camera);
         }
+
+        public static Tuple<World, Camera> Example11(int width, int height)
+        {
+            var world = new World();
+
+            var hex = Hexagon();
+            world.Objects.Add(hex);
+
+            var light = new PointLight(
+                Double4.Point(-10, 10, -10),
+                Color.White);
+
+            world.Lights.Add(light);
+
+            var camera = new Camera(width, height, Math.PI / 4.2)
+            {
+                Transform = Transform.View(
+                    Double4.Point(-4, 5, -3),
+                    Double4.Point(0, 0.5, 0),
+                    Double4.Vector(0, 1, 0)),
+
+                ProgressMonitor = new ParallelConsoleProgressMonitor(height),
+            };
+
+            return Tuple.Create(world, camera);
+        }
+
+        static Shape HexagonCorner() =>
+            new Sphere()
+            {
+                Transform =
+                    Transform.Translate(0, 0, -1) *
+                    Transform.Scale(0.25, 0.25, 0.25),
+            };
+
+        static Shape HexagonEdge() =>
+            new Cylinder()
+            {
+                Minimum = 0,
+                Maximum = 1,
+                Transform =
+                    Transform.Translate(0, 0, -1) *
+                        Transform.RotateY(-Math.PI / 6) *
+                        Transform.RotateZ(-Math.PI / 2) *
+                        Transform.Scale(0.25, 1, 0.25),
+            };
+
+        static Shape HexagonSide() =>
+            new Pixie.Core.Group()
+            {
+                HexagonCorner(),
+                HexagonEdge(),
+            };
+
+        static Shape Hexagon()
+        {
+            var hex = new Pixie.Core.Group();
+            for (var n = 0; n < 6; n++)
+            {
+                var side = HexagonSide();
+                side.Transform = Transform.RotateY(n * Math.PI / 3);
+
+                hex.Add(side);
+            }
+
+            return hex;
+        }
     }
 }
