@@ -119,7 +119,9 @@ namespace Pixie.Core
 
         public override Bounds3 Bounds()
         {
-            throw new NotImplementedException();
+            var min = Double4.Point(-1, this.Minimum, -1);
+            var max = Double4.Point(1, this.Maximum, 1);
+            return new Bounds3(min, max);
         }
     }
 }

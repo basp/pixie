@@ -19,13 +19,122 @@ namespace Pixie.Core
 
         public bool IsReadOnly => false;
 
+        private const double Epsilon = 0.0001;
+
+        private static double Max(double a, double b, double c) =>
+            Math.Max(a, Math.Max(b, c));
+
+        private static double Min(double a, double b, double c) =>
+            Math.Min(a, Math.Min(b, c));
+
+        private static void CheckAxis(
+            double origin,
+            double direction,
+            double tmin,
+            double tmax,
+            out double min,
+            out double max)
+        {
+            var tminNum = tmin - origin;
+            var tmaxNum = tmax - origin;
+
+            if (Math.Abs(direction) >= Epsilon)
+            {
+                min = tminNum / direction;
+                max = tmaxNum / direction;
+            }
+            else
+            {
+                min = tminNum * double.PositiveInfinity;
+                max = tmaxNum * double.PositiveInfinity;
+            }
+
+            if (min > max)
+            {
+                var tmp = min;
+                min = max;
+                max = tmp;
+            }
+        }
+
+        public bool IntersectBounds(Ray ray)
+        {
+            var bounds = this.Bounds();
+
+            CheckAxis(
+                ray.Origin.X,
+                ray.Direction.X,
+                bounds.Min.X,
+                bounds.Max.X,
+                out var xtmin,
+                out var xtmax);
+
+            CheckAxis(
+                ray.Origin.Y,
+                ray.Direction.Y,
+                bounds.Min.Y,
+                bounds.Max.Y,
+                out var ytmin,
+                out var ytmax);
+
+            CheckAxis(
+                ray.Origin.Z,
+                ray.Direction.Z,
+                bounds.Min.Z,
+                bounds.Max.Z,
+                out var ztmin,
+                out var ztmax);
+
+            var tmin = Max(xtmin, ytmin, ztmin);
+            var tmax = Min(xtmax, ytmax, ztmax);
+
+            if (tmin > tmax)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public override Bounds3 Bounds()
         {
-            throw new NotImplementedException();
+            if (this.children.Count == 0)
+            {
+                return new Bounds3(
+                    Double4.Point(
+                        double.NegativeInfinity,
+                        double.NegativeInfinity,
+                        double.NegativeInfinity),
+                    Double4.Point(
+                        double.PositiveInfinity,
+                        double.PositiveInfinity,
+                        double.PositiveInfinity));
+            }
+
+            var corners = this.children
+                .SelectMany(x => x.Bounds().Corners().Select(c => x.Transform * c))
+                .ToList();
+
+            var min = Double4.Point(
+                corners.Min(c => c.X),
+                corners.Min(c => c.Y),
+                corners.Min(c => c.Z));
+
+            var max = Double4.Point(
+                corners.Max(c => c.X),
+                corners.Max(c => c.Y),
+                corners.Max(c => c.Z));
+
+            return new Bounds3(min, max);
         }
 
         public override IntersectionList LocalIntersect(Ray ray)
         {
+            if (!this.IntersectBounds(ray))
+            {
+                return IntersectionList.Empty();
+            }
+
             var xs = this.children.SelectMany(x => x.Intersect(ray));
             return IntersectionList.Create(xs.ToArray());
         }

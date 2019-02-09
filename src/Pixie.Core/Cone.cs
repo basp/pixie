@@ -124,16 +124,23 @@ namespace Pixie.Core
             }
 
             var y = Math.Sqrt(dist);
-            if(point.Y > 0)
+            if (point.Y > 0)
             {
                 y = -y;
             }
 
-            return Double4.Vector(point.X, y, point.Z);        }
+            return Double4.Vector(point.X, y, point.Z);
+        }
 
         public override Bounds3 Bounds()
         {
-            throw new NotImplementedException();
+            var r = Math.Max(
+                Math.Abs(this.Minimum),
+                Math.Abs(this.Maximum));
+
+            var min = Double4.Point(-r, this.Minimum, -r);
+            var max = Double4.Point(r, this.Maximum, r);
+            return new Bounds3(min, max);
         }
     }
 }

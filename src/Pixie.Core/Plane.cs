@@ -8,7 +8,9 @@ namespace Pixie.Core
 
         public override Bounds3 Bounds()
         {
-            throw new NotImplementedException();
+            var min = Double4.Point(double.NegativeInfinity, -Epsilon, double.NegativeInfinity);
+            var max = Double4.Point(double.PositiveInfinity, Epsilon, double.PositiveInfinity);
+            return new Bounds3(min, max);
         }
 
         public override IntersectionList LocalIntersect(Ray ray)
