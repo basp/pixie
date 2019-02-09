@@ -1037,5 +1037,42 @@ namespace Pixie.Cmd
 
             return Tuple.Create(world, camera);
         }
+
+        public static Tuple<World, Camera> Example10(int width, int height)
+        {
+            var world = new World();
+
+            var cone = new Cone()
+            {
+                Material = new Material()
+                {
+                    Color = Color.White,
+                    Specular = 0,
+                },
+                Minimum = -1,
+                Maximum = 0,
+                IsClosed = true,
+                Transform =
+                    Transform.RotateX(Math.PI) *
+                    Transform.Translate(0, 1, 0),
+            };
+
+            world.Objects.Add(cone);
+
+            var light = new PointLight(Double4.Point(0, 10, -10), Color.White);
+            world.Lights.Add(light);
+
+            var camera = new Camera(width, height, Math.PI / 3)
+            {
+                Transform = Transform.View(
+                    Double4.Point(0, 0, -5),
+                    Double4.Point(0, 0, 0),
+                    Double4.Vector(0, 1, 0)),
+
+                ProgressMonitor = new ParallelConsoleProgressMonitor(height),
+            };
+
+            return Tuple.Create(world, camera);
+        }
     }
 }
