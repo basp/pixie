@@ -66,8 +66,7 @@ namespace Pixie.Core
         {
             Color res = Color.Black;
 
-
-            // TODO: We should probably acculate outside the loop (perhaps?)
+            // TODO: Double-check this loop and the accumulation
             foreach (var light in this.Lights)
             {
                 var shadow = this.IsShadowed(comps.OverPoint, light);

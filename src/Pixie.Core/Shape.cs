@@ -12,6 +12,8 @@ namespace Pixie.Core
 
         public bool HasParent => this.Parent != null;
 
+        public virtual bool Includes(Shape obj) => obj == this;
+
         public Double4x4 Transform
         {
             get => this.transform;

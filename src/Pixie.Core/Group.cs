@@ -140,6 +140,19 @@ namespace Pixie.Core
             throw new NotImplementedException();
         }
 
+        public override bool Includes(Shape obj)
+        {
+            foreach (var c in this.children)
+            {
+                if (c.Includes(obj))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void Add(Shape item)
         {
             item.Parent = this;
