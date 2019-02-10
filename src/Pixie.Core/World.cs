@@ -6,7 +6,7 @@ namespace Pixie.Core
 
     public class World
     {
-        public IList<PointLight> Lights { get; set; } = new List<PointLight>();
+        public IList<ILightSource> Lights { get; set; } = new List<ILightSource>();
 
         public IList<Shape> Objects { get; set; } = new List<Shape>();
 
@@ -67,32 +67,40 @@ namespace Pixie.Core
             Color res = Color.Black;
 
             // TODO: Double-check this loop and the accumulation
-            foreach (var light in this.Lights)
+            foreach (var source in this.Lights)
             {
-                var shadow = this.IsShadowed(comps.OverPoint, light);
+                var lights = source.GetLights().ToList();
+                var col = Color.Black;
 
-                var surface = comps.Object.Material.Li(
-                    comps.Object,
-                    light,
-                    comps.OverPoint,
-                    comps.Eyev,
-                    comps.Normalv,
-                    shadow);
-
-                var reflected = this.ReflectedColor(comps, remaining);
-                var refracted = this.RefractedColor(comps, remaining);
-
-                var material = comps.Object.Material;
-                if (material.Reflective > 0 && material.Transparency > 0)
+                foreach (var light in lights)
                 {
-                    var reflectance = comps.Schlick();
-                    res += surface + reflected * reflectance +
-                                     refracted * (1 - reflectance);
+                    var shadow = this.IsShadowed(comps.OverPoint, light);
+
+                    var surface = comps.Object.Material.Li(
+                        comps.Object,
+                        light,
+                        comps.OverPoint,
+                        comps.Eyev,
+                        comps.Normalv,
+                        shadow);
+
+                    var reflected = this.ReflectedColor(comps, remaining);
+                    var refracted = this.RefractedColor(comps, remaining);
+
+                    var material = comps.Object.Material;
+                    if (material.Reflective > 0 && material.Transparency > 0)
+                    {
+                        var reflectance = comps.Schlick();
+                        col += surface + reflected * reflectance +
+                                         refracted * (1 - reflectance);
+                    }
+                    else
+                    {
+                        col += surface + reflected + refracted;
+                    }
                 }
-                else
-                {
-                    res += surface + reflected + refracted;
-                }
+
+                res += col * (1.0 / lights.Count);
             }
 
             return res;
@@ -112,7 +120,7 @@ namespace Pixie.Core
             return Color.Black;
         }
 
-        public bool IsShadowed(Double4 point, PointLight light)
+        public bool IsShadowed(Double4 point, ILight light)
         {
             var v = light.Position - point;
             var distance = v.Magnitude();

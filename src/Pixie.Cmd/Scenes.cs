@@ -1534,7 +1534,7 @@ namespace Pixie.Cmd
 
             var sphere = new Sphere()
             {
-                Transform = 
+                Transform =
                     Transform.Translate(0, 1, 0),
 
                 Material = new Material
@@ -1543,9 +1543,17 @@ namespace Pixie.Cmd
                 },
             };
 
-            var light = new PointLight(
-                Double4.Point(-10, 10, -10),
-                Color.White);
+            // var light = new PointLight(
+            //     Double4.Point(-10, 10, -10),
+            //     Color.White);
+
+            var light = new AreaLight(
+                Double4.Point(-5, -5, -5),
+                Color.White,
+                Double4.Vector(0, 0, 10),
+                Double4.Vector(0, 10, 0),
+                20,
+                20);
 
             world.Objects.Add(plane);
             world.Objects.Add(sphere);
