@@ -1459,7 +1459,7 @@ namespace Pixie.Cmd
 
             var art1 = CreateArtifact(new Color(1.0, 0.0, 0.0));
             var art2 = CreateArtifact(new Color(0.0, 1.0, 0.0));
-            art2.Transform = 
+            art2.Transform =
                 Transform.Scale(0.7, 0.7, 0.7) *
                 Transform.RotateZ(Math.PI / 5) *
                 Transform.RotateX(Math.PI / 6);
@@ -1512,6 +1512,50 @@ namespace Pixie.Cmd
                 Transform = Transform.View(
                     Double4.Point(1, 2.5, -5),
                     Double4.Point(0, 0.0, 0),
+                    Double4.Vector(0, 1, 0)),
+
+                ProgressMonitor = new ParallelConsoleProgressMonitor(height),
+            };
+
+            return Tuple.Create(world, camera);
+        }
+
+        public static Tuple<World, Camera> Example15(int width, int height)
+        {
+            var world = new World();
+
+            var plane = new Plane()
+            {
+                Material = new Material
+                {
+                    Color = new Color(0.1, 0.5, 0.2),
+                },
+            };
+
+            var sphere = new Sphere()
+            {
+                Transform = 
+                    Transform.Translate(0, 1, 0),
+
+                Material = new Material
+                {
+                    Color = new Color(0.1, 0.4, 0.8),
+                },
+            };
+
+            var light = new PointLight(
+                Double4.Point(-10, 10, -10),
+                Color.White);
+
+            world.Objects.Add(plane);
+            world.Objects.Add(sphere);
+            world.Lights.Add(light);
+
+            var camera = new Camera(width, height, Math.PI / 3)
+            {
+                Transform = Transform.View(
+                    Double4.Point(1, 2.5, -5),
+                    Double4.Point(0, 0.75, 0),
                     Double4.Vector(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),

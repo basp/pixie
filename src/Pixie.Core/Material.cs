@@ -43,7 +43,7 @@ namespace Pixie.Core
 
         public Color Li(
             Shape obj,
-            PointLight light,
+            ILight light,
             Double4 point,
             Double4 eyev,
             Double4 normalv,
