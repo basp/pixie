@@ -1528,6 +1528,7 @@ namespace Pixie.Cmd
             {
                 Material = new Material
                 {
+                    Specular = 0,
                     Color = new Color(0.1, 0.5, 0.2),
                 },
             };
@@ -1548,12 +1549,12 @@ namespace Pixie.Cmd
             //     Color.White);
 
             var light = new AreaLight(
-                Double4.Point(-5, -5, -5),
+                Double4.Point(0, 2, -10),
                 Color.White,
-                Double4.Vector(0, 0, 10),
-                Double4.Vector(0, 10, 0),
-                20,
-                20);
+                Double4.Vector(0.1, 0, 0),
+                Double4.Vector(0, 0.1, 0),
+                1,
+                1);
 
             world.Objects.Add(plane);
             world.Objects.Add(sphere);

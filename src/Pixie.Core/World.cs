@@ -71,6 +71,7 @@ namespace Pixie.Core
             {
                 var lights = source.GetLights().ToList();
                 var col = Color.Black;
+                var oneOverLightCount = 1.0 / lights.Count;
 
                 foreach (var light in lights)
                 {
@@ -100,7 +101,8 @@ namespace Pixie.Core
                     }
                 }
 
-                res += col * (1.0 / lights.Count);
+                // res += (col * oneOverLightCount);
+                res += col;
             }
 
             return res;
