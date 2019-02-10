@@ -70,11 +70,11 @@ namespace Pixie.Core
             foreach (var source in this.Lights)
             {
                 var lights = source.GetLights().ToList();
-                var col = Color.Black;
                 var oneOverLightCount = 1.0 / lights.Count;
 
                 foreach (var light in lights)
                 {
+                    var col = Color.Black;
                     var shadow = this.IsShadowed(comps.OverPoint, light);
 
                     var surface = comps.Object.Material.Li(
@@ -99,10 +99,9 @@ namespace Pixie.Core
                     {
                         col += surface + reflected + refracted;
                     }
-                }
 
-                // res += (col * oneOverLightCount);
-                res += col;
+                    res += col;
+                }
             }
 
             return res;

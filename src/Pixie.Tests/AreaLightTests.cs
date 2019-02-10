@@ -27,7 +27,7 @@ namespace Pixie.Tests
 
             var ls = l.GetLights();
             var expected = new PointLight(
-                Double4.Point(x, y, z), Color.White);
+                Double4.Point(x, y, z), Color.White * (1.0 / (2 * 2)));
 
             Assert.Contains(expected, ls);
         }
@@ -52,7 +52,7 @@ namespace Pixie.Tests
             
             var ls = l.GetLights();
             var expected = new PointLight(
-                Double4.Point(x, y, z), Color.White);
+                Double4.Point(x, y, z), Color.White * (1.0 / (2 * 2)));
 
             Assert.Contains(expected, ls);
         }       
@@ -76,9 +76,9 @@ namespace Pixie.Tests
                 2,
                 2);
             
-            var ls = l.GetLights();
+            var ls = l.GetLights().ToList();
             var expected = new PointLight(
-                Double4.Point(x, y, z), Color.White);
+                Double4.Point(x, y, z), Color.White * (1.0 / ls.Count));
 
             Assert.Contains(expected, ls);
         }     

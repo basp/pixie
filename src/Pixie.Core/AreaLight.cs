@@ -48,15 +48,12 @@ namespace Pixie.Core
             var d = ax1 + ax2;
             var t = Transform.Translate(-d.X / 2, -d.Y / 2, -d.Z / 2);
 
-            const int rows = 2;
-            const int cols = 2;
-
-            var si = 1.0 / (rows - 1);
-            var sj = 1.0 / (cols - 1);
+            var si = 1.0 / (this.rows - 1);
+            var sj = 1.0 / (this.columns - 1);
 
             for (var i = 0; i < rows; i++)
             {
-                for (var j = 0; j < cols; j++)
+                for (var j = 0; j < columns; j++)
                 {
                     var ti = i * si;
                     var tj = j * sj;
@@ -66,7 +63,11 @@ namespace Pixie.Core
 
                     var p = center + (vi + vj);
                     p = t * p;
-                    yield return new PointLight(p, this.intensity);
+                    var f = 1.0 / (rows * columns);
+                    var intensity = this.intensity * f;
+                    yield return new PointLight(
+                        p,
+                        intensity);
                 }
             }
         }

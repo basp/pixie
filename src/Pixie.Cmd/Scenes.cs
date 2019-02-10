@@ -1540,6 +1540,8 @@ namespace Pixie.Cmd
 
                 Material = new Material
                 {
+                    Specular = 0.9,
+                    Shininess = 300,
                     Color = new Color(0.1, 0.4, 0.8),
                 },
             };
@@ -1549,12 +1551,12 @@ namespace Pixie.Cmd
             //     Color.White);
 
             var light = new AreaLight(
-                Double4.Point(0, 2, -10),
+                Double4.Point(-2, 2.0, -7),
                 Color.White,
-                Double4.Vector(0.1, 0, 0),
-                Double4.Vector(0, 0.1, 0),
-                1,
-                1);
+                Double4.Vector(2, 0, 0),
+                Double4.Vector(0, 2, 0),
+                5,
+                5);
 
             world.Objects.Add(plane);
             world.Objects.Add(sphere);
@@ -1563,7 +1565,7 @@ namespace Pixie.Cmd
             var camera = new Camera(width, height, Math.PI / 3)
             {
                 Transform = Transform.View(
-                    Double4.Point(1, 2.5, -5),
+                    Double4.Point(1, 2.25, -5),
                     Double4.Point(0, 0.75, 0),
                     Double4.Vector(0, 1, 0)),
 
