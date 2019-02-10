@@ -1161,7 +1161,7 @@ namespace Pixie.Cmd
 
             world.Objects.Add(plane);
 
-            var gradTransform =                         
+            var gradTransform =
                 Transform.Translate(0, 1, 0) *
                 Transform.RotateZ(Math.PI / 2) *
                 Transform.Scale(2, 1, 1);
@@ -1172,7 +1172,7 @@ namespace Pixie.Cmd
                 Ambient = 0.21,
                 Diffuse = 0.81,
                 Pattern = new GradientPattern(
-                    new Color(0.13, 0.58, 0.69), 
+                    new Color(0.13, 0.58, 0.69),
                     new Color(0.43, 0.84, 0.93))
                 {
                     Transform = gradTransform,
@@ -1185,7 +1185,7 @@ namespace Pixie.Cmd
                 Ambient = 0.21,
                 Diffuse = 0.81,
                 Pattern = new GradientPattern(
-                    new Color(0.74, 0.76, 0.78), 
+                    new Color(0.74, 0.76, 0.78),
                     new Color(0.17, 0.24, 0.31))
                 {
                     Transform = gradTransform,
@@ -1198,7 +1198,7 @@ namespace Pixie.Cmd
                 Ambient = 0.21,
                 Diffuse = 0.81,
                 Pattern = new GradientPattern(
-                    new Color(0.80, 0.17, 0.37), 
+                    new Color(0.80, 0.17, 0.37),
                     new Color(0.46, 0.23, 0.53))
                 {
                     Transform = gradTransform,
@@ -1211,14 +1211,14 @@ namespace Pixie.Cmd
                 Ambient = 0.21,
                 Diffuse = 0.81,
                 Pattern = new GradientPattern(
-                    new Color(0.0, 0.2, 0.16), 
+                    new Color(0.0, 0.2, 0.16),
                     new Color(0.0, 0.31, 0.57))
                 {
                     Transform = gradTransform,
                 }
             };
 
-            var grads = new []
+            var grads = new[]
             {
                 grad2,
                 grad1,
@@ -1237,7 +1237,7 @@ namespace Pixie.Cmd
                 grad2,
                 grad1,
             };
-            
+
             const int nx = 32;
             // const int nz = 8;
 
@@ -1320,6 +1320,198 @@ namespace Pixie.Cmd
                 Transform = Transform.View(
                     Double4.Point(0.0, 3.2, -4),
                     Double4.Point(0, 0.5, 0),
+                    Double4.Vector(0, 1, 0)),
+
+                ProgressMonitor = new ParallelConsoleProgressMonitor(height),
+            };
+
+            return Tuple.Create(world, camera);
+        }
+
+        public static Tuple<World, Camera> Example13(int width, int height)
+        {
+            var world = new World();
+
+            var yellow = new Material
+            {
+                Color = new Color(0.8, 0.8, 0.05),
+            };
+
+            var col1 = new Material
+            {
+                Color = new Color(0.2, 0.4, 0.65),
+            };
+
+            var col2 = new Material
+            {
+                Color = new Color(0.1, 0.45, 0.55),
+            };
+
+            var cyl1 = new Cylinder()
+            {
+                Minimum = -1,
+                Maximum = 1,
+                IsClosed = true,
+                Transform =
+                    Transform.Scale(0.5, 1, 0.5),
+                Material = yellow,
+            };
+
+            var cyl2 = new Cylinder()
+            {
+                Minimum = -1,
+                Maximum = 1,
+                IsClosed = true,
+                Transform =
+                    Transform.RotateZ(Math.PI / 2) *
+                    Transform.Scale(0.5, 1, 0.5),
+                Material = yellow,
+            };
+
+            var cyl3 = new Cylinder()
+            {
+                Minimum = -1,
+                Maximum = 1,
+                IsClosed = true,
+                Transform =
+                    Transform.RotateX(Math.PI / 2) *
+                    Transform.Scale(0.5, 1, 0.5),
+                Material = yellow,
+            };
+
+            var union1 = new Csg(Operation.Union, cyl1, cyl2);
+            var union2 = new Csg(Operation.Union, union1, cyl3)
+            {
+                Transform =
+                    Transform.Scale(1.2, 1.2, 1.2),
+            };
+
+            var sphere1 = new Sphere()
+            {
+                // Transform = Transform.Scale(Math.Sqrt(2), Math.Sqrt(2), Math.Sqrt(2)),
+                Transform = Transform.Scale(1.4, 1.4, 1.4),
+                Material = col1,
+            };
+            var cube1 = new Cube()
+            {
+                Material = col2,
+            };
+
+            var intersec1 = new Csg(Operation.Intersect, cube1, sphere1);
+
+            var diff1 = new Csg(Operation.Difference, intersec1, union2);
+
+            world.Objects.Add(diff1);
+
+            var light = new PointLight(
+                Double4.Point(10, 10, -10),
+                Color.White);
+
+            world.Lights.Add(light);
+
+            var camera = new Camera(width, height, Math.PI / 4.8)
+            {
+                Transform = Transform.View(
+                    Double4.Point(3.5, 3.5, -5),
+                    Double4.Point(0, 0.0, 0),
+                    Double4.Vector(0, 1, 0)),
+
+                ProgressMonitor =
+                    new ParallelConsoleProgressMonitor(height),
+            };
+
+            return Tuple.Create(world, camera);
+        }
+
+        // https://www.youtube.com/watch?v=AuS6HDHc7XE&feature=youtu.be&t=9
+
+        private static Shape CreateArtifact(Color col)
+        {
+            var sphere1 = new Sphere()
+            {
+                Transform = Transform.Scale(1.3, 1.3, 1.3),
+                Material = new Material
+                {
+                    Color = col,
+                    Ambient = 0.12,
+                    Specular = 0.5,
+                },
+            };
+
+            var cube1 = new Cube()
+            {
+                Material = new Material
+                {
+                    Color = col,
+                    Ambient = 0.12,
+                    Specular = 0.5,
+                },
+            };
+
+            return new Csg(Operation.Difference, cube1, sphere1)
+            {
+            };
+        }
+
+        public static Tuple<World, Camera> Example14(int width, int height)
+        {
+            var world = new World();
+
+            var art1 = CreateArtifact(new Color(1.0, 0.0, 0.0));
+            var art2 = CreateArtifact(new Color(0.0, 1.0, 0.0));
+            art2.Transform = 
+                Transform.Scale(0.7, 0.7, 0.7) *
+                Transform.RotateZ(Math.PI / 5) *
+                Transform.RotateX(Math.PI / 6);
+
+            var art3 = CreateArtifact(new Color(0.0, 0.0, 1.0));
+            art3.Transform =
+                Transform.Scale(0.5, 0.5, 0.5) *
+                Transform.RotateZ(-Math.PI / 5) *
+                Transform.RotateY(Math.PI / 6) *
+                Transform.RotateX(Math.PI / 8);
+
+            var art4 = CreateArtifact(new Color(1.0, 1.0, 0.0));
+            art4.Transform =
+                Transform.Scale(0.3, 0.3, 0.3) *
+                Transform.RotateZ(Math.PI / 5) *
+                Transform.RotateX(Math.PI / 6);
+
+            var art5 = CreateArtifact(new Color(0.0, 1.0, 1.0));
+            art5.Transform =
+                Transform.Scale(0.2, 0.2, 0.2) *
+                Transform.RotateZ(Math.PI / 3) *
+                Transform.RotateY(Math.PI / 5);
+
+            var art6 = CreateArtifact(new Color(1.0, 0.0, 1.0));
+            art6.Transform =
+                Transform.Scale(0.14, 0.14, 0.14) *
+                Transform.RotateZ(Math.PI / 5) *
+                Transform.RotateX(Math.PI / 3);
+
+            world.Objects.Add(art1);
+            world.Objects.Add(art2);
+            world.Objects.Add(art3);
+            world.Objects.Add(art4);
+            world.Objects.Add(art5);
+            world.Objects.Add(art6);
+
+            var l1 = new PointLight(
+                Double4.Point(5, 10, 10),
+                new Color(0.7, 0.7, 0.7));
+
+            var l2 = new PointLight(
+                Double4.Point(-3, 10, 10),
+                new Color(0.7, 0.7, 0.7));
+
+            world.Lights.Add(l1);
+            world.Lights.Add(l2);
+
+            var camera = new Camera(width, height, Math.PI / 4.5)
+            {
+                Transform = Transform.View(
+                    Double4.Point(1, 2.5, -5),
+                    Double4.Point(0, 0.0, 0),
                     Double4.Vector(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),

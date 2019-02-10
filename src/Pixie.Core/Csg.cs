@@ -91,7 +91,7 @@ namespace Pixie.Core
 
         public override Double4 LocalNormalAt(Double4 point)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override bool Includes(Shape obj) =>
