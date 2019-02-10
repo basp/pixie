@@ -1551,12 +1551,12 @@ namespace Pixie.Cmd
             //     Color.White);
 
             var light = new AreaLight(
-                Double4.Point(-2, 2.0, -7),
+                Double4.Point(-1, 8, 7),
                 Color.White,
-                Double4.Vector(2, 0, 0),
-                Double4.Vector(0, 2, 0),
-                5,
-                5);
+                Double4.Vector(20, 0, 0),
+                Double4.Vector(0, 20, 0),
+                10,
+                10);
 
             world.Objects.Add(plane);
             world.Objects.Add(sphere);
