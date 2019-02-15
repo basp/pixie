@@ -1524,17 +1524,15 @@ namespace Pixie.Cmd
         {
             var world = new World();
 
-            var sky = new Sphere()
+            var sky = new Plane()
             {
-                Transform =
-                    Transform.Scale(24, 24, 24),
-                
+                Transform = 
+                    Transform.Translate(0, 30, 0) *
+                    Transform.RotateX(Math.PI),
+
                 Material = new Material()
                 {
-                    Color = new Color(0.9, 0.9, 1.0),
-                    Ambient = 0.6,
-                    Diffuse = 0.3,
-                    Specular = 0,
+                    Color = Color.White,
                 },
             };
 
@@ -1543,27 +1541,15 @@ namespace Pixie.Cmd
                 Material = new Material
                 {
                     Specular = 0,
-                    // Color = new Color(1, 1, 1),                    
-                    Reflective = 0.21,
+                    // Color = new Color(1, 1, 1),
+                    Diffuse = 0.7,
+                    Ambient = 0.3,                    
                     Pattern = new CheckersPattern(
                         new Color(0.6, 0.6, 0.6),
                         new Color(0.45, 0.45, 0.45))
                     {
                         // Transform = Transform.Scale(2, 2, 2),
                     },
-                },
-            };
-
-            var back = new Plane()
-            {
-                Transform =
-                    Transform.Translate(0, 0, 5) *
-                    Transform.RotateX(-Math.PI / 2),
-
-                Material = new Material()
-                {
-                    Specular = 0,
-                    Color = new Color(0.91, 0.91, 0.91),
                 },
             };
 
@@ -1604,8 +1590,8 @@ namespace Pixie.Cmd
             var smallSphere2 = new Sphere()
             {
                 Transform =
-                    Transform.Translate(0, 0.5, 3) *
-                    Transform.Scale(0.5, 0.5, 0.5),
+                    Transform.Translate(0, 0.75, 3.5) *
+                    Transform.Scale(0.75, 0.75, 0.75),
 
                 Material = new Material
                 {
@@ -1622,14 +1608,14 @@ namespace Pixie.Cmd
             //     Color.White);
 
             var areaLight = new AreaLight(
-                Double4.Point(-10, 15, -2),
+                Double4.Point(-8, 16, -2),
                 Color.White,
-                Double4.Vector(5, 0, 0),
-                Double4.Vector(0, 0, 5),
-                5,
-                5);
+                Double4.Vector(8, 0, 0),
+                Double4.Vector(0, 0, 8),
+                10,
+                10);
 
-            // world.Objects.Add(back);
+            world.Objects.Add(sky);
             world.Objects.Add(floor);
             world.Objects.Add(sphere);
             world.Objects.Add(smallSphere1);
@@ -1639,7 +1625,7 @@ namespace Pixie.Cmd
             var camera = new Camera(width, height, Math.PI / 4)
             {
                 Transform = Transform.View(
-                    Double4.Point(2.0, 0.52, -5),
+                    Double4.Point(2.4, 1.08, -5.4),
                     Double4.Point(0, 0.7, 0),
                     Double4.Vector(0, 1, 0)),
 

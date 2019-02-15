@@ -24,7 +24,7 @@
 
             const int nPixels = width * height;
             Console.WriteLine($"Total: {sw.Elapsed})");
-            Console.WriteLine($"{nPixels / sw.ElapsedMilliseconds}px/ms");
+            Console.WriteLine($"{width} * {height} / {sw.ElapsedMilliseconds} = {(double)nPixels / sw.ElapsedMilliseconds}px/ms");
             Console.WriteLine($"{Stats.Tests} intersection tests");
             Console.WriteLine(path);
         }

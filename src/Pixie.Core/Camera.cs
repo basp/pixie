@@ -52,7 +52,7 @@ namespace Pixie.Core
         public IProgressMonitor ProgressMonitor { get; set; } =
             new ProgressMonitor();
 
-        public IEnumerable<Ray> RaysForPixel(int px, int py, int n = 1)
+        public IEnumerable<Ray> RaysForPixel(int px, int py, int n = 8)
         {
             var inv = this.Transform.Inverse();
             var origin = inv * Double4.Point(0, 0, 0);
@@ -113,10 +113,9 @@ namespace Pixie.Core
                     // var ray = this.RayForPixel(x, y);
                     // var color = w.ColorAt(ray, 5);
 
-                    const int supersampling = 16;
                     var color = Color.Black;
-                    var rays = this.RaysForPixel(x, y, supersampling).ToList();
-                    foreach (var ray in this.RaysForPixel(x, y))
+                    var rays = this.RaysForPixel(x, y).ToList();
+                    foreach (var ray in rays)
                     {
                         color += w.ColorAt(ray, 5);
                     }
