@@ -1524,12 +1524,13 @@ namespace Pixie.Cmd
         {
             var world = new World();
 
-            var plane = new Plane()
+            var floor = new Plane()
             {
                 Material = new Material
                 {
                     Specular = 0,
-                    Color = new Color(0.1, 0.5, 0.2),
+                    // Color = new Color(1, 1, 1),                    
+                    Pattern = new CheckersPattern(Color.White, Color.Black),
                 },
             };
 
@@ -1540,27 +1541,37 @@ namespace Pixie.Cmd
 
                 Material = new Material
                 {
-                    Specular = 0.9,
-                    Shininess = 300,
+                    Specular = 1.0,
+                    Ambient = 0.0,
+                    Diffuse = 0.01,
+                    Shininess = 350,
                     Color = new Color(0.1, 0.4, 0.8),
+                    Reflective = 0.62,
+                    RefractiveIndex = 1.5322,
+                    Transparency = 0.2,
                 },
             };
 
-            // var light = new PointLight(
+            var smallSphere = new Sphere()
+            {
+
+            };
+
+            // var light1 = new PointLight(
             //     Double4.Point(-10, 10, -10),
             //     Color.White);
 
-            var light = new AreaLight(
-                Double4.Point(-2, 2.0, -7),
+            var light1 = new AreaLight(
+                Double4.Point(-10, 10, -2),
                 Color.White,
-                Double4.Vector(2, 0, 0),
-                Double4.Vector(0, 2, 0),
-                5,
-                5);
+                Double4.Vector(2.5, 0, 0),
+                Double4.Vector(0, 0, 2.5),
+                2,
+                2);
 
-            world.Objects.Add(plane);
+            world.Objects.Add(floor);
             world.Objects.Add(sphere);
-            world.Lights.Add(light);
+            world.Lights.Add(light1);
 
             var camera = new Camera(width, height, Math.PI / 3)
             {

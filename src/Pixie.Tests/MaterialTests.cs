@@ -108,7 +108,7 @@ namespace Pixie.Tests
         {
             var w = new DefaultWorld();
             var p = Double4.Point(0, 10, 0);
-            Assert.False(w.IsShadowed(p, (ILight)w.Lights[0]));
+            Assert.False(w.IsShadowed(p, w.Lights[0]));
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace Pixie.Tests
         {
             var w = new DefaultWorld();
             var p = Double4.Point(10, -10, 10);
-            Assert.True(w.IsShadowed(p, (ILight)w.Lights[0]));
+            Assert.True(w.IsShadowed(p, w.Lights[0]));
         }
 
         [Fact]
@@ -124,7 +124,7 @@ namespace Pixie.Tests
         {
             var w = new DefaultWorld();
             var p = Double4.Point(-20, 20, -20);
-            Assert.False(w.IsShadowed(p, (ILight)w.Lights[0]));
+            Assert.False(w.IsShadowed(p, w.Lights[0]));
         }
 
         [Fact]
@@ -132,7 +132,7 @@ namespace Pixie.Tests
         {
             var w = new DefaultWorld();
             var p = Double4.Point(-2, 2, -2);
-            Assert.False(w.IsShadowed(p, (ILight)w.Lights[0]));
+            Assert.False(w.IsShadowed(p, w.Lights[0]));
         }
 
         [Fact]

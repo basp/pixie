@@ -10,8 +10,8 @@
     {
         static void Main(string[] args)
         {
-            const int width = 1280;
-            const int height = 1024;
+            const int width = 800;
+            const int height = 600;
 
             var t = Scenes.Example15(width, height);
 

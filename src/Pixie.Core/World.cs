@@ -16,7 +16,7 @@ namespace Pixie.Core
             return IntersectionList.Create(xs.ToArray());
         }
 
-        public Color ReflectedColor(Computations comps, int remaining = 5)
+        public Color ReflectedColor(Computations comps, int remaining)
         {
             if (remaining <= 0)
             {
@@ -33,7 +33,7 @@ namespace Pixie.Core
             return color * comps.Object.Material.Reflective;
         }
 
-        public Color RefractedColor(Computations comps, int remaining = 5)
+        public Color RefractedColor(Computations comps, int remaining)
         {
             if (remaining <= 0)
             {
@@ -62,54 +62,44 @@ namespace Pixie.Core
                 comps.Object.Material.Transparency;
         }
 
-        public Color Shade(Computations comps, int remaining = 5)
+        public Color Shade(Computations comps, int remaining)
         {
             Color res = Color.Black;
 
-            // TODO: Double-check this loop and the accumulation
-            foreach (var source in this.Lights)
+            foreach (var light in this.Lights)
             {
-                var lights = source.GetLights().ToList();
-                var oneOverLightCount = 1.0 / lights.Count;
+                var shadow = this.IsShadowed(comps.OverPoint, light);
 
-                foreach (var light in lights)
+                var surface = comps.Object.Material.Li(
+                    comps.Object,
+                    light,
+                    comps.OverPoint,
+                    comps.Eyev,
+                    comps.Normalv,
+                    shadow);
+
+                var reflected = this.ReflectedColor(comps, remaining);
+                var refracted = this.RefractedColor(comps, remaining);
+
+                var material = comps.Object.Material;
+                if (material.Reflective > 0 && material.Transparency > 0)
                 {
-                    var col = Color.Black;
-                    var shadow = this.IsShadowed(comps.OverPoint, light);
-
-                    var surface = comps.Object.Material.Li(
-                        comps.Object,
-                        light,
-                        comps.OverPoint,
-                        comps.Eyev,
-                        comps.Normalv,
-                        shadow);
-
-                    var reflected = this.ReflectedColor(comps, remaining);
-                    var refracted = this.RefractedColor(comps, remaining);
-
-                    var material = comps.Object.Material;
-                    if (material.Reflective > 0 && material.Transparency > 0)
-                    {
-                        var reflectance = comps.Schlick();
-                        col += surface + reflected * reflectance +
-                                         refracted * (1 - reflectance);
-                    }
-                    else
-                    {
-                        col += surface + reflected + refracted;
-                    }
-
-                    res += col;
+                    var reflectance = comps.Schlick();
+                    res += surface + reflected * reflectance +
+                                        refracted * (1 - reflectance);
+                }
+                else
+                {
+                    res += surface + reflected + refracted;
                 }
             }
-
+            
             return res;
         }
 
         const int RecursiveDepth = 5;
 
-        public Color ColorAt(Ray ray, int remaining = RecursiveDepth)
+        public Color ColorAt(Ray ray, int remaining)
         {
             var xs = this.Intersect(ray);
             if (xs.TryGetHit(out var i))
@@ -121,7 +111,25 @@ namespace Pixie.Core
             return Color.Black;
         }
 
-        public bool IsShadowed(Double4 point, ILight light)
+        // public double IsShadowed(Double4 point, ILightSource source)
+        // {
+        //     /*
+        //     var v = light.Position - point;
+        //     var distance = v.Magnitude();
+        //     var direction = v.Normalize();
+        //     var r = new Ray(point, direction);
+        //     var xs = this.Intersect(r);
+        //     if (xs.TryGetHit(out var i))
+        //     {
+        //         return i.T < distance;
+        //     }
+
+        //     return false;
+        //     */
+        //     return 0;
+        // }
+
+        public bool IsShadowed(Double4 point, ILightSource light)
         {
             var v = light.Position - point;
             var distance = v.Magnitude();

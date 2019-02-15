@@ -68,18 +68,34 @@ namespace Pixie.Core
         public Canvas Render(World w)
         {
             var img = new Canvas(this.hsize, this.vsize);
+
+
             Parallel.For(0, this.vsize, y =>
             {
                 this.ProgressMonitor.OnRowStarted(y);
                 for (var x = 0; x < this.hsize - 1; x++)
                 {
                     var ray = this.RayForPixel(x, y);
-                    var color = w.ColorAt(ray);
+                    var color = w.ColorAt(ray, 5);
                     img[x, y] = color;
                 }
 
                 this.ProgressMonitor.OnRowFinished(y);
             });
+
+            // for (var y = 0; y < this.vsize; y++)
+            // {
+            //     this.ProgressMonitor.OnRowStarted(y);
+            //     for (var x = 0; x < this.hsize - 1; x++)
+            //     {
+            //         Console.Write(".");
+            //         var ray = this.RayForPixel(x, y);
+            //         var color = w.ColorAt(ray, 5);
+            //         img[x, y] = color;
+            //     }
+
+            //     this.ProgressMonitor.OnRowFinished(y);
+            // }
 
             return img;
         }
