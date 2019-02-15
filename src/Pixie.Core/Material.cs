@@ -47,7 +47,7 @@ namespace Pixie.Core
             Double4 point,
             Double4 eyev,
             Double4 normalv,
-            bool shadow = false)
+            double shadow = 0.0)
         {
             Color color, ambient, diffuse, specular;
 
@@ -66,10 +66,11 @@ namespace Pixie.Core
 
             ambient = effectiveColor * this.Ambient;
 
-            if (shadow)
-            {
-                return ambient;
-            }
+            // var shadowf = 0.0;
+            // if (shadow)
+            // {
+            //     shadowf = 1.0;
+            // }
 
             if (lightDotNormal < 0)
             {
@@ -94,7 +95,7 @@ namespace Pixie.Core
                 }
             }
 
-            return ambient + diffuse + specular;
+            return ambient + (1.0 - shadow) * (diffuse + specular);
         }
     }
 }

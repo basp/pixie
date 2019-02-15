@@ -3,6 +3,7 @@ namespace Pixie.Core
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
 
     public class World
     {
@@ -12,6 +13,7 @@ namespace Pixie.Core
 
         public IntersectionList Intersect(Ray ray)
         {
+            Interlocked.Increment(ref Stats.Tests);
             var xs = this.Objects.SelectMany(x => x.Intersect(ray));
             return IntersectionList.Create(xs.ToArray());
         }
@@ -68,7 +70,7 @@ namespace Pixie.Core
 
             foreach (var light in this.Lights)
             {
-                var shadow = this.IsShadowed(comps.OverPoint, light);
+                var shadow = this.Shadow(comps.OverPoint, light);
 
                 var surface = comps.Object.Material.Li(
                     comps.Object,
@@ -93,7 +95,7 @@ namespace Pixie.Core
                     res += surface + reflected + refracted;
                 }
             }
-            
+
             return res;
         }
 
@@ -111,37 +113,34 @@ namespace Pixie.Core
             return Color.Black;
         }
 
-        // public double IsShadowed(Double4 point, ILightSource source)
-        // {
-        //     /*
-        //     var v = light.Position - point;
-        //     var distance = v.Magnitude();
-        //     var direction = v.Normalize();
-        //     var r = new Ray(point, direction);
-        //     var xs = this.Intersect(r);
-        //     if (xs.TryGetHit(out var i))
-        //     {
-        //         return i.T < distance;
-        //     }
+        public double Shadow(Double4 point, ILightSource source)
+        {
+            var lights = source.GetLights().ToList();
+            var n = lights.Count;
+            var hits = 0;
+            foreach (var light in source.GetLights())
+            {
+                var v = light.Position - point;
+                var distance = v.Magnitude();
+                var direction = v.Normalize();
+                var r = new Ray(point, direction);
+                var xs = this.Intersect(r);
+                if (xs.TryGetHit(out var i))
+                {
+                    if (i.T < distance)
+                    {
+                        hits += 1;
+                    }
+                }
+            }
 
-        //     return false;
-        //     */
-        //     return 0;
-        // }
+            return (double)hits / n;
+        }
 
         public bool IsShadowed(Double4 point, ILightSource light)
         {
-            var v = light.Position - point;
-            var distance = v.Magnitude();
-            var direction = v.Normalize();
-            var r = new Ray(point, direction);
-            var xs = this.Intersect(r);
-            if (xs.TryGetHit(out var i))
-            {
-                return i.T < distance;
-            }
-
-            return false;
+            var shadow = this.Shadow(point, light);
+            return Math.Abs(shadow) > 0.00001;
         }
     }
 }

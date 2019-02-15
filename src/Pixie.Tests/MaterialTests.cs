@@ -32,11 +32,12 @@ namespace Pixie.Tests
                 Color.White);
             var result = m.Li(sphere, light, position, eyev, normalv);
             var expected = new Color(1.9, 1.9, 1.9);
-            Assert.Equal(expected, result);
+            var cmp = Color.GetEqualityComparer(0.00001);
+            Assert.Equal(expected, result, cmp);
         }
 
         [Fact]
-        public void TestLightingwithEyeBetrweenLightAndSurfaceAmdEyeOffset45Deg()
+        public void TestLightingwithEyeBetweenLightAndSurfaceAmdEyeOffset45Deg()
         {
             var eyev = Double4.Vector(0, Math.Sqrt(2) / 2, -Math.Sqrt(2) / 2);
             var normalv = Double4.Vector(0, 0, -1);
@@ -98,7 +99,7 @@ namespace Pixie.Tests
             var eyev = Double4.Vector(0, 0, -1);
             var normalv = Double4.Vector(0, 0, -1);
             var light = new PointLight(Double4.Point(0, 0, -10), Color.White);
-            var c = m.Li(sphere, light, position, eyev, normalv, shadow: true);
+            var c = m.Li(sphere, light, position, eyev, normalv, shadow: 1.0);
             var expected = new Color(0.1, 0.1, 0.1);
             Assert.Equal(expected, c);
         }

@@ -1,10 +1,14 @@
 namespace Pixie.Core
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class Camera
     {
+        private static readonly Random rng = new Random();
+
         private readonly int hsize;
         private readonly int vsize;
         private readonly double fov;
@@ -48,6 +52,37 @@ namespace Pixie.Core
         public IProgressMonitor ProgressMonitor { get; set; } =
             new ProgressMonitor();
 
+        public IEnumerable<Ray> RaysForPixel(int px, int py, int n = 1)
+        {
+            var inv = this.Transform.Inverse();
+            var origin = inv * Double4.Point(0, 0, 0);
+
+            for (var i = 0; i < n; i++)
+            {
+                var xOffset = (px + 0.5);
+                var yOffset = (py + 0.5);
+
+                // This causes RenderingWorldWithCamera test to fail
+
+                var rx = rng.NextDouble();
+                var ry = rng.NextDouble();
+
+                xOffset += (0.5 - rx);
+                yOffset += (0.5 - ry);
+
+                xOffset *= this.pixelSize;
+                yOffset *= this.pixelSize;
+
+                var worldX = this.halfWidth - xOffset;
+                var worldY = this.halfHeight - yOffset;
+
+                var pixel = inv * Double4.Point(worldX, worldY, -1);
+                var direction = (pixel - origin).Normalize();
+
+                yield return new Ray(origin, direction);
+            }
+        }
+
         public Ray RayForPixel(int px, int py)
         {
             var xOffset = (px + 0.5) * this.pixelSize;
@@ -67,16 +102,26 @@ namespace Pixie.Core
 
         public Canvas Render(World w)
         {
+            Stats.Reset();
             var img = new Canvas(this.hsize, this.vsize);
-
-
             Parallel.For(0, this.vsize, y =>
             {
                 this.ProgressMonitor.OnRowStarted(y);
+                // for(Parallel.For(0, this.hsize, x =>))
                 for (var x = 0; x < this.hsize - 1; x++)
                 {
-                    var ray = this.RayForPixel(x, y);
-                    var color = w.ColorAt(ray, 5);
+                    // var ray = this.RayForPixel(x, y);
+                    // var color = w.ColorAt(ray, 5);
+
+                    const int supersampling = 16;
+                    var color = Color.Black;
+                    var rays = this.RaysForPixel(x, y, supersampling).ToList();
+                    foreach (var ray in this.RaysForPixel(x, y))
+                    {
+                        color += w.ColorAt(ray, 5);
+                    }
+
+                    color *= (1.0 / rays.Count);
                     img[x, y] = color;
                 }
 

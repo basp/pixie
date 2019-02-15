@@ -1524,13 +1524,46 @@ namespace Pixie.Cmd
         {
             var world = new World();
 
+            var sky = new Sphere()
+            {
+                Transform =
+                    Transform.Scale(24, 24, 24),
+                
+                Material = new Material()
+                {
+                    Color = new Color(0.9, 0.9, 1.0),
+                    Ambient = 0.6,
+                    Diffuse = 0.3,
+                    Specular = 0,
+                },
+            };
+
             var floor = new Plane()
             {
                 Material = new Material
                 {
                     Specular = 0,
                     // Color = new Color(1, 1, 1),                    
-                    Pattern = new CheckersPattern(Color.White, Color.Black),
+                    Reflective = 0.21,
+                    Pattern = new CheckersPattern(
+                        new Color(0.6, 0.6, 0.6),
+                        new Color(0.45, 0.45, 0.45))
+                    {
+                        // Transform = Transform.Scale(2, 2, 2),
+                    },
+                },
+            };
+
+            var back = new Plane()
+            {
+                Transform =
+                    Transform.Translate(0, 0, 5) *
+                    Transform.RotateX(-Math.PI / 2),
+
+                Material = new Material()
+                {
+                    Specular = 0,
+                    Color = new Color(0.91, 0.91, 0.91),
                 },
             };
 
@@ -1543,41 +1576,71 @@ namespace Pixie.Cmd
                 {
                     Specular = 1.0,
                     Ambient = 0.0,
-                    Diffuse = 0.01,
+                    Diffuse = 0.001,
                     Shininess = 350,
-                    Color = new Color(0.1, 0.4, 0.8),
-                    Reflective = 0.62,
-                    RefractiveIndex = 1.5322,
-                    Transparency = 0.2,
+                    Color = new Color(0.05, 0.05, 0.2),
+                    Transparency = 0.90,
+                    RefractiveIndex = 1.52,
+                    Reflective = 0.98,
                 },
             };
 
-            var smallSphere = new Sphere()
+            var smallSphere1 = new Sphere()
             {
+                Transform =
+                    Transform.Translate(0, 0.5, -2) *
+                    Transform.Scale(0.5, 0.5, 0.5),
 
+                Material = new Material
+                {
+                    Specular = 0.2,
+                    Ambient = 0.2,
+                    Diffuse = 0.7,
+                    Shininess = 20,
+                    Color = new Color(0.8, 0.3, 0.4),
+                },
             };
 
-            var light1 = new PointLight(
-                Double4.Point(-10, 10, -10),
-                Color.White);
+            var smallSphere2 = new Sphere()
+            {
+                Transform =
+                    Transform.Translate(0, 0.5, 3) *
+                    Transform.Scale(0.5, 0.5, 0.5),
 
-            // var light1 = new AreaLight(
-            //     Double4.Point(-10, 10, -2),
-            //     Color.White,
-            //     Double4.Vector(2.5, 0, 0),
-            //     Double4.Vector(0, 0, 2.5),
-            //     2,
-            //     2);
+                Material = new Material
+                {
+                    Specular = 0.2,
+                    Ambient = 0.1,
+                    Diffuse = 0.9,
+                    Shininess = 50,
+                    Color = new Color(0.2, 0.7, 0.6),
+                },
+            };
 
+            // var light1 = new PointLight(
+            //     Double4.Point(-10, 10, -10),
+            //     Color.White);
+
+            var areaLight = new AreaLight(
+                Double4.Point(-10, 15, -2),
+                Color.White,
+                Double4.Vector(5, 0, 0),
+                Double4.Vector(0, 0, 5),
+                5,
+                5);
+
+            // world.Objects.Add(back);
             world.Objects.Add(floor);
             world.Objects.Add(sphere);
-            world.Lights.Add(light1);
+            world.Objects.Add(smallSphere1);
+            world.Objects.Add(smallSphere2);
+            world.Lights.Add(areaLight);
 
-            var camera = new Camera(width, height, Math.PI / 3)
+            var camera = new Camera(width, height, Math.PI / 4)
             {
                 Transform = Transform.View(
-                    Double4.Point(1, 2.25, -5),
-                    Double4.Point(0, 0.75, 0),
+                    Double4.Point(2.0, 0.52, -5),
+                    Double4.Point(0, 0.7, 0),
                     Double4.Vector(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
