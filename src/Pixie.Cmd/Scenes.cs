@@ -1557,17 +1557,17 @@ namespace Pixie.Cmd
 
             };
 
-            // var light1 = new PointLight(
-            //     Double4.Point(-10, 10, -10),
-            //     Color.White);
+            var light1 = new PointLight(
+                Double4.Point(-10, 10, -10),
+                Color.White);
 
-            var light1 = new AreaLight(
-                Double4.Point(-10, 10, -2),
-                Color.White,
-                Double4.Vector(2.5, 0, 0),
-                Double4.Vector(0, 0, 2.5),
-                2,
-                2);
+            // var light1 = new AreaLight(
+            //     Double4.Point(-10, 10, -2),
+            //     Color.White,
+            //     Double4.Vector(2.5, 0, 0),
+            //     Double4.Vector(0, 0, 2.5),
+            //     2,
+            //     2);
 
             world.Objects.Add(floor);
             world.Objects.Add(sphere);

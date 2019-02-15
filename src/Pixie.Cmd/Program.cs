@@ -28,7 +28,7 @@
             var sw = new Stopwatch();
             sw.Start();
             var img = t.Item2.Render(t.Item1);
-            img.SavePpm(@"D:\temp\test.ppm");
+            img.SavePpm(@"C:\temp\test.ppm");
             sw.Stop();
 
             const int nPixels = width * height;
