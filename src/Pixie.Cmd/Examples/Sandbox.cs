@@ -21,7 +21,7 @@ namespace Pixie.Cmd
                 new Color(0, 0, 1));
 
             g1.Transform = 
-                Transform.RotateZ(Math.PI / -1.5) *
+                Transform.RotateZ(-0.2) *
                 Transform.RotateY(Math.PI / 5) *
                 Transform.Translate(-1, 0, 0) *
                 Transform.Scale(2, 1, 1);
