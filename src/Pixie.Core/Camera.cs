@@ -51,7 +51,7 @@ namespace Pixie.Core
         public IProgressMonitor ProgressMonitor { get; set; } =
             new ProgressMonitor();
 
-        public IEnumerable<Ray> Supersample(int px, int py, int n = 8)
+        public IEnumerable<Ray> Supersample(int px, int py, int n = 16)
         {
             var inv = this.Transform.Inverse();
             var origin = inv * Double4.Point(0, 0, 0);
@@ -110,15 +110,15 @@ namespace Pixie.Core
                 for (var x = 0; x < this.hsize - 1; x++)
                 {
                     var color = Color.Black;
-                    // var rays = this.Supersample(x, y).ToList();
-                    // foreach (var ray in rays)
-                    // {
-                    //     color += w.ColorAt(ray, 5);
-                    // }
-                    // color *= (1.0 / rays.Count);
+                    var rays = this.Supersample(x, y).ToList();
+                    foreach (var ray in rays)
+                    {
+                        color += w.ColorAt(ray, 5);
+                    }
+                    color *= (1.0 / rays.Count);
 
-                    var ray = this.RayForPixel(x, y);
-                    color = w.ColorAt(ray);
+                    // var ray = this.RayForPixel(x, y);
+                    // color = w.ColorAt(ray);
                     img[x, y] = color;
                 }
 
