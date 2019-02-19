@@ -11,11 +11,11 @@
     {
         static void Main(string[] args)
         {
-            const int width = 800;
-            const int height = 600;
+            const int width = 400;
+            const int height = 200;
 
             // var t = Cover.Create(width, height);
-            var t = Scenes.Example15(width, height);
+            var t = Sandbox.Create(width, height);
 
             var sw = new Stopwatch();
             sw.Start();

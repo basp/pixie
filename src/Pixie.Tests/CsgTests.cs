@@ -1,4 +1,4 @@
-namespace Pixie.Test
+namespace Pixie.Tests
 {
     using System;
     using Xunit;

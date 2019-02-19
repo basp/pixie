@@ -7,8 +7,6 @@ namespace Pixie.Core
 
     public class Camera
     {
-        const bool supersample = true;
-
         private static readonly Random rng = new Random();
         private readonly int hsize;
         private readonly int vsize;
@@ -112,22 +110,15 @@ namespace Pixie.Core
                 for (var x = 0; x < this.hsize - 1; x++)
                 {
                     var color = Color.Black;
-                    if (supersample)
-                    {
-                        var rays = this.Supersample(x, y).ToList();
-                        foreach (var ray in rays)
-                        {
-                            color += w.ColorAt(ray, 5);
-                        }
+                    // var rays = this.Supersample(x, y).ToList();
+                    // foreach (var ray in rays)
+                    // {
+                    //     color += w.ColorAt(ray, 5);
+                    // }
+                    // color *= (1.0 / rays.Count);
 
-                        color *= (1.0 / rays.Count);
-                    }
-                    else
-                    {
-                        var ray = this.RayForPixel(x, y);
-                        color = w.ColorAt(ray);
-                    }
-
+                    var ray = this.RayForPixel(x, y);
+                    color = w.ColorAt(ray);
                     img[x, y] = color;
                 }
 
