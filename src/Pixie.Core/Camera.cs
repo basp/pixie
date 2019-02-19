@@ -7,8 +7,9 @@ namespace Pixie.Core
 
     public class Camera
     {
-        private static readonly Random rng = new Random();
+        const bool supersample = true;
 
+        private static readonly Random rng = new Random();
         private readonly int hsize;
         private readonly int vsize;
         private readonly double fov;
@@ -52,7 +53,7 @@ namespace Pixie.Core
         public IProgressMonitor ProgressMonitor { get; set; } =
             new ProgressMonitor();
 
-        public IEnumerable<Ray> RaysForPixel(int px, int py, int n = 8)
+        public IEnumerable<Ray> Supersample(int px, int py, int n = 8)
         {
             var inv = this.Transform.Inverse();
             var origin = inv * Double4.Point(0, 0, 0);
@@ -62,7 +63,8 @@ namespace Pixie.Core
                 var xOffset = (px + 0.5);
                 var yOffset = (py + 0.5);
 
-                // This causes RenderingWorldWithCamera test to fail
+                // This causes RenderingWorldWithCamera test to 
+                // fail due to the random offsets
 
                 var rx = rng.NextDouble();
                 var ry = rng.NextDouble();
@@ -107,39 +109,30 @@ namespace Pixie.Core
             Parallel.For(0, this.vsize, y =>
             {
                 this.ProgressMonitor.OnRowStarted(y);
-                // for(Parallel.For(0, this.hsize, x =>))
                 for (var x = 0; x < this.hsize - 1; x++)
                 {
-                    // var ray = this.RayForPixel(x, y);
-                    // var color = w.ColorAt(ray, 5);
-
                     var color = Color.Black;
-                    var rays = this.RaysForPixel(x, y).ToList();
-                    foreach (var ray in rays)
+                    if (supersample)
                     {
-                        color += w.ColorAt(ray, 5);
+                        var rays = this.Supersample(x, y).ToList();
+                        foreach (var ray in rays)
+                        {
+                            color += w.ColorAt(ray, 5);
+                        }
+
+                        color *= (1.0 / rays.Count);
+                    }
+                    else
+                    {
+                        var ray = this.RayForPixel(x, y);
+                        color = w.ColorAt(ray);
                     }
 
-                    color *= (1.0 / rays.Count);
                     img[x, y] = color;
                 }
 
                 this.ProgressMonitor.OnRowFinished(y);
             });
-
-            // for (var y = 0; y < this.vsize; y++)
-            // {
-            //     this.ProgressMonitor.OnRowStarted(y);
-            //     for (var x = 0; x < this.hsize - 1; x++)
-            //     {
-            //         Console.Write(".");
-            //         var ray = this.RayForPixel(x, y);
-            //         var color = w.ColorAt(ray, 5);
-            //         img[x, y] = color;
-            //     }
-
-            //     this.ProgressMonitor.OnRowFinished(y);
-            // }
 
             return img;
         }

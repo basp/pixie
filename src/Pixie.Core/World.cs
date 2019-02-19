@@ -101,7 +101,7 @@ namespace Pixie.Core
 
         const int RecursiveDepth = 5;
 
-        public Color ColorAt(Ray ray, int remaining)
+        public Color ColorAt(Ray ray, int remaining = RecursiveDepth)
         {
             var xs = this.Intersect(ray);
             if (xs.TryGetHit(out var i))

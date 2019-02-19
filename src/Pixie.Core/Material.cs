@@ -5,21 +5,21 @@ namespace Pixie.Core
     public class Material : IEquatable<Material>
     {
         public double Ambient;
-        
+
         public double Diffuse;
-        
+
         public double Specular;
-        
+
         public double Shininess;
-        
+
         public double Reflective;
-        
+
         public double Transparency;
-        
+
         public double RefractiveIndex;
-        
+
         public Color Color;
-        
+
         public Pattern Pattern;
 
         public Material()
@@ -40,6 +40,23 @@ namespace Pixie.Core
             this.Specular == other.Specular &&
             this.Shininess == other.Shininess &&
             this.Color.Equals(other.Color);
+
+        public Material Extend(Action<Material> setup)
+        {
+            var m = new Material()
+            {
+                Ambient = this.Ambient,
+                Diffuse = this.Diffuse,
+                Specular = this.Specular,
+                Shininess = this.Shininess,
+                Reflective = this.Reflective,
+                Transparency = this.Transparency,
+                RefractiveIndex = this.RefractiveIndex,
+                Color = this.Color,
+            };
+            setup(m);
+            return m;
+        }
 
         public Color Li(
             Shape obj,
@@ -65,12 +82,6 @@ namespace Pixie.Core
             var lightDotNormal = Double4.Dot(lightv, normalv);
 
             ambient = effectiveColor * this.Ambient;
-
-            // var shadowf = 0.0;
-            // if (shadow)
-            // {
-            //     shadowf = 1.0;
-            // }
 
             if (lightDotNormal < 0)
             {

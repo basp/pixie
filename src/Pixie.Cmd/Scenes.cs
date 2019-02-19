@@ -1612,8 +1612,8 @@ namespace Pixie.Cmd
                 Color.White,
                 Double4.Vector(8, 0, 0),
                 Double4.Vector(0, 0, 8),
-                10,
-                10);
+                5,
+                5);
 
             world.Objects.Add(sky);
             world.Objects.Add(floor);

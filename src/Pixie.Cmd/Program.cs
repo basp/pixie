@@ -4,15 +4,17 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Drawing;
+    using Humanizer;
     using Pixie.Core;
 
     class Program
     {
         static void Main(string[] args)
         {
-            const int width = 1280;
-            const int height = 1024;
+            const int width = 800;
+            const int height = 600;
 
+            // var t = Cover.Create(width, height);
             var t = Scenes.Example15(width, height);
 
             var sw = new Stopwatch();

@@ -1,3 +1,2 @@
 # pixie
-All the old code is shove up the `attic` but the quest continues.
-The focus is more on rayh-tracing and for now I'm just about to do some *Phong* lighting on the sphere.
+Pixie is mostly complete but we're still working on fancy effets and better rounding.
