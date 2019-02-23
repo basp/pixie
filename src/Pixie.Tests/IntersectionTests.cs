@@ -83,7 +83,7 @@ namespace Pixie.Tests
             var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
             var shape = new Sphere();
             var i = new Intersection(4, shape);
-            var comps = i.PrepareComputations(r);
+            var comps = i.Precompute(r);
             Assert.Equal(i.T, comps.T);
             Assert.Equal(Double4.Point(0, 0, -1), comps.Point);
             Assert.Equal(Double4.Vector(0, 0, -1), comps.Eyev);
@@ -96,7 +96,7 @@ namespace Pixie.Tests
             var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
             var shape = new Sphere();
             var i = new Intersection(4, shape);
-            var comps = i.PrepareComputations(r);
+            var comps = i.Precompute(r);
             Assert.False(comps.Inside);
         }
 
@@ -106,7 +106,7 @@ namespace Pixie.Tests
             var r = new Ray(Double4.Point(0, 0, 0), Double4.Vector(0, 0, 1));
             var shape = new Sphere();
             var i = new Intersection(1, shape);
-            var comps = i.PrepareComputations(r);
+            var comps = i.Precompute(r);
             Assert.Equal(Double4.Point(0, 0, 1), comps.Point);
             Assert.Equal(Double4.Vector(0, 0, -1), comps.Eyev);
             Assert.Equal(Double4.Vector(0, 0, -1), comps.Normalv);
@@ -123,7 +123,7 @@ namespace Pixie.Tests
             };
 
             var i = new Intersection(5, shape);
-            var comps = i.PrepareComputations(r);
+            var comps = i.Precompute(r);
             Assert.True(comps.OverPoint.Z < (-Intersection.Epsilon / 2));
             Assert.True(comps.Point.Z > comps.OverPoint.Z);
         }
@@ -134,7 +134,7 @@ namespace Pixie.Tests
             var shape = new Plane();
             var r = new Ray(Double4.Point(0, 1, -1), Double4.Vector(0, -Math.Sqrt(2) / 2, Math.Sqrt(2) / 2));
             var i = new Intersection(Math.Sqrt(2), shape);
-            var comps = i.PrepareComputations(r);
+            var comps = i.Precompute(r);
             var expected = Double4.Vector(0, Math.Sqrt(2) / 2, Math.Sqrt(2) / 2);
             Assert.Equal(expected, comps.Reflectv);
         }
@@ -176,7 +176,7 @@ namespace Pixie.Tests
                 new Intersection(5.25, c),
                 new Intersection(6, a));
 
-            var comps = xs[index].PrepareComputations(r, xs);
+            var comps = xs[index].Precompute(r, xs);
             Assert.Equal(n1, comps.N1);
             Assert.Equal(n2, comps.N2);
         }
@@ -192,7 +192,7 @@ namespace Pixie.Tests
 
             var i = new Intersection(5, shape);
             var xs = IntersectionList.Create(i);
-            var comps = i.PrepareComputations(r, xs);
+            var comps = i.Precompute(r, xs);
             Assert.True(comps.UnderPoint.Z > Intersection.Epsilon / 2);
             Assert.True(comps.Point.Z < comps.UnderPoint.Z);
         }
@@ -209,7 +209,7 @@ namespace Pixie.Tests
                 new Intersection(-Math.Sqrt(2)/2, shape),
                 new Intersection(Math.Sqrt(2)/2, shape));
             
-            var comps = xs[1].PrepareComputations(r, xs);
+            var comps = xs[1].Precompute(r, xs);
             var reflectance = comps.Schlick();
             Assert.Equal(1.0, reflectance);
         }
@@ -223,7 +223,7 @@ namespace Pixie.Tests
                 new Intersection(-1, shape),
                 new Intersection(1, shape));
 
-            var comps = xs[1].PrepareComputations(r, xs);
+            var comps = xs[1].Precompute(r, xs);
             var reflectance = comps.Schlick();
             const int prec = 8;
             Assert.Equal(0.04, reflectance, prec);
@@ -236,7 +236,7 @@ namespace Pixie.Tests
             var r = new Ray(Double4.Point(0, 0.99, -2), Double4.Vector(0, 0, 1));
             var xs = IntersectionList.Create(
                 new Intersection(1.8589, shape));
-            var comps = xs[0].PrepareComputations(r, xs);
+            var comps = xs[0].Precompute(r, xs);
             var reflectance = comps.Schlick();
             const int prec = 5;
             Assert.Equal(0.48873, reflectance, prec);

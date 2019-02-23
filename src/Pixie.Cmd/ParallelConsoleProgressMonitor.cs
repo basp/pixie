@@ -3,7 +3,6 @@ namespace Pixie.Cmd
     using System;
     using System.Diagnostics;
     using System.Threading;
-    using Humanizer;
     using Pixie.Core;
 
     public class ParallelConsoleProgressMonitor : ProgressMonitor

@@ -4,31 +4,41 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Drawing;
-    using Humanizer;
+    using System.IO;
+    using PowerArgs;
     using Pixie.Core;
 
+    [ArgExceptionBehavior(ArgExceptionPolicy.StandardExceptionHandling)]
     class Program
     {
-        static void Main(string[] args)
+        [HelpHook]
+        [ArgShortcut("-?")]
+        [ArgDescription("Shows this help")]
+        public static bool Help { get; set; }
+
+        [ArgActionMethod]
+        public static void Render(RenderArgs args)
         {
-            const int width = 1280;
-            const int height = 1024;
-
-            // var t = Cover.Create(width, height);
-            var t = Sandbox.Create(width, height);
-
+            var pixels = args.Width * args.Height;
+            var t = Sandbox.Create(args.Width, args.Height);
             var sw = new Stopwatch();
             sw.Start();
             var img = t.Item2.Render(t.Item1);
-            const string path = @"D:\temp\test.ppm";
-            img.SavePpm(path);
+            img.SavePpm(args.Out);
             sw.Stop();
 
-            const int nPixels = width * height;
-            Console.WriteLine($"Total: {sw.Elapsed})");
-            Console.WriteLine($"{width} * {height} / {sw.ElapsedMilliseconds} = {(double)nPixels / sw.ElapsedMilliseconds}px/ms");
-            Console.WriteLine($"{Stats.Tests} intersection tests");
-            Console.WriteLine(path);
+            Console.WriteLine($"{sw.Elapsed}");
+            Console.WriteLine($"{(double)pixels / sw.ElapsedMilliseconds}px/ms");
+            Console.WriteLine($"Rays:               {Stats.Tests}");
+            Console.WriteLine($"Primary rays:       {Stats.PrimaryRays}");
+            Console.WriteLine($"Secondary rays:     {Stats.SecondaryRays}");
+            Console.WriteLine($"Shadow rays:        {Stats.ShadowRays}"); 
+            Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
+        }
+
+        static void Main(string[] args)
+        {
+            Args.InvokeAction<Program>(args);
         }
     }
 }

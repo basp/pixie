@@ -55,7 +55,7 @@ namespace Pixie.Tests
             var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
             var shape = w.Objects[0];
             var i = new Intersection(4, shape);
-            var comps = i.PrepareComputations(r);
+            var comps = i.Precompute(r);
             var c = w.Shade(comps, 5);
             var expected = new Color(0.38066, 0.47583, 0.2855);
             const double eps = 0.00001;
@@ -72,7 +72,7 @@ namespace Pixie.Tests
             var r = new Ray(Double4.Point(0, 0, 0), Double4.Vector(0, 0, 1));
             var shape = w.Objects[1];
             var i = new Intersection(0.5, shape);
-            var comps = i.PrepareComputations(r);
+            var comps = i.Precompute(r);
             var c = w.Shade(comps, 5);
             var expected = new Color(0.90498, 0.90498, 0.90498);
             const double eps = 0.00001;
@@ -136,7 +136,7 @@ namespace Pixie.Tests
 
             var r = new Ray(Double4.Point(0, 0, 5), Double4.Vector(0, 0, 1));
             var i = new Intersection(4, s2);
-            var comps = i.PrepareComputations(r);
+            var comps = i.Precompute(r);
             var c = w.Shade(comps, 5);
             var expected = new Color(0.1, 0.1, 0.1);
             Assert.Equal(expected, c);
@@ -150,7 +150,7 @@ namespace Pixie.Tests
             var shape = w.Objects[1];
             shape.Material.Ambient = 1;
             var i = new Intersection(1, shape);
-            var comps = i.PrepareComputations(r);
+            var comps = i.Precompute(r);
             var c = w.ReflectedColor(comps, 5);
             Assert.Equal(Color.Black, c);
         }
@@ -167,7 +167,7 @@ namespace Pixie.Tests
                 Double4.Point(0, 0, -3), 
                 Double4.Vector(0, -Math.Sqrt(2)/2, Math.Sqrt(2)/2));
             var i = new Intersection(Math.Sqrt(2), plane);
-            var comps = i.PrepareComputations(r);
+            var comps = i.Precompute(r);
             var c = w.ReflectedColor(comps, 5);
             var expected = new Color(0.19032, 0.2379, 0.14274);
             const double eps = 0.0001;
@@ -187,7 +187,7 @@ namespace Pixie.Tests
                 Double4.Point(0, 0, -3),
                 Double4.Vector(0, -Math.Sqrt(2)/2, Math.Sqrt(2)/2));
             var i = new Intersection(Math.Sqrt(2), plane);
-            var comps = i.PrepareComputations(r);
+            var comps = i.Precompute(r);
             var c = w.Shade(comps, 5);
             var expected = new Color(0.87677, 0.92436, 0.82918);
             const double eps = 0.0001;
@@ -226,7 +226,7 @@ namespace Pixie.Tests
                 Double4.Point(0, 0, -3),
                 Double4.Vector(0, -Math.Sqrt(2)/2, Math.Sqrt(2)/2));
             var i = new Intersection(Math.Sqrt(2), plane);
-            var comps = i.PrepareComputations(r);
+            var comps = i.Precompute(r);
             var c = w.ReflectedColor(comps, 0);
             Assert.Equal(Color.Black, c);
         }
@@ -240,7 +240,7 @@ namespace Pixie.Tests
             var xs = IntersectionList.Create(
                 new Intersection(4, shape),
                 new Intersection(6, shape));
-            var comps = xs[0].PrepareComputations(r, xs);
+            var comps = xs[0].Precompute(r, xs);
             var c = w.RefractedColor(comps, 5);
             Assert.Equal(Color.Black, c);
         }
@@ -262,7 +262,7 @@ namespace Pixie.Tests
                 new Intersection(4, shape),
                 new Intersection(6, shape));
 
-            var comps = xs[0].PrepareComputations(r, xs);
+            var comps = xs[0].Precompute(r, xs);
             var c = w.RefractedColor(comps, 0);
             Assert.Equal(Color.Black, c);
         }
@@ -284,7 +284,7 @@ namespace Pixie.Tests
                 new Intersection(-Math.Sqrt(2)/2, shape),
                 new Intersection(Math.Sqrt(2)/2, shape));
             
-            var comps = xs[1].PrepareComputations(r, xs);
+            var comps = xs[1].Precompute(r, xs);
             var c = w.RefractedColor(comps, 5);
             Assert.Equal(Color.Black, c);
         }
@@ -312,7 +312,7 @@ namespace Pixie.Tests
                 new Intersection(0.4899, b),
                 new Intersection(0.9899, a));
             
-            var comps = xs[2].PrepareComputations(r, xs);
+            var comps = xs[2].Precompute(r, xs);
             var c = w.RefractedColor(comps, 5);
             var expected = new Color(0, 0.99888, 0.04725);
 
@@ -345,7 +345,7 @@ namespace Pixie.Tests
             var xs = IntersectionList.Create(
                 new Intersection(Math.Sqrt(2), floor));
             
-            var comps = xs[0].PrepareComputations(r, xs);
+            var comps = xs[0].Precompute(r, xs);
             var c = w.Shade(comps, 5);
             var expected = new Color(0.93642, 0.68642, 0.68642);
 
@@ -379,7 +379,7 @@ namespace Pixie.Tests
             var xs = IntersectionList.Create(
                 new Intersection(Math.Sqrt(2), floor));
 
-            var comps = xs[0].PrepareComputations(r, xs);
+            var comps = xs[0].Precompute(r, xs);
             var c = w.Shade(comps, 5);
             var expected = new Color(0.93391, 0.69643, 0.69243);
             const double eps = 0.00001;

@@ -3,6 +3,7 @@ namespace Pixie.Core
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
 
     public class Camera
@@ -103,28 +104,32 @@ namespace Pixie.Core
         public Canvas Render(World w)
         {
             Stats.Reset();
+            this.ProgressMonitor.OnStarted();
             var img = new Canvas(this.hsize, this.vsize);
             Parallel.For(0, this.vsize, y =>
             {
                 this.ProgressMonitor.OnRowStarted(y);
-                for (var x = 0; x < this.hsize - 1; x++)
+                for (var x = 0; x < this.hsize; x++)
                 {
                     var color = Color.Black;
-                    var rays = this.Supersample(x, y).ToList();
-                    foreach (var ray in rays)
-                    {
-                        color += w.ColorAt(ray, 5);
-                    }
-                    color *= (1.0 / rays.Count);
+                    
+                    // var rays = this.Supersample(x, y).ToList();
+                    // foreach (var ray in rays)
+                    // {
+                    //     color += w.ColorAt(ray, 5);
+                    // }
+                    // color *= (1.0 / rays.Count);
 
-                    // var ray = this.RayForPixel(x, y);
-                    // color = w.ColorAt(ray);
+                    Interlocked.Increment(ref Stats.PrimaryRays);
+                    var ray = this.RayForPixel(x, y);
+                    color = w.ColorAt(ray);
                     img[x, y] = color;
                 }
 
                 this.ProgressMonitor.OnRowFinished(y);
             });
 
+            this.ProgressMonitor.OnFinished();
             return img;
         }
     }

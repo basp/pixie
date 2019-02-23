@@ -22,10 +22,10 @@ namespace Pixie.Core
             this.T == other.T &&
             this.Object == other.Object;
 
-        public Computations PrepareComputations(Ray r) =>
-            PrepareComputations(r, IntersectionList.Create(this));
+        public Computations Precompute(Ray r) =>
+            Precompute(r, IntersectionList.Create(this));
 
-        public Computations PrepareComputations(Ray r, IntersectionList xs)
+        public Computations Precompute(Ray r, IntersectionList xs)
         {
             var t = this.T;
             var obj = this.Object;
