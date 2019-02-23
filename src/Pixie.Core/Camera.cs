@@ -8,7 +8,7 @@ namespace Pixie.Core
 
     public class Camera
     {
-        private static readonly Random rng = new Random();
+        public static readonly Stats Stats = new Stats();        
         private readonly int hsize;
         private readonly int vsize;
         private readonly double fov;
@@ -47,42 +47,14 @@ namespace Pixie.Core
 
         public double PixelSize => this.pixelSize;
 
+        public double HalfWidth => this.halfWidth;
+
+        public double HalfHeight => this.halfHeight;
+
         public Double4x4 Transform { get; set; } = Double4x4.Identity;
 
         public IProgressMonitor ProgressMonitor { get; set; } =
             new ProgressMonitor();
-
-        public IEnumerable<Ray> Supersample(int px, int py, int n = 16)
-        {
-            var inv = this.Transform.Inverse();
-            var origin = inv * Double4.Point(0, 0, 0);
-
-            for (var i = 0; i < n; i++)
-            {
-                var xOffset = (px + 0.5);
-                var yOffset = (py + 0.5);
-
-                // This causes RenderingWorldWithCamera test to 
-                // fail due to the random offsets
-
-                var rx = rng.NextDouble();
-                var ry = rng.NextDouble();
-
-                xOffset += (0.5 - rx);
-                yOffset += (0.5 - ry);
-
-                xOffset *= this.pixelSize;
-                yOffset *= this.pixelSize;
-
-                var worldX = this.halfWidth - xOffset;
-                var worldY = this.halfHeight - yOffset;
-
-                var pixel = inv * Double4.Point(worldX, worldY, -1);
-                var direction = (pixel - origin).Normalize();
-
-                yield return new Ray(origin, direction);
-            }
-        }
 
         public Ray RayForPixel(int px, int py)
         {
@@ -101,7 +73,10 @@ namespace Pixie.Core
             return new Ray(origin, direction);
         }
 
-        public Canvas Render(World w)
+        public Canvas Render(World w) =>
+            Render(w, new DefaultSampler(w, this));
+
+        public Canvas Render(World w, ISampler sampler)
         {
             Stats.Reset();
             this.ProgressMonitor.OnStarted();
@@ -111,19 +86,7 @@ namespace Pixie.Core
                 this.ProgressMonitor.OnRowStarted(y);
                 for (var x = 0; x < this.hsize; x++)
                 {
-                    var color = Color.Black;
-                    
-                    // var rays = this.Supersample(x, y).ToList();
-                    // foreach (var ray in rays)
-                    // {
-                    //     color += w.ColorAt(ray, 5);
-                    // }
-                    // color *= (1.0 / rays.Count);
-
-                    Interlocked.Increment(ref Stats.PrimaryRays);
-                    var ray = this.RayForPixel(x, y);
-                    color = w.ColorAt(ray);
-                    img[x, y] = color;
+                    img[x, y] = sampler.Sample(x, y);
                 }
 
                 this.ProgressMonitor.OnRowFinished(y);

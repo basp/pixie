@@ -1,4 +1,4 @@
-namespace Pixie.Cmd
+namespace Pixie.Cmd.Examples
 {
     using System;
     using Pixie.Core;

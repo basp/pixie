@@ -7,6 +7,7 @@
     using System.IO;
     using PowerArgs;
     using Pixie.Core;
+    using Pixie.Cmd.Examples;
 
     [ArgExceptionBehavior(ArgExceptionPolicy.StandardExceptionHandling)]
     class Program
@@ -20,19 +21,23 @@
         public static void Render(RenderArgs args)
         {
             var pixels = args.Width * args.Height;
-            var t = Sandbox.Create(args.Width, args.Height);
+            // var t = Sandbox.Create(args.Width, args.Height);
+            // var t = Test01.Create(args.Width, args.Height);
+            var t = Cover.Create(args.Width, args.Height);
             var sw = new Stopwatch();
             sw.Start();
             var img = t.Item2.Render(t.Item1);
             img.SavePpm(args.Out);
             sw.Stop();
 
+            var stats = Camera.Stats;
+
             Console.WriteLine($"{sw.Elapsed}");
             Console.WriteLine($"{(double)pixels / sw.ElapsedMilliseconds}px/ms");
-            Console.WriteLine($"Rays:               {Stats.Tests}");
-            Console.WriteLine($"Primary rays:       {Stats.PrimaryRays}");
-            Console.WriteLine($"Secondary rays:     {Stats.SecondaryRays}");
-            Console.WriteLine($"Shadow rays:        {Stats.ShadowRays}"); 
+            Console.WriteLine($"Intersection tests: {stats.Tests}");
+            Console.WriteLine($"Primary rays:       {stats.PrimaryRays}");
+            Console.WriteLine($"Secondary rays:     {stats.SecondaryRays}");
+            Console.WriteLine($"Shadow rays:        {stats.ShadowRays}"); 
             Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
         }
 
