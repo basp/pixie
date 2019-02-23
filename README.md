@@ -7,7 +7,7 @@ description language support for now. Although Pixie isn't designed for speed fo
 
 ## reference image
 The image below is the reference image from the cover of the book as rendered by Pixie. 
-![reference image](https://i.imgur.com/LHdrSTH.png)
+![reference image](https://i.imgur.com/jszWCMD.png)
 
 ## geometry
 Pixie does not really distinguish between points and vectors on a low level. This allows for some freedom but also for some mishaps. For instance, it is very much possible to perform an addition operation on two points even though this makes little sense from a math perspective.
@@ -100,6 +100,9 @@ var s = new Cube()
     },
 };
 ```
+
+## patterns
+Patters 
 
 ## ideas
 * Bezier curves
