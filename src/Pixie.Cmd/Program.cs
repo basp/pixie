@@ -24,9 +24,10 @@
             // var t = Sandbox.Create(args.Width, args.Height);
             // var t = Test01.Create(args.Width, args.Height);
             var t = Cover.Create(args.Width, args.Height);
+            var sampler = new RandomSuperSampler(t.Item1, t.Item2, n: 8);
             var sw = new Stopwatch();
             sw.Start();
-            var img = t.Item2.Render(t.Item1);
+            var img = t.Item2.Render(t.Item1, sampler);
             img.SavePpm(args.Out);
             sw.Stop();
 

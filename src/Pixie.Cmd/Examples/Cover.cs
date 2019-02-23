@@ -215,10 +215,9 @@ namespace Pixie.Cmd.Examples
                     Transform.Translate(-0.5, -8.5, 8) * largeObject,
             };
 
-            var world = new World();
-            
+            var world = new World();        
             world.Objects.Add(plane);            
-            world.Objects.Add(sphere);
+            world.Objects.Add(sphere);            
             world.Objects.Add(cube1);
             world.Objects.Add(cube2);
             world.Objects.Add(cube3);
@@ -237,8 +236,8 @@ namespace Pixie.Cmd.Examples
             world.Objects.Add(cube16);
             world.Objects.Add(cube17);
             world.Lights.Add(light1);
-            // world.Lights.Add(light2);
-
+            world.Lights.Add(light2);
+            
             return Tuple.Create(world, camera);
         }
     }

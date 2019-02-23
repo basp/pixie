@@ -10,14 +10,18 @@ namespace Pixie.Core
         private static readonly Random rng = new Random();
         private readonly World world;
         private readonly Camera camera;
+        private readonly int n;
+        private readonly double oneOverN;
 
-        public RandomSuperSampler(World world, Camera camera)
+        public RandomSuperSampler(World world, Camera camera, int n = 4)
         {
             this.world = world;
             this.camera = camera;
+            this.n = n;
+            this.oneOverN = 1.0 / n;
         }
 
-        public IEnumerable<Ray> Supersample(int px, int py, int n = 4)
+        public IEnumerable<Ray> Supersample(int px, int py)
         {
             var inv = this.camera.Transform.Inverse();
             var origin = inv * Double4.Point(0, 0, 0);
@@ -26,13 +30,10 @@ namespace Pixie.Core
             var halfWidth = this.camera.HalfWidth;
             var halfHeight = this.camera.HalfHeight;
 
-            for (var i = 0; i < n; i++)
+            for (var i = 0; i < this.n; i++)
             {
                 var xOffset = (px + 0.5);
                 var yOffset = (py + 0.5);
-
-                // This causes RenderingWorldWithCamera test to 
-                // fail due to the random offsets
 
                 var rx = rng.NextDouble();
                 var ry = rng.NextDouble();
@@ -63,7 +64,8 @@ namespace Pixie.Core
                 color += this.world.ColorAt(ray, 5);
             }
 
-            color *= (1.0 / rays.Count);
+            // color *= (1.0 / this.n);
+            color *= this.oneOverN;
             return color;
         }
     }

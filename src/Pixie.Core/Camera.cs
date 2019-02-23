@@ -8,7 +8,7 @@ namespace Pixie.Core
 
     public class Camera
     {
-        public static readonly Stats Stats = new Stats();        
+        public static readonly Stats Stats = new Stats();
         private readonly int hsize;
         private readonly int vsize;
         private readonly double fov;
@@ -55,23 +55,6 @@ namespace Pixie.Core
 
         public IProgressMonitor ProgressMonitor { get; set; } =
             new ProgressMonitor();
-
-        public Ray RayForPixel(int px, int py)
-        {
-            var xOffset = (px + 0.5) * this.pixelSize;
-            var yOffset = (py + 0.5) * this.pixelSize;
-
-            var worldX = this.halfWidth - xOffset;
-            var worldY = this.halfHeight - yOffset;
-
-            var inv = this.Transform.Inverse();
-
-            var pixel = inv * Double4.Point(worldX, worldY, -1);
-            var origin = inv * Double4.Point(0, 0, 0);
-            var direction = (pixel - origin).Normalize();
-
-            return new Ray(origin, direction);
-        }
 
         public Canvas Render(World w) =>
             Render(w, new DefaultSampler(w, this));
