@@ -86,9 +86,9 @@ var world = new World()
 ## materials
 Materials are implemented based mostly on *Phong shading* whith some extensions for reflection, transparency and refraction.
 
-Every new material will have have a white color and some *Phong* values that
-make sure it shows up. If you are going to use a particular material multiple times
-you probably should cache it but otherwise it is probably better to set it inline.
+Every new material will have have a white color and defaults that make sure it shows up. 
+If you are going to use a particular material multiple times you probably should cache it 
+but otherwise it is probably better to set it inline.
 ```
 var s = new Cube()
 {
