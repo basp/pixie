@@ -3,7 +3,7 @@ Basic .NET ray-tracer implementation as specified by
 the awesome [The Ray Tracer Challenge](https://pragprog.com/book/jbtracer/the-ray-tracer-challenge) book.
 
 Pixie is designed to be used from the API level. That means there is no scene
-description language support for now. Although Pixie isn't designed for speed for speed first, it certainly is not a slouch. It will hapilly put all your cores to full use.
+description language support for now. Although Pixie isn't designed for speed for speed first, it is not a slouch. It will hapilly put all your cores to full use.
 
 ## reference image
 The image below is the reference image from the cover of the book which
@@ -69,7 +69,7 @@ var light = new PointLight(
     new Color(1, 1, 1));
 ```
 
-Note that area lights are still pretty much experimental, undocumented and their API is subject to change.
+Area lights are still pretty much experimental, undocumented and their API is subject to change.
 
 ## world
 A `World` is nothing more than a container for lights and objects. Now that we 
@@ -85,6 +85,22 @@ var world = new World()
 
 ## materials
 Materials are implemented based mostly on *Phong shading* whith some extensions for reflection, transparency and refraction.
+
+Every new material will have have a white color and some *Phong* values that
+make sure it shows up. If you are going to use a particular material multiple times
+you probably should cache it but otherwise it is often easy to just set it inline.
+```
+var s = new Cube()
+{
+    Material = new Material()
+    {
+        Specular = 0,
+        Ambient = 0.3,
+        Diffuse = 0.5,
+        Color = new Color(0.8, 0.2, 0.8),
+    },
+};
+```
 
 ## ideas
 * Bezier curves
