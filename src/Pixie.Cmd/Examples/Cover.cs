@@ -238,7 +238,7 @@ namespace Pixie.Cmd.Examples
             world.Objects.Add(cube16);
             world.Objects.Add(cube17);
             world.Lights.Add(light1);
-            world.Lights.Add(light2);
+            // world.Lights.Add(light2);
             
             return Tuple.Create(world, camera);
         }

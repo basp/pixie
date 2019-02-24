@@ -6,7 +6,7 @@ Pixie is designed to be used from the API level. That means there is no scene
 description language support for now. Although Pixie isn't designed for speed for speed first, it is not a slouch. It will hapilly put all your cores to full use.
 
 ## reference image
-The image below is the reference image from the cover of the book as rendered by Pixie. 
+The image below is the reference image from the cover of the book as rendered by Pixie. Note that it's currently incorrect due to an error in the translation of the scene code, not due to an error in Pixie itself.
 ![reference image](https://i.imgur.com/jszWCMD.png)
 
 ## geometry

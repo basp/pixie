@@ -60,11 +60,10 @@ namespace Pixie.Core
             var rays = this.Supersample(x, y).ToList();
             foreach (var ray in rays)
             {
-                Interlocked.Increment(ref Camera.Stats.PrimaryRays);
+                Interlocked.Increment(ref Stats.PrimaryRays);
                 color += this.world.ColorAt(ray, 5);
             }
 
-            // color *= (1.0 / this.n);
             color *= this.oneOverN;
             return color;
         }

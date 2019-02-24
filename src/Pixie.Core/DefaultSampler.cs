@@ -28,7 +28,11 @@ namespace Pixie.Core
 
             var inv = this.camera.Transform.Inverse();
 
+            // For focal blur we need to manipulate the hard-coded 
+            // z component below for focal depth.
             var pixel = inv * Double4.Point(worldX, worldY, -1);
+            // Instead of tracing from the origin, select a point
+            // on the aperture instead.
             var origin = inv * Double4.Point(0, 0, 0);
             var direction = (pixel - origin).Normalize();
 
@@ -37,7 +41,7 @@ namespace Pixie.Core
 
         public Color Sample(int x, int y)
         {
-            Interlocked.Increment(ref Camera.Stats.PrimaryRays);
+            Interlocked.Increment(ref Stats.PrimaryRays);
             var ray = this.RayForPixel(x, y);
             return world.ColorAt(ray);
         }

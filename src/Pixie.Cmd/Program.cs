@@ -24,21 +24,26 @@
             // var t = Sandbox.Create(args.Width, args.Height);
             // var t = Test01.Create(args.Width, args.Height);
             var t = Cover.Create(args.Width, args.Height);
-            var sampler = new RandomSuperSampler(t.Item1, t.Item2, n: 8);
+            // var sampler = new RandomSuperSampler(t.Item1, t.Item2, n: 8);
+            var sampler = new FocalBlurSampler(
+                t.Item1,
+                t.Item2,
+                na: 0.03,
+                focalDepth: 1.1,
+                n: 32);
+
             var sw = new Stopwatch();
             sw.Start();
-            var img = t.Item2.Render(t.Item1);
+            var img = t.Item2.Render(t.Item1, sampler);
             img.SavePpm(args.Out);
             sw.Stop();
 
-            var stats = Camera.Stats;
-
             Console.WriteLine($"{sw.Elapsed}");
             Console.WriteLine($"{(double)pixels / sw.ElapsedMilliseconds}px/ms");
-            Console.WriteLine($"Intersection tests: {stats.Tests}");
-            Console.WriteLine($"Primary rays:       {stats.PrimaryRays}");
-            Console.WriteLine($"Secondary rays:     {stats.SecondaryRays}");
-            Console.WriteLine($"Shadow rays:        {stats.ShadowRays}"); 
+            Console.WriteLine($"Intersection tests: {Stats.Tests}");
+            Console.WriteLine($"Primary rays:       {Stats.PrimaryRays}");
+            Console.WriteLine($"Secondary rays:     {Stats.SecondaryRays}");
+            Console.WriteLine($"Shadow rays:        {Stats.ShadowRays}"); 
             Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
         }
 

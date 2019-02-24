@@ -8,7 +8,6 @@ namespace Pixie.Core
 
     public class Camera
     {
-        public static readonly Stats Stats = new Stats();
         private readonly int hsize;
         private readonly int vsize;
         private readonly double fov;

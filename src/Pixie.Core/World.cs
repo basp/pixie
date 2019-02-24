@@ -13,7 +13,7 @@ namespace Pixie.Core
 
         public IntersectionList Intersect(Ray ray)
         {
-            Interlocked.Increment(ref Camera.Stats.Tests);
+            Interlocked.Increment(ref Stats.Tests);
             var xs = this.Objects.SelectMany(x => x.Intersect(ray));
             return IntersectionList.Create(xs.ToArray());
         }
@@ -30,7 +30,7 @@ namespace Pixie.Core
                 return Color.Black;
             }
 
-            Interlocked.Increment(ref Camera.Stats.SecondaryRays);
+            Interlocked.Increment(ref Stats.SecondaryRays);
             var reflectRay = new Ray(comps.OverPoint, comps.Reflectv);
             var color = this.ColorAt(reflectRay, remaining - 1);
             return color * comps.Object.Material.Reflective;
@@ -57,7 +57,7 @@ namespace Pixie.Core
                 return Color.Black;
             }
 
-            Interlocked.Increment(ref Camera.Stats.SecondaryRays);
+            Interlocked.Increment(ref Stats.SecondaryRays);
             var cost = Math.Sqrt(1.0 - sin2t);
             var direction = comps.Normalv * (nRatio * cosi - cost) - comps.Eyev * nRatio;
             var refractRay = new Ray(comps.UnderPoint, direction);
@@ -121,7 +121,7 @@ namespace Pixie.Core
             var hits = 0;
             foreach (var light in source.GetLights())
             {
-                Interlocked.Increment(ref Camera.Stats.ShadowRays);
+                Interlocked.Increment(ref Stats.ShadowRays);
                 var v = light.Position - point;
                 var distance = v.Magnitude();
                 var direction = v.Normalize();
