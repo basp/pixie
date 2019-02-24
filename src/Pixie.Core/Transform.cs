@@ -48,17 +48,47 @@ namespace Pixie.Core
 
         public static Double4x4 View(Double4 from, Double4 to, Double4 up)
         {
-            var forward = (to - from).Normalize();
-            var left = Double4.Cross(forward, up.Normalize());
-            var trueUp = Double4.Cross(left, forward);   
+            var fwd = (to - from).Normalize();
+            var left = Double4.Cross(fwd, up.Normalize());
+            var trueUp = Double4.Cross(left, fwd);   
             var orientation =         
                 new Double4x4(
                     left.X, left.Y, left.Z, 0,
                     trueUp.X, trueUp.Y, trueUp.Z, 0,
-                    -forward.X, -forward.Y, -forward.Z, 0,
+                    -fwd.X, -fwd.Y, -fwd.Z, 0,
                     0, 0, 0, 1);
 
             return orientation * Translate(-from.X, -from.Y, -from.Z);
         }
+
+        public static Double4x4 Translate(
+            this Double4x4 m, 
+            double x, 
+            double y, 
+            double z) => Transform.Translate(x, y, z) * m;
+
+        public static Double4x4 Scale(
+            this Double4x4 m, 
+            double x, 
+            double y, 
+            double z) => Transform.Scale(x, y, z) * m;
+
+        public static Double4x4 RotateX(this Double4x4 m, double r) =>
+            Transform.RotateX(r) * m;
+
+        public static Double4x4 RotateY(this Double4x4 m, double r) =>
+            Transform.RotateY(r) * m;
+
+        public static Double4x4 RotateZ(this Double4x4 m, double r) =>
+            Transform.RotateZ(r) * m;
+
+        public static Double4x4 Shear(
+            this Double4x4 m,
+            double xy,
+            double xz,
+            double yx,
+            double yz,
+            double zx,
+            double zy) => Transform.Shear(xy, xz, yx, yz, zx, zy) * m;
     }
 }

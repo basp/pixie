@@ -27,7 +27,7 @@
             var sampler = new RandomSuperSampler(t.Item1, t.Item2, n: 8);
             var sw = new Stopwatch();
             sw.Start();
-            var img = t.Item2.Render(t.Item1, sampler);
+            var img = t.Item2.Render(t.Item1);
             img.SavePpm(args.Out);
             sw.Stop();
 

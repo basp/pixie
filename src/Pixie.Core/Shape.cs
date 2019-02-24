@@ -6,6 +6,8 @@ namespace Pixie.Core
 
         protected Double4x4 inv = Double4x4.Identity;
 
+        protected Double4x4 invt = Double4x4.Identity;
+
         public Material Material { get; set; } = new Material();
 
         public Shape Parent { get; set; } = null;
@@ -20,6 +22,7 @@ namespace Pixie.Core
             set
             {
                 this.inv = value.Inverse();
+                this.invt = this.inv.Transpose();
                 this.transform = value;
             }
         }
@@ -58,7 +61,8 @@ namespace Pixie.Core
 
         public Double4 NormalToWorld(Double4 n)
         {
-            n = this.Inverse.Transpose() * n;
+            // n = this.Inverse.Transpose() * n;
+            n = this.invt * n;
             n.W = 0;
             n = n.Normalize();
 

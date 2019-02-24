@@ -23,9 +23,9 @@ namespace Pixie.Core
             this.vsize = vsize;
             this.fov = fov;
 
-            var halfView = (double)Math.Tan(fov / 2);
+            var halfView = Math.Tan(fov / 2);
             this.aspect = (double)hsize / vsize;
-            if (hsize >= vsize)
+            if (aspect >= 1)
             {
                 this.halfWidth = halfView;
                 this.halfHeight = halfView / aspect;
@@ -36,7 +36,7 @@ namespace Pixie.Core
                 this.halfHeight = halfView;
             }
 
-            this.pixelSize = this.halfWidth * 2 / this.hsize;
+            this.pixelSize = (this.halfWidth * 2) / this.hsize;
         }
 
         public int HorizontalSize => this.hsize;

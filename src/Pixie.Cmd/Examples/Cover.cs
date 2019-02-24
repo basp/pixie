@@ -13,7 +13,7 @@ namespace Pixie.Cmd.Examples
                     Transform.View(
                         Double4.Point(-6, 6, -10),
                         Double4.Point(6, 0, 6),
-                        Double4.Point(-0.45, 1, 0)),
+                        Double4.Vector(-0.45, 1, 0)),
 
                 ProgressMonitor = 
                     new ParallelConsoleProgressMonitor(height),
@@ -52,17 +52,18 @@ namespace Pixie.Cmd.Examples
             });
 
             var standardTransform =
-                Transform.Translate(1, -1, 1) *
-                Transform.Scale(0.5, 0.5, 0.5);
+                Double4x4.Identity
+                    .Translate(1, -1, 1)
+                    .Scale(0.5, 0.5, 0.5);
 
             var largeObject =
-                standardTransform * Transform.Scale(3.5, 3.5, 3.5);
+                standardTransform.Scale(3.5, 3.5, 3.5);
 
             var mediumObject =
-                standardTransform * Transform.Scale(3, 3, 3);
+                standardTransform.Scale(3, 3, 3);
 
             var smallObject =
-                standardTransform * Transform.Scale(2, 2, 2);
+                standardTransform.Scale(2, 2, 2);
 
             var plane = new Plane()
             {
@@ -75,8 +76,9 @@ namespace Pixie.Cmd.Examples
                 },
 
                 Transform = 
-                    Transform.Translate(0, 0, 500) *
-                    Transform.RotateX(Math.PI / 2),
+                    Double4x4.Identity
+                        .RotateX(Math.PI / 2)
+                        .Translate(0, 0, 500),
             };
 
             var sphere = new Sphere()
@@ -100,119 +102,119 @@ namespace Pixie.Cmd.Examples
             {
                 Material = whiteMaterial,
                 Transform = 
-                    Transform.Translate(4, 0, 0) * mediumObject,
+                    mediumObject.Translate(4, 0, 0),
             };
 
             var cube2 = new Cube()
             {
                 Material = blueMaterial,
                 Transform =
-                    Transform.Translate(8.5, 1.5, -0.6) * largeObject,
+                    largeObject.Translate(8.5, 1.5, -0.6),
             };
 
             var cube3 = new Cube()
             {
                 Material = redMaterial,
                 Transform =
-                    Transform.Translate(0, 0, 4) * largeObject,
+                    largeObject.Translate(0, 0, 4),
             };
 
             var cube4 = new Cube()
             {
                 Material = whiteMaterial,
                 Transform =
-                    Transform.Translate(4, 0, 4) * smallObject,
+                    smallObject.Translate(4, 0, 4),
             };
 
             var cube5 = new Cube()
             {
                 Material = purpleMaterial,
                 Transform =
-                    Transform.Translate(7.5, 0.5, 4) * mediumObject,
+                    mediumObject.Translate(7.5, 0.5, 4),
             };
 
             var cube6 = new Cube()
             {
                 Material = whiteMaterial,
                 Transform =
-                    Transform.Translate(-0.25, 0.25, 8) * mediumObject,
+                    mediumObject.Translate(-0.25, 0.25, 8),
             };
 
             var cube7 = new Cube()
             {
                 Material = blueMaterial,
                 Transform =
-                    Transform.Translate(4, 1, 7.5) * largeObject,
+                    largeObject.Translate(4, 1, 7.5),
             };
 
             var cube8 = new Cube()
             {
                 Material = redMaterial,
                 Transform =
-                    Transform.Translate(10, 2, 7.5) * mediumObject,
+                    mediumObject.Translate(10, 2, 7.5),
             };
 
             var cube9 = new Cube()
             {
                 Material = whiteMaterial,
                 Transform =
-                    Transform.Translate(8, 2, 12) * smallObject,
+                    smallObject.Translate(8, 2, 12),
             };
 
             var cube10 = new Cube()
             {
                 Material = whiteMaterial,
                 Transform =
-                    Transform.Translate(20, 1, 9) * smallObject,
+                    smallObject.Translate(20, 1, 9),
             };
 
             var cube11 = new Cube()
             {
                 Material = blueMaterial,
                 Transform =
-                    Transform.Translate(-0.5, -5, 0.25) * largeObject,
+                    largeObject.Translate(-0.5, -5, 0.25),
             };
 
             var cube12 = new Cube()
             {
                 Material = redMaterial,
                 Transform =
-                    Transform.Translate(4, -4, 0) * largeObject,
+                    largeObject.Translate(4, -4, 0),
             };
 
             var cube13 = new Cube()
             {
                 Material = whiteMaterial,
                 Transform =
-                    Transform.Translate(8.5, -4, 0) * largeObject,
+                    largeObject.Translate(8.5, -4, 0),
             };
 
             var cube14 = new Cube()
             {
                 Material = whiteMaterial,
                 Transform =
-                    Transform.Translate(0, -4, 4) * largeObject,
+                    largeObject.Translate(0, -4, 4),
             };
 
             var cube15 = new Cube()
             {
                 Material = purpleMaterial,
                 Transform = 
-                    Transform.Translate(-0.5, -4.5, 8) * largeObject,
+                    largeObject.Translate(-0.5, -4.5, 8),
             };
 
             var cube16 = new Cube()
             {
                 Material = whiteMaterial,
                 Transform =
-                    Transform.Translate(0, -8, 4) * largeObject,
+                    largeObject.Translate(0, -8, 4),
             };
 
             var cube17 = new Cube()
             {
                 Material = whiteMaterial,
                 Transform =
-                    Transform.Translate(-0.5, -8.5, 8) * largeObject,
+                    largeObject.Translate(-0.5, -8.5, 8),
             };
 
             var world = new World();        
