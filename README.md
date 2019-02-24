@@ -102,7 +102,9 @@ var s = new Cube()
 ```
 
 ## patterns
-Included patterns are basically procedural textures. They support transformations as well.
+Patterns are basically procedural textures. They support transformations as well.
+All of the classics such as stripe, gradient and checkers are included. Pixie
+supports nested and blended patterns as well.
 
 ## ideas
 * Bezier curves
