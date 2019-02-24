@@ -102,7 +102,7 @@ var s = new Cube()
 ```
 
 ## patterns
-Patters 
+Included patterns are basically procedural textures. They support transformations as well.
 
 ## ideas
 * Bezier curves

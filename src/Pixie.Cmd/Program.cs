@@ -28,7 +28,7 @@
             var sampler = new FocalBlurSampler(
                 t.Item1,
                 t.Item2,
-                na: 0.03,
+                na: 0.01,
                 focalDepth: 1.1,
                 n: 32);
 
