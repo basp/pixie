@@ -4,7 +4,7 @@ namespace Pixie.Core
 
     public class FocalBlurSampler : ISampler
     {
-        private static readonly Random rng = new Random();
+        private readonly Random rng = new Random();
         private readonly World world;
         private readonly Camera camera;
         private readonly double focalDistance;
@@ -47,7 +47,7 @@ namespace Pixie.Core
             return new Ray(origin, direction);
         }
 
-        private static Double4 RandomInUnitDisk()
+        private Double4 RandomInUnitDisk()
         {
             Double4 v;
             do

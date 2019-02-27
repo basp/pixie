@@ -53,7 +53,7 @@ namespace Pixie.Core
 
         public double HalfHeight => this.halfHeight;
 
-        public Double4x4 Transform 
+        public Double4x4 Transform
         {
             get => this.transform;
             set
@@ -98,22 +98,17 @@ namespace Pixie.Core
             Stats.Reset();
             this.ProgressMonitor.OnStarted();
             var img = new Canvas(this.hsize, this.vsize);
-            // Parallel.For(0, this.vsize, y =>
-            // {
-            for(var y = 0; y < this.vsize; y++)
+            Parallel.For(0, this.vsize, y =>
             {
                 var sampler = samplerFactory();
                 this.ProgressMonitor.OnRowStarted(y);
                 for (var x = 0; x < this.hsize; x++)
                 {
-                    // var ray = this.RayForPixel(x, y);
-                    // img[x, y] = w.ColorAt(ray);
                     img[x, y] = sampler.Sample(x, y);
                 }
 
                 this.ProgressMonitor.OnRowFinished(y);
-            }
-            // });
+            });
 
             this.ProgressMonitor.OnFinished();
             return img;
