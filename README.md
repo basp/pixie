@@ -8,6 +8,7 @@ description language support for now. Although Pixie isn't designed for speed fo
 ## reference image
 The reference image below is rendered using the latest Pixie features. It shows
 off the focal distance on the new `FocalBlurSampler` implementation.
+
 ![reference image](https://i.imgur.com/yhPdzSF.png)
 
 ## geometry
