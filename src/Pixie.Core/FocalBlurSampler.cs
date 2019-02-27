@@ -1,6 +1,7 @@
 namespace Pixie.Core
 {
     using System;
+    using System.Threading;
 
     public class FocalBlurSampler : ISampler
     {
@@ -14,7 +15,9 @@ namespace Pixie.Core
         public FocalBlurSampler(
             World world,
             Camera camera,
+            // You probably want to set focal distance to norm(at-from).
             double focalDistance = 1.0,
+            // Aperture size works best at smaller values such as 0.1
             double aperture = 1.0,
             int n = 8)
         {
@@ -47,6 +50,10 @@ namespace Pixie.Core
             return new Ray(origin, direction);
         }
 
+        // It was definitely not a good idea to have this static
+        // and multiple threads trying to mess around with the
+        // random number generator. So now every thread gets its 
+        // own sampler and every sampler gets its own rng.
         private Double4 RandomInUnitDisk()
         {
             Double4 v;
@@ -79,6 +86,10 @@ namespace Pixie.Core
                 var direction = (focalPoint - origin).Normalize();
                 var secondaryRay = new Ray(origin, direction);
 
+                // We probably should count these "secondary" rays
+                // as primary rays for stats purposes; this is consistent
+                // with RandomSuperSampler behavior.
+                Interlocked.Increment(ref Stats.PrimaryRays);
                 col += this.world.ColorAt(secondaryRay);
             }
 

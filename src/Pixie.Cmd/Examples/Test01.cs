@@ -51,7 +51,7 @@ namespace Pixie.Cmd.Examples
             {
                 Material = new Material()
                 {
-                    Color = new Color(0.1, 0.3, 0.2),
+                    Color = new Color(0.5, 0.5, 0.5),
                     Specular = 0,
                     Diffuse = 0.8,
                     Ambient = 0.2,
@@ -63,6 +63,10 @@ namespace Pixie.Cmd.Examples
                 Material = new Material()
                 {
                     Color = new Color(0.1, 0.4, 0.72),
+                    Reflective = 0.6,
+                    Diffuse = 0.3,
+                    Specular = 0.95,
+                    Shininess = 300,
                 },
 
                 Transform = Double4x4.Identity *
@@ -74,12 +78,28 @@ namespace Pixie.Cmd.Examples
             {
                 Material = new Material()
                 {
-                    Color = new Color(0.52, 0.4, 0.32),
+                    Color = new Color(0.9, 0.9, 0.1),
+                    Reflective = 0.4,
+                    Diffuse = 0.4,
+                    Specular = 0.96,
+                    Shininess = 300,
+                },
+
+                Transform = Double4x4.Identity *
+                    Transform.Scale(0.3, 0.3, 0.3) *
+                    Transform.Translate(0, 1, -2.5),
+            };
+
+            var s3 = new Sphere()
+            {
+                Material = new Material()
+                {
+                    Color = new Color(0.72, 0.11, 0.32),
                 },
 
                 Transform = Double4x4.Identity *
                     Transform.Scale(0.5, 0.5, 0.5) *
-                    Transform.Translate(0, 1, -2),
+                    Transform.Translate(0, 1, -4),
             };
 
             var l1 = new PointLight(
@@ -90,6 +110,7 @@ namespace Pixie.Cmd.Examples
             world.Objects.Add(floor);
             world.Objects.Add(s1);
             world.Objects.Add(s2);
+            world.Objects.Add(s3);
             world.Lights.Add(l1);
 
             var cam = new Camera(width, height, Math.PI / 4)

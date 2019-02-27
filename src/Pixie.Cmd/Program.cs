@@ -28,7 +28,7 @@
             sw.Start();
             var img = t.Item2.Render(
                 t.Item1,
-                () => new FocalBlurSampler(t.Item1, t.Item2, 3.605, 0.1));
+                () => new FocalBlurSampler(t.Item1, t.Item2, 2.305, 0.09, 100));
 
             img.SavePpm(args.Out);
             sw.Stop();
