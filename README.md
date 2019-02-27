@@ -109,8 +109,9 @@ All of the classics such as stripe, gradient and checkers are included. Pixie
 supports nested and blended patterns as well.
 
 ## samplers
-Pixie supports aa few samplers out of the box but many more can be implemented
-using the `ISampler` interface.
+Pixie includes a few samplers but many more can be implemented using 
+the `ISampler` interface.
+
 * `DefaultSampler` functions like a pin-hole camera. It shoots a single ray for
 each pixel.
 * `RandomSuperSampler` shoots a bunch of rays in but around the origin of a 
