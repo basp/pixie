@@ -26,13 +26,9 @@ namespace Pixie.Core
             var worldX = halfWidth - xOffset;
             var worldY = halfHeight - yOffset;
 
-            var inv = this.camera.Transform.Inverse();
+            var inv = this.camera.TransformInv;
 
-            // For focal blur we need to manipulate the hard-coded 
-            // z component below for focal depth.
             var pixel = inv * Double4.Point(worldX, worldY, -1);
-            // Instead of tracing from the origin, select a point
-            // on the aperture instead.
             var origin = inv * Double4.Point(0, 0, 0);
             var direction = (pixel - origin).Normalize();
 

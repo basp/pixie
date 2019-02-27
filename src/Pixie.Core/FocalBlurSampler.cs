@@ -41,10 +41,10 @@ namespace Pixie.Core
             var worldX = halfWidth - xOffset;
             var worldY = halfHeight - yOffset;
 
-            var inv = this.camera.Transform.Inverse();
+            var inv = this.camera.TransformInv;
 
-            var pixel = inv * Double4.Point(worldX, worldY, -this.focalDepth);
-            var origin = inv * RandomPointOnAperture();
+            var pixel = inv * Double4.Point(worldX, worldY, -1);
+            var origin = inv * Double4.Point(0, 0, 0);
             var direction = (pixel - origin).Normalize();
 
             return new Ray(origin, direction);
@@ -59,12 +59,21 @@ namespace Pixie.Core
 
         public Color Sample(int x, int y)
         {
+            // https://steveharveynz.wordpress.com/2012/12/21/ray-tracer-part-5-depth-of-field/
             var color = Color.Black;
+            var primary = RayForPixel(x, y);
+            //Console.WriteLine($"Origin: {primary.Origin}");
+            //Console.WriteLine($"Direction: {primary.Direction}");
+            var fp = primary.Position(this.focalDepth);
             for(var i = 0; i < n; i++)
             {
-                Interlocked.Increment(ref Stats.PrimaryRays);
-                var ray = this.RayForPixel(x, y);
-                color += this.world.ColorAt(ray);
+                var rx = 0.5 - rng.NextDouble();
+                var ry = 0.5 - rng.NextDouble();
+                var offsetv = Double4.Vector(rx, ry, 0) * this.na;
+                var origin = primary.Origin + offsetv;
+                var direction = (fp - origin).Normalize();
+                var secondary = new Ray(origin, direction);
+                color += this.world.ColorAt(secondary);
             }
 
             color *= this.oneOverN;

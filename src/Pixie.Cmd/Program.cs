@@ -28,9 +28,9 @@
             var sampler = new FocalBlurSampler(
                 t.Item1,
                 t.Item2,
-                na: 0.01,
-                focalDepth: 1.1,
-                n: 32);
+                na: 0.1,
+                focalDepth: 1.0,
+                n: 10);
 
             var sw = new Stopwatch();
             sw.Start();
