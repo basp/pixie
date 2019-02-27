@@ -106,6 +106,17 @@ Patterns are basically procedural textures. They support transformations as well
 All of the classics such as stripe, gradient and checkers are included. Pixie
 supports nested and blended patterns as well.
 
+## samplers
+Pixie supports aa few samplers out of the box but many more can be implemented
+using the `ISampler` interface.
+* `DefaultSampler` functions like a pin-hole camera. It shoots a single ray for
+each pixel.
+* `RandomSuperSampler` shoots a bunch of rays in but around the origin of a 
+pixel. This sampler is not very smart but it can help with anti-aliasing.
+* `FocalBlurSampler` takes a focal distance and an aperture size and creates an
+effect known as focal blur. Since this samper is also multi-sampling per pixel, 
+it tends to create an anti-aliasing effect as well.
+
 ## ideas
 * Bezier curves
 * L-systems
