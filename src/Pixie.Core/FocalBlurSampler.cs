@@ -1,37 +1,34 @@
 namespace Pixie.Core
 {
     using System;
-    using System.Threading;
 
     public class FocalBlurSampler : ISampler
     {
-        private static Random rng = new Random();
+        private static readonly Random rng = new Random();
         private readonly World world;
         private readonly Camera camera;
-        private readonly double na;
-        private readonly double focalDepth;
+        private readonly double focalDistance;
+        private readonly double aperture;
         private readonly int n;
-        private readonly double oneOverN;
 
         public FocalBlurSampler(
-            World world, 
-            Camera camera, 
-            double na = 0.03, 
-            double focalDepth = 1,
-            int n = 5)
+            World world,
+            Camera camera,
+            double focalDistance = 1.0,
+            double aperture = 1.0,
+            int n = 8)
         {
             this.world = world;
             this.camera = camera;
-            this.na = na;         
-            this.focalDepth = focalDepth;   
+            this.focalDistance = focalDistance;
+            this.aperture = aperture;
             this.n = n;
-            this.oneOverN = 1.0 / n;
         }
 
         public Ray RayForPixel(int px, int py)
         {
             var pixelSize = this.camera.PixelSize;
-            
+
             var halfWidth = this.camera.HalfWidth;
             var halfHeight = this.camera.HalfHeight;
 
@@ -43,32 +40,49 @@ namespace Pixie.Core
 
             var inv = this.camera.Transform.Inverse();
 
-            var pixel = inv * Double4.Point(worldX, worldY, -this.focalDepth);
-            var origin = inv * RandomPointOnAperture();
+            var pixel = inv * Double4.Point(worldX, worldY, -1);
+            var origin = inv * Double4.Point(0, 0, 0);
             var direction = (pixel - origin).Normalize();
 
             return new Ray(origin, direction);
         }
 
-        private Double4 RandomPointOnAperture()
+        private static Double4 RandomInUnitDisk()
         {
-            var x = this.na - (rng.NextDouble() * 2 * this.na);
-            var y = this.na - (rng.NextDouble() * 2 * this.na);
-            return Double4.Point(x, y, 0);
+            Double4 v;
+            do
+            {
+                v = 2.0 * Double4.Vector(
+                    rng.NextDouble(),
+                    rng.NextDouble(),
+                    0.0) - Double4.Vector(1, 1, 0);
+            }
+            while (v.Dot(v) >= 1.0); // force vector in disk
+            return v;
         }
 
         public Color Sample(int x, int y)
         {
-            var color = Color.Black;
-            for(var i = 0; i < n; i++)
+            var primaryRay = this.RayForPixel(x, y);
+            var focalPoint = primaryRay.Position(focalDistance);
+            var col = Color.Black;
+            for (var i = 0; i < this.n; i++)
             {
-                Interlocked.Increment(ref Stats.PrimaryRays);
-                var ray = this.RayForPixel(x, y);
-                color += this.world.ColorAt(ray);
+                // Get a vector with a random displacement 
+                // on a disk with radius 1.0 and use it to 
+                // offset the origin.
+                var offset = RandomInUnitDisk() * aperture;
+
+                // Create a new ray offset from the original ray
+                // and pointing at the focal point.
+                var origin = primaryRay.Origin + offset;
+                var direction = (focalPoint - origin).Normalize();
+                var secondaryRay = new Ray(origin, direction);
+
+                col += this.world.ColorAt(secondaryRay);
             }
 
-            color *= this.oneOverN;
-            return color;
+            return (1.0 / this.n) * col;
         }
     }
 }

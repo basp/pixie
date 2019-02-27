@@ -40,60 +40,63 @@ namespace Pixie.Cmd.Examples
     {
         public static Tuple<World, Camera> Create(int width, int height)
         {
-            var pat1 = new TestPattern1()
-            {
-                Transform = Double4x4.Identity * 
-                    Transform.Scale(2.1, 1, 1.7) *
-                    Transform.RotateY(Math.PI / 4),
-            };
+            // var pat1 = new TestPattern1()
+            // {
+            //     Transform = Double4x4.Identity * 
+            //         Transform.Scale(2.1, 1, 1.7) *
+            //         Transform.RotateY(Math.PI / 4),
+            // };
 
             var floor = new Plane()
             {
                 Material = new Material()
                 {
-                    Pattern = pat1,
+                    Color = new Color(0.1, 0.3, 0.2),
                     Specular = 0,
                     Diffuse = 0.8,
                     Ambient = 0.2,
                 },
             };
 
-            var s = new Sphere()
+            var s1 = new Sphere()
             {
                 Material = new Material()
                 {
                     Color = new Color(0.1, 0.4, 0.72),
-                    Reflective = 0.5,
-                    Specular = 0.96,
-                    Shininess = 300,                    
-                    Ambient = 0.01,
-                    Diffuse = 0.3,
                 },
 
                 Transform = Double4x4.Identity *
-                    Transform.Scale(0.25, 0.25, 0.25) *
+                    Transform.Scale(0.5, 0.5, 0.5) *
                     Transform.Translate(0, 1, 0),
+            };
+
+            var s2 = new Sphere()
+            {
+                Material = new Material()
+                {
+                    Color = new Color(0.52, 0.4, 0.32),
+                },
+
+                Transform = Double4x4.Identity *
+                    Transform.Scale(0.5, 0.5, 0.5) *
+                    Transform.Translate(0, 1, -2),
             };
 
             var l1 = new PointLight(
                 Double4.Point(-100, 40, -20),
                 new Color(1, 1, 1));
 
-            var l2 = new PointLight(
-                Double4.Point(-100, 50, 40),
-                new Color(0.4, 0.4, 0.4));
-
             var world = new World();
             world.Objects.Add(floor);
-            world.Objects.Add(s);
+            world.Objects.Add(s1);
+            world.Objects.Add(s2);
             world.Lights.Add(l1);
-            // world.Lights.Add(l2);
 
             var cam = new Camera(width, height, Math.PI / 4)
             {
                 Transform = Transform.View(
-                    Double4.Point(0, 0.95, -0.4),
-                    Double4.Point(0, 0.25, 0),
+                    Double4.Point(0, 2, -3),
+                    Double4.Point(0, 0, 0),
                     Double4.Vector(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),

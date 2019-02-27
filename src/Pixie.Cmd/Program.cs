@@ -21,20 +21,15 @@
         public static void Render(RenderArgs args)
         {
             var pixels = args.Width * args.Height;
-            // var t = Sandbox.Create(args.Width, args.Height);
-            // var t = Test01.Create(args.Width, args.Height);
-            var t = Cover.Create(args.Width, args.Height);
-            // var sampler = new RandomSuperSampler(t.Item1, t.Item2, n: 8);
-            var sampler = new FocalBlurSampler(
-                t.Item1,
-                t.Item2,
-                na: 0.01,
-                focalDepth: 1.1,
-                n: 32);
+            // var t = Cover.Create(args.Width, args.Height);
+            var t = Test01.Create(args.Width, args.Height);
 
             var sw = new Stopwatch();
             sw.Start();
-            var img = t.Item2.Render(t.Item1, sampler);
+            var img = t.Item2.Render(
+                t.Item1,
+                () => new FocalBlurSampler(t.Item1, t.Item2, 3.605, 0.1));
+
             img.SavePpm(args.Out);
             sw.Stop();
 
@@ -43,7 +38,7 @@
             Console.WriteLine($"Intersection tests: {Stats.Tests}");
             Console.WriteLine($"Primary rays:       {Stats.PrimaryRays}");
             Console.WriteLine($"Secondary rays:     {Stats.SecondaryRays}");
-            Console.WriteLine($"Shadow rays:        {Stats.ShadowRays}"); 
+            Console.WriteLine($"Shadow rays:        {Stats.ShadowRays}");
             Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
         }
 
