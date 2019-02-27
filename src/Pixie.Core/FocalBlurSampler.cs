@@ -38,7 +38,7 @@ namespace Pixie.Core
             var worldX = halfWidth - xOffset;
             var worldY = halfHeight - yOffset;
 
-            var inv = this.camera.Transform.Inverse();
+            var inv = this.camera.TransformInv;
 
             var pixel = inv * Double4.Point(worldX, worldY, -1);
             var origin = inv * Double4.Point(0, 0, 0);

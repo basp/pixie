@@ -23,7 +23,7 @@ namespace Pixie.Core
 
         public IEnumerable<Ray> Supersample(int px, int py)
         {
-            var inv = this.camera.Transform.Inverse();
+            var inv = this.camera.TransformInv;
             var origin = inv * Double4.Point(0, 0, 0);
 
             var pixelSize = this.camera.PixelSize;

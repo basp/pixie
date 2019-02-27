@@ -15,6 +15,8 @@ namespace Pixie.Core
         private readonly double halfWidth;
         private readonly double halfHeight;
         private readonly double pixelSize;
+        private Double4x4 transform;
+        private Double4x4 transformInv;
 
         public Camera(int hsize, int vsize, double fov)
         {
@@ -36,6 +38,7 @@ namespace Pixie.Core
             }
 
             this.pixelSize = (this.halfWidth * 2) / this.hsize;
+            this.transform = Double4x4.Identity;
         }
 
         public int HorizontalSize => this.hsize;
@@ -50,7 +53,17 @@ namespace Pixie.Core
 
         public double HalfHeight => this.halfHeight;
 
-        public Double4x4 Transform { get; set; } = Double4x4.Identity;
+        public Double4x4 Transform 
+        {
+            get => this.transform;
+            set
+            {
+                this.transform = value;
+                this.transformInv = value.Inverse();
+            }
+        }
+
+        public Double4x4 TransformInv => this.transformInv;
 
         public IProgressMonitor ProgressMonitor { get; set; } =
             new ProgressMonitor();
