@@ -7,9 +7,35 @@ description language support for now. Although Pixie isn't designed for speed fo
 
 ## reference image
 The reference image below is rendered using the latest Pixie features. It shows
-off the focal distance on the new `FocalBlurSampler` implementation.
+off focal distance on the new `FocalBlurSampler` implementation.
 
 ![reference image](https://i.imgur.com/yhPdzSF.png)
+
+## getting started
+In order to create a `World` you need to create some shapes. Let's start with 
+a simple `Sphere` with radius `1.0` positioned at the origin.o
+```
+var sphere = new Sphere();
+```
+
+Next we need a light source, we'll offset this a bit so it shines
+from a nice angle.
+```
+var light = new PointLight(
+    Double4.Point(10, 10, -10),
+    Color.White);
+```
+
+Our world will this `sphere` and the `light` so we get:
+```
+var world = new World()
+{
+    objects = new [] { sphere },
+    lights = new [] { light },
+};
+```
+
+TODO
 
 ## geometry
 Pixie does not really distinguish between points and vectors on a low level. This allows for some freedom but also for some mishaps. For instance, it is very much possible to perform an addition operation on two points even though this makes little sense from a math perspective.
@@ -113,7 +139,7 @@ Pixie includes a few samplers but many more can be implemented using
 the `ISampler` interface.
 
 * `DefaultSampler` functions like a pin-hole camera. It shoots a single ray for
-each pixel.
+each pixel right trough the center.
 * `RandomSuperSampler` shoots a bunch of rays in but around the origin of a 
 pixel. This sampler is not very smart but it can help with anti-aliasing.
 * `FocalBlurSampler` takes a focal distance and an aperture size and creates an
