@@ -25,6 +25,11 @@ namespace Pixie.Core
         public Computations Precompute(Ray r) =>
             Precompute(r, IntersectionList.Create(this));
 
+        /// <summary>
+        /// We'll need this set of values quite a lot in our calculations
+        /// so it makes sense to compute them in advance and just pass the
+        /// results around.
+        /// </summary>
         public Computations Precompute(Ray r, IntersectionList xs)
         {
             var t = this.T;
