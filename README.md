@@ -16,7 +16,7 @@ The image below is one of the scenes from the book rendered with focal blur.
 
 ## getting started
 In order to create a `World` you need to create some shapes. Let's start with 
-a simple `Sphere` with radius `1.0` positioned at the origin.o
+a simple `Sphere` with radius `1.0` positioned at the origin.
 ```
 var sphere = new Sphere();
 ```
