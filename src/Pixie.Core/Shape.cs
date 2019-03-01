@@ -61,7 +61,6 @@ namespace Pixie.Core
 
         public Double4 NormalToWorld(Double4 n)
         {
-            // n = this.Inverse.Transpose() * n;
             n = this.invt * n;
             n.W = 0;
             n = n.Normalize();
