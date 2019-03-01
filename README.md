@@ -38,7 +38,21 @@ var world = new World()
 };
 ```
 
-TODO
+In order to actually render something we need a camera. Since our objects
+are all in unit size and centered around the origin by default we just need
+to position our camera a few units back.
+```
+var cam = new Camera(
+    Double4.Point(-2, 1, -5),
+    Double4.Point(0, 0.5, 0),
+    Double4.Vector(0, 1, 0));
+```
+
+And with a camera we can render and save the image as follows.
+```
+var img = cam.Render(world);
+img.SavePpm(@".\out.ppm");
+```
 
 ## geometry
 Pixie does not really distinguish between points and vectors on a low level. This allows for some freedom but also for some mishaps. For instance, it is very much possible to perform an addition operation on two points even though this makes little sense from a math perspective.
