@@ -8,8 +8,10 @@ description language support for now. Although Pixie isn't designed for speed fo
 ## reference image
 The reference image below is rendered using the latest Pixie features. It shows
 off focal distance on the new `FocalBlurSampler` implementation.
+![reference image1](https://i.imgur.com/yhPdzSF.png)
 
-![reference image](https://i.imgur.com/yhPdzSF.png)
+The image below is one of the scenes from the book rendered with focal blur.
+![reference image2](https://i.imgur.com/lycq2xd.png)
 
 ## getting started
 In order to create a `World` you need to create some shapes. Let's start with 
