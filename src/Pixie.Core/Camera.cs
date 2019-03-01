@@ -39,6 +39,7 @@ namespace Pixie.Core
 
             this.pixelSize = (this.halfWidth * 2) / this.hsize;
             this.transform = Double4x4.Identity;
+            this.transformInv = this.transform.Inverse();
         }
 
         public int HorizontalSize => this.hsize;
