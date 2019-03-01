@@ -1,6 +1,5 @@
 # pixie
-Basic .NET ray-tracer implementation as specified by 
-the awesome [The Ray Tracer Challenge](https://pragprog.com/book/jbtracer/the-ray-tracer-challenge) book.
+Ray-tracer implementation as specified by the awesome [The Ray Tracer Challenge](https://pragprog.com/book/jbtracer/the-ray-tracer-challenge) book.
 
 Pixie is designed to be used from the API level. That means there is no scene
 description language support for now. Although Pixie isn't designed for speed for speed first, it is not a slouch. It will hapilly put all your cores to full use.
