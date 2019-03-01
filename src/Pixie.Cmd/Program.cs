@@ -22,13 +22,27 @@
         {
             var pixels = args.Width * args.Height;
             // var t = Cover.Create(args.Width, args.Height);
-            var t = Test01.Create(args.Width, args.Height);
+            // var t = Test01.Create(args.Width, args.Height);
+            var t = Test02.Create(args.Width, args.Height);
+            
+            // Tuples are not super clear (also, still no destructuring?)
+            var world = t.Item1;
+            var camera = t.Item2;
+
+            // Func<ISampler> samplerFactory = () =>
+            //     new FocalBlurSampler(t.Item1, t.Item2, 2.305, 0.09, 100);
+
+            // Func<ISampler> samplerFactory = () =>
+            //     new RandomSuperSampler(world, camera, args.N);
+
+            Func<ISampler> samplerFactory = () =>
+                new FocalBlurSampler(t.Item1, t.Item2, 3.9, 0.09, args.N);
 
             var sw = new Stopwatch();
             sw.Start();
             var img = t.Item2.Render(
                 t.Item1,
-                () => new FocalBlurSampler(t.Item1, t.Item2, 2.305, 0.09, 100));
+                samplerFactory);
 
             img.SavePpm(args.Out);
             sw.Stop();
@@ -39,6 +53,7 @@
             Console.WriteLine($"Primary rays:       {Stats.PrimaryRays}");
             Console.WriteLine($"Secondary rays:     {Stats.SecondaryRays}");
             Console.WriteLine($"Shadow rays:        {Stats.ShadowRays}");
+            Console.WriteLine($"Super sampling:     {args.N}x");
             Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
         }
 

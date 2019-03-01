@@ -3,6 +3,9 @@
     using System;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// A vector of 4 floating point values.
+    /// </summary>
     public struct Double4 : IEquatable<Double4>
     {
         public static Double4 Zero =>
@@ -33,9 +36,18 @@
 
         public bool IsVector => this.W == 0.0;
 
+        /// <summary>
+        /// Constructs a point vector with W component set to 1.
+        /// </summary>
         public static Double4 Point(double x, double y, double z) =>
             new Double4(x, y, z, 1);
 
+        /// <summary>
+        /// Constructs a direction vector with W component set to 0.
+        /// </summary>
+        /// <remarks>
+        /// Note that these direction vectors are unaffected by translations.
+        /// </remarks>
         public static Double4 Vector(double x, double y, double z) =>
             new Double4(x, y, z, 0);
 

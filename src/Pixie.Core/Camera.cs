@@ -6,6 +6,14 @@ namespace Pixie.Core
     using System.Threading;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Camera's are used to take pictures of a world. The most basic
+    /// responsibility is for the camera to translate film coordinates 
+    /// to world space and and record the color that was observed on the 
+    /// canvas. Since there are many ways in how to capture a color, any
+    /// advanced camera will rely on an sampler to do the actual 
+    /// colorization.
+    /// </summary>
     public class Camera
     {
         private readonly int hsize;
@@ -69,31 +77,32 @@ namespace Pixie.Core
         public IProgressMonitor ProgressMonitor { get; set; } =
             new ProgressMonitor();
 
-        public Ray RayForPixel(int px, int py)
-        {
-            var pixelSize = this.PixelSize;
-
-            var halfWidth = this.HalfWidth;
-            var halfHeight = this.HalfHeight;
-
-            var xOffset = (px + 0.5) * pixelSize;
-            var yOffset = (py + 0.5) * pixelSize;
-
-            var worldX = halfWidth - xOffset;
-            var worldY = halfHeight - yOffset;
-
-            var inv = this.Transform.Inverse();
-
-            var pixel = inv * Double4.Point(worldX, worldY, -1);
-            var origin = inv * Double4.Point(0, 0, 0);
-            var direction = (pixel - origin).Normalize();
-
-            return new Ray(origin, direction);
-        }
-
+        /// <summary>
+        /// Renders a world using the default shader. This shader
+        /// will cast a single ray right through the center of each
+        /// pixel.
+        /// </summary>
+        /// <remarks>
+        /// The default shader is very fast but it causes really hard
+        /// shadows and anti-aliasing artifacts. One way to compensate
+        /// is to render at a larger-than-required resolution and use an
+        /// external image manipulation program to scale it down to the
+        /// desired resolution. An arguably better but more expensive way 
+        /// is to use either the random supersampler or focal-blur sampler
+        /// implementations.
+        /// </remarks>
         public Canvas Render(World w) =>
             Render(w, () => new DefaultSampler(w, this));
 
+        /// <summary>
+        /// Renders a world to a canvas. 
+        /// </summary>
+        /// <remarks>
+        /// Since we have multiple lines being rendered in parallel it's 
+        /// very importatnt to make sure all the samplers can operate 
+        /// independently. This takes extra care when implementing a new
+        /// sampler.
+        /// </remarks>
         public Canvas Render(World w, Func<ISampler> samplerFactory)
         {
             Stats.Reset();

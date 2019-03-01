@@ -10,6 +10,9 @@ namespace Pixie.Cmd
         [ArgDefaultValue(100)]
         public int Height { get; set; }
 
+        [ArgDefaultValue(4)]
+        public int N { get; set; }
+
         [ArgDefaultValue("out.ppm")]
         public string Out { get; set; }
     }
