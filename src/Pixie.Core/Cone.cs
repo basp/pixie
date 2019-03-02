@@ -76,7 +76,6 @@ namespace Pixie.Core
             }
 
             var disc = b * b - 4 * a * c;
-
             if (disc < 0)
             {
                 return IntersectionList.Empty();
@@ -93,6 +92,7 @@ namespace Pixie.Core
             }
 
             xs = new List<Intersection>();
+
             var y0 = o.Y + t0 * d.Y;
             if (this.Minimum < y0 && y0 < this.Maximum)
             {
@@ -106,7 +106,6 @@ namespace Pixie.Core
             }
 
             this.IntersectCaps(ray, xs);
-
             return IntersectionList.Create(xs.ToArray());
         }
 

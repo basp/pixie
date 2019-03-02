@@ -3,6 +3,9 @@ namespace Pixie.Core
     using System;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// A RGB color triple.
+    /// </summary>
     public struct Color
     {
         public static Color White =>

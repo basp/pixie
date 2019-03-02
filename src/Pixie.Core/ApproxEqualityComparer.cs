@@ -4,14 +4,12 @@ namespace Pixie.Core
     using System.Collections.Generic;
 
     /// <summary>
-    /// Compares two values for approximate equality. The value
-    /// of epsilon is the absolute tolerance allowing the equality
-    /// test to pass.
+    /// Compares two values for approximate equality.
     /// </summary>
     /// <remarks>
     /// You don't really need to deal with approximate equality often
     /// except in test cases. Types that need this support a 
-    /// static `GetEqualityComparer(double)` factory method to make it 
+    /// static <c>GetEqualityComparer</c> method to make it 
     /// easier to get an approximate comparer for a particur type.
     /// </remarks>
     internal abstract class ApproxEqualityComparer<T> : IEqualityComparer<T>

@@ -7,13 +7,13 @@ namespace Pixie.Core
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Camera's are used to take pictures of a world. The most basic
-    /// responsibility is for the camera to translate film coordinates 
-    /// to world space and and record the color that was observed on the 
-    /// canvas. Since there are many ways in how to capture a color, any
-    /// advanced camera will rely on an sampler to do the actual 
-    /// colorization.
+    /// Instances of the <c>Camera</c> class are used to take pictures
+    /// of the world.
     /// </summary>
+    /// <remarks>
+    /// Since there are many ways in how to capture a color, any advanced 
+    /// camera will rely on an sampler to do the actual colorization.
+    /// </remarks>
     public class Camera
     {
         private readonly int hsize;
@@ -26,6 +26,12 @@ namespace Pixie.Core
         private Double4x4 transform;
         private Double4x4 transformInv;
 
+        /// <summary>
+        /// Constructs a new <c>Camera</c> instance.
+        /// </summary>
+        /// <param name="hsize">The horizontal size of the canvas.</param>
+        /// <param name="vsize">The vertical size of the canvas.</param>
+        /// <param name="fov">The size of the field of view.</param>
         public Camera(int hsize, int vsize, double fov)
         {
             this.hsize = hsize;
@@ -91,6 +97,7 @@ namespace Pixie.Core
         /// is to use either the random supersampler or focal-blur sampler
         /// implementations.
         /// </remarks>
+        /// <param name="w">The <c>World</c> instance to be rendered.</param>
         public Canvas Render(World w) =>
             Render(w, () => new DefaultSampler(w, this));
 
@@ -103,6 +110,10 @@ namespace Pixie.Core
         /// independently. This takes extra care when implementing a new
         /// sampler.
         /// </remarks>
+        /// <param name="w">The <c>World</c> instance to be rendered.</param>
+        /// <param name="samplerFactory">
+        /// A factory function to provide sampler instances.
+        /// </param>
         public Canvas Render(World w, Func<ISampler> samplerFactory)
         {
             Stats.Reset();

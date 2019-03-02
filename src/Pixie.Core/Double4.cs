@@ -4,7 +4,7 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// A vector of 4 floating point values.
+    /// A vector of 4 <c>double</c> point values.
     /// </summary>
     public struct Double4 : IEquatable<Double4>
     {
@@ -37,17 +37,23 @@
         public bool IsVector => this.W == 0.0;
 
         /// <summary>
-        /// Constructs a point vector with W component set to 1.
+        /// Constructs a point vector.
         /// </summary>
+        /// <param name="x">Value for the <c>X</c> component.</param>
+        /// <param name="y">Value for the <c>Y</c> component.</param>
+        /// <param name="z">Value for the <c>Z</c> component.</param>
         public static Double4 Point(double x, double y, double z) =>
             new Double4(x, y, z, 1);
 
         /// <summary>
-        /// Constructs a direction vector with W component set to 0.
+        /// Constructs a direction vector.
         /// </summary>
         /// <remarks>
-        /// Note that these direction vectors are unaffected by translations.
+        /// Note that direction vectors are unaffected by translations.
         /// </remarks>
+        /// <param name="x">Value for the <c>X</c> component.</param>
+        /// <param name="y">Value for the <c>Y</c> component.</param>
+        /// <param name="z">Value for the <c>Z</c> component.</param>
         public static Double4 Vector(double x, double y, double z) =>
             new Double4(x, y, z, 0);
 

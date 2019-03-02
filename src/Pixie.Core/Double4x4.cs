@@ -4,6 +4,9 @@ namespace Pixie.Core
     using System.Collections.Generic;
     using System.Linq;
 
+    /// <summary>
+    /// A 4x4 matrix of <c>double</c> values.
+    /// </summary>
     public struct Double4x4 : IEquatable<Double4x4>
     {
         public static Double4x4 Identity =>

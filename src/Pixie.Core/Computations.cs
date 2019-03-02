@@ -2,6 +2,9 @@ namespace Pixie.Core
 {
     using System;
 
+    /// <summary>
+    /// Holds precomputed values for an intersection.
+    /// </summary>
     public struct Computations
     {
         public double T;

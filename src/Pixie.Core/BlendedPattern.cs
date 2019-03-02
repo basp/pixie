@@ -2,6 +2,9 @@ namespace Pixie.Core
 {
     using System;
 
+    /// <summary>
+    /// Blends two patterns together using a blender function.
+    /// </summary>
     public class BlendedPattern : Pattern
     {
         private static Func<Color,Color,Color> DefaultBlender =

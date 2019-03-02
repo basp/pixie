@@ -3,6 +3,9 @@ namespace Pixie.Core
     using System;
     using System.IO;
 
+    /// <summary>
+    /// A canvas is used by the camera to store the image.
+    /// </summary>
     public class Canvas
     {
         private int width;

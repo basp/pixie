@@ -2,6 +2,9 @@ namespace Pixie.Core
 {
     using System;
 
+    /// <summary>
+    /// Represents a Phong shaded material.
+    /// </summary>
     public class Material : IEquatable<Material>
     {
         public double Ambient;
