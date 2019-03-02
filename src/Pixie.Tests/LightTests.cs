@@ -50,7 +50,7 @@ namespace Pixie.Tests
                 v2,
                 2,
                 Color.White);
-            
+
             Assert.Equal(corner, light.Corner);
             Assert.Equal(Double4.Vector(0.5, 0, 0), light.Uvec);
             Assert.Equal(4, light.Usteps);
@@ -58,6 +58,128 @@ namespace Pixie.Tests
             Assert.Equal(2, light.Vsteps);
             Assert.Equal(8, light.Samples);
             Assert.Equal(Double4.Point(1, 0, 0.5), light.Position);
+        }
+
+        [Theory]
+        [InlineData(0, 0, 0.25, 0, 0.25)]
+        [InlineData(1, 0, 0.75, 0, 0.25)]
+        [InlineData(0, 1, 0.25, 0, 0.75)]
+        [InlineData(2, 0, 1.25, 0, 0.25)]
+        [InlineData(3, 1, 1.75, 0, 0.75)]
+        public void FindSinglePointOnAnAreaLight(
+            double u,
+            double v,
+            double rx,
+            double ry,
+            double rz)
+        {
+            var corner = Double4.Point(0, 0, 0);
+            var v1 = Double4.Vector(2, 0, 0);
+            var v2 = Double4.Vector(0, 0, 1);
+            var light = new AreaLight(
+                corner,
+                v1,
+                4,
+                v2,
+                2,
+                Color.White);
+
+            var pt = light.PointOnLight(u, v);
+            var expected = Double4.Point(rx, ry, rz);
+            Assert.Equal(expected, pt);
+        }
+
+        [Theory]
+        [InlineData(0, 0, 2, 0.0)]
+        [InlineData(1, -1, 2, 0.25)]
+        [InlineData(1.5, 0, 2, 0.5)]
+        [InlineData(1.25, 1.25, 3, 0.75)]
+        [InlineData(0, 0, -2, 1.0)]
+        public void AreaLightIntensityFunction(
+            double px,
+            double py,
+            double pz,
+            double result)
+        {
+            var w = new DefaultWorld();
+            var corner = Double4.Point(-0.5, -0.5, -5);
+            var v1 = Double4.Vector(1, 0, 0);
+            var v2 = Double4.Vector(0, 1, 0);
+            var light = new AreaLight(
+                corner,
+                v1,
+                2,
+                v2,
+                2,
+                Color.White);
+
+            var pt = Double4.Point(px, py, pz);
+            var intensity = light.IntensityAt(pt, w);
+            Assert.Equal(result, intensity);
+        }
+
+        [Theory]
+        [InlineData(0, 0, 0.15, 0, 0.35)]
+        [InlineData(1, 0, 0.65, 0, 0.35)]
+        [InlineData(0, 1, 0.15, 0, 0.85)]
+        [InlineData(2, 0, 1.15, 0, 0.35)]
+        [InlineData(3, 1, 1.65, 0, 0.85)]
+        public void FindSinglePointOnJitteredAreaLight(
+            double u,
+            double v,
+            double rx,
+            double ry,
+            double rz)
+        {
+            var corner = Double4.Point(0, 0, 0);
+            var v1 = Double4.Vector(2, 0, 0);
+            var v2 = Double4.Vector(0, 0, 1);
+            var light = new AreaLight(
+                corner,
+                v1,
+                4,
+                v2,
+                2,
+                Color.White)
+            {
+                Jitter = new Sequence(0.3, 0.7),
+            };
+
+            var pt = light.PointOnLight(u, v);
+            var expected = Double4.Point(rx, ry, rz);
+            Assert.Equal(expected, pt);
+        }
+
+        [Theory]
+        [InlineData(0, 0, 2, 0.0)]
+        [InlineData(1, -1, 2, 0.5)]
+        [InlineData(1.5, 0, 2, 0.75)]
+        [InlineData(1.25, 1.25, 3, 0.75)]
+        [InlineData(0, 0, -2, 1.0)]
+        public void AreaLightWithJitteredSamples(
+            double px,
+            double py,
+            double pz,
+            double result)
+        {
+            var w = new DefaultWorld();
+            var corner = Double4.Point(-0.5, -0.5, -5);
+            var v1 = Double4.Vector(1, 0, 0);
+            var v2 = Double4.Vector(0, 1, 0);
+            var light = new AreaLight(
+                corner,
+                v1,
+                2,
+                v2,
+                2,
+                Color.White)
+            {
+                Jitter = new Sequence(0.7, 0.3, 0.9, 0.1, 0.5),
+            };
+
+            var pt = Double4.Point(px, py, pz);
+            var intensity = light.IntensityAt(pt, w);
+            Assert.Equal(result, intensity);
         }
     }
 }

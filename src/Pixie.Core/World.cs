@@ -11,10 +11,15 @@ namespace Pixie.Core
 
         public IList<Shape> Objects { get; set; } = new List<Shape>();
 
-        public IntersectionList Intersect(Ray ray)
+        public IntersectionList Intersect(Ray ray) =>
+            this.Intersect(ray, obj => true);
+
+        public IntersectionList Intersect(Ray ray, Func<Shape, bool> predicate)
         {
             Interlocked.Increment(ref Stats.Tests);
-            var xs = this.Objects.SelectMany(x => x.Intersect(ray));
+            var xs = this.Objects
+                .Where(predicate)
+                .SelectMany(x => x.Intersect(ray));
             return IntersectionList.Create(xs.ToArray());
         }
 
@@ -71,7 +76,6 @@ namespace Pixie.Core
 
             foreach (var light in this.Lights)
             {
-                // var shadow = this.IsShadowed(light.Position, comps.OverPoint);
                 var intensity = light.IntensityAt(comps.OverPoint, this);
 
                 var surface = comps.Object.Material.Li(
@@ -122,7 +126,7 @@ namespace Pixie.Core
             var distance = v.Magnitude();
             var direction = v.Normalize();
             var r = new Ray(point, direction);
-            var xs = this.Intersect(r);
+            var xs = this.Intersect(r, obj => obj.Shadow);
             if (xs.TryGetHit(out var i))
             {
                 if (i.T < distance)

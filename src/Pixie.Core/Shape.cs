@@ -8,6 +8,8 @@ namespace Pixie.Core
 
         protected Double4x4 invt = Double4x4.Identity;
 
+        public bool Shadow { get; set; } = true;
+        
         public Material Material { get; set; } = new Material();
 
         public Shape Parent { get; set; } = null;

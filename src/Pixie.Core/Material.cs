@@ -81,35 +81,42 @@ namespace Pixie.Core
             }
 
             var effectiveColor = color * light.Intensity;
-            var lightv = (light.Position - point).Normalize();
-            var lightDotNormal = Double4.Dot(lightv, normalv);
-
             ambient = effectiveColor * this.Ambient;
 
-            if (lightDotNormal < 0)
+            var sum = Color.Black;
+            foreach (var lightPos in light.Sample())
             {
-                diffuse = Color.Black;
-                specular = Color.Black;
-            }
-            else
-            {
-                diffuse = effectiveColor * this.Diffuse * lightDotNormal;
+                var lightv = (lightPos - point).Normalize();
+                var lightDotNormal = Double4.Dot(lightv, normalv);
 
-                var reflectv = Double4.Reflect(-lightv, normalv);
-                var reflectDotEye = Double4.Dot(reflectv, eyev);
-
-                if (reflectDotEye <= 0)
+                if (lightDotNormal < 0)
                 {
+                    diffuse = Color.Black;
                     specular = Color.Black;
                 }
                 else
                 {
-                    var factor = (double)Math.Pow(reflectDotEye, this.Shininess);
-                    specular = light.Intensity * this.Specular * factor;
+                    diffuse = effectiveColor * this.Diffuse * lightDotNormal;
+
+                    var reflectv = Double4.Reflect(-lightv, normalv);
+                    var reflectDotEye = Double4.Dot(reflectv, eyev);
+
+                    if (reflectDotEye <= 0)
+                    {
+                        specular = Color.Black;
+                    }
+                    else
+                    {
+                        var factor = (double)Math.Pow(reflectDotEye, this.Shininess);
+                        specular = light.Intensity * this.Specular * factor;
+                    }
                 }
+
+                sum += diffuse;
+                sum += specular;
             }
 
-            return ambient + intensity * (diffuse + specular);
+            return ambient + (sum * (1.0 / light.Samples)) * intensity;
         }
     }
 }

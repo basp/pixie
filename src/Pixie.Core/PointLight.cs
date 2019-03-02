@@ -15,10 +15,12 @@ namespace Pixie.Core
 
         public Double4 Position { get; }
 
+        public int Samples => 1;
+
         public override bool Equals(object obj)
         {
             var other = obj as PointLight;
-            if(other == null)
+            if (other == null)
             {
                 return false;
             }
@@ -30,16 +32,28 @@ namespace Pixie.Core
             this.Position.GetHashCode() * this.Intensity.GetHashCode();
 
         public bool Equals(PointLight other) =>
-            this.Equals((ILight)other);
+            this.Intensity.Equals(other.Intensity) &&
+            this.Position.Equals(other.Position);
 
-        public bool Equals(ILight other) =>
-            this.Position.Equals(other.Position) &&
-            this.Intensity.Equals(other.Intensity);
+        public bool Equals(ILight obj)
+        {
+            var other = obj as PointLight;
+            if (other == null)
+            {
+                return false;
+            }
+
+            return this.Equals(other);
+        }
 
         public double IntensityAt(Double4 point, World w)
         {
             var shadow = w.IsShadowed(this.Position, point);
             return shadow ? 0.0 : 1.0;
         }
+
+        public Double4 PointOnLight(double u, double v) => this.Position;
+
+        public IEnumerable<Double4> Sample() => new[] { this.Position };
     }
 }

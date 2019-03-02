@@ -1,6 +1,7 @@
 namespace Pixie.Core
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The most basic of light sources. This is quick to render, easy to
@@ -11,8 +12,12 @@ namespace Pixie.Core
     {
         Color Intensity { get; }
 
-        Double4 Position { get; }
+        int Samples { get; }   
 
         double IntensityAt(Double4 point, World w);
+
+        Double4 PointOnLight(double u, double v);   
+
+        IEnumerable<Double4> Sample();      
     }
 }
