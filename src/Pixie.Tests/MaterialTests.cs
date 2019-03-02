@@ -99,41 +99,9 @@ namespace Pixie.Tests
             var eyev = Double4.Vector(0, 0, -1);
             var normalv = Double4.Vector(0, 0, -1);
             var light = new PointLight(Double4.Point(0, 0, -10), Color.White);
-            var c = m.Li(sphere, light, position, eyev, normalv, shadow: 1.0);
+            var c = m.Li(sphere, light, position, eyev, normalv, intensity: 0.0);
             var expected = new Color(0.1, 0.1, 0.1);
             Assert.Equal(expected, c);
-        }
-
-        [Fact]
-        public void NoShadowWhenNothingCollinearWithPointAndLight()
-        {
-            var w = new DefaultWorld();
-            var p = Double4.Point(0, 10, 0);
-            Assert.False(w.IsShadowed(p, w.Lights[0]));
-        }
-
-        [Fact]
-        public void ShadowWhenObjectBetweenPointAndLight()
-        {
-            var w = new DefaultWorld();
-            var p = Double4.Point(10, -10, 10);
-            Assert.True(w.IsShadowed(p, w.Lights[0]));
-        }
-
-        [Fact]
-        public void NoShadowWhenObjectBehindTheLight()
-        {
-            var w = new DefaultWorld();
-            var p = Double4.Point(-20, 20, -20);
-            Assert.False(w.IsShadowed(p, w.Lights[0]));
-        }
-
-        [Fact]
-        public void NoShadowWhenObjectBehindThePoint()
-        {
-            var w = new DefaultWorld();
-            var p = Double4.Point(-2, 2, -2);
-            Assert.False(w.IsShadowed(p, w.Lights[0]));
         }
 
         [Fact]
@@ -165,6 +133,42 @@ namespace Pixie.Tests
             var m = new Material();
             Assert.Equal(0, m.Transparency);
             Assert.Equal(1.0, m.RefractiveIndex);
+        }
+
+        [Theory]
+        [InlineData(1.0, 1, 1, 1)]
+        [InlineData(0.5, 0.55, 0.55, 0.55)]
+        [InlineData(0.0, 0.1, 0.1, 0.1)]
+        public void LightingUsesLightIntensityToAttenuateColor(
+            double intensity,
+            double r,
+            double g,
+            double b)
+        {
+            var w = new DefaultWorld();
+            w.Lights = new ILight[]
+            {
+                new PointLight(Double4.Point(0, 0, -10), Color.White),
+            };
+
+            var shape = w.Objects[0];
+            shape.Material.Ambient = 0.1;
+            shape.Material.Diffuse = 0.9;
+            shape.Material.Specular = 0;
+            shape.Material.Color = new Color(1, 1, 1);
+            var pt = Double4.Point(0, 0, -1);
+            var eyev = Double4.Vector(0, 0, -1);
+            var normalv = Double4.Vector(0, 0, -1);
+            var result = shape.Material.Li(
+                shape, 
+                w.Lights[0], 
+                pt, 
+                eyev, 
+                normalv,
+                intensity);
+            
+            var expected = new Color(r, g, b);
+            Assert.Equal(expected, result);
         }
     }
 }

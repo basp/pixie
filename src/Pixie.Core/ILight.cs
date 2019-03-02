@@ -12,5 +12,7 @@ namespace Pixie.Core
         Color Intensity { get; }
 
         Double4 Position { get; }
+
+        double IntensityAt(Double4 point, World w);
     }
 }

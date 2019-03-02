@@ -7,7 +7,7 @@ namespace Pixie.Core
 
     public class World
     {
-        public IList<ILightSource> Lights { get; set; } = new List<ILightSource>();
+        public IList<ILight> Lights { get; set; } = new List<ILight>();
 
         public IList<Shape> Objects { get; set; } = new List<Shape>();
 
@@ -71,7 +71,8 @@ namespace Pixie.Core
 
             foreach (var light in this.Lights)
             {
-                var shadow = this.Shadow(comps.OverPoint, light);
+                // var shadow = this.IsShadowed(light.Position, comps.OverPoint);
+                var intensity = light.IntensityAt(comps.OverPoint, this);
 
                 var surface = comps.Object.Material.Li(
                     comps.Object,
@@ -79,7 +80,7 @@ namespace Pixie.Core
                     comps.OverPoint,
                     comps.Eyev,
                     comps.Normalv,
-                    shadow);
+                    intensity);
 
                 var reflected = this.ReflectedColor(comps, remaining);
                 var refracted = this.RefractedColor(comps, remaining);
@@ -114,35 +115,54 @@ namespace Pixie.Core
             return Color.Black;
         }
 
-        public double Shadow(Double4 point, ILightSource source)
+        public bool IsShadowed(Double4 lightPosition, Double4 point)
         {
-            var lights = source.GetLights().ToList();
-            var n = lights.Count;
-            var hits = 0;
-            foreach (var light in source.GetLights())
+            Interlocked.Increment(ref Stats.ShadowRays);
+            var v = lightPosition - point;
+            var distance = v.Magnitude();
+            var direction = v.Normalize();
+            var r = new Ray(point, direction);
+            var xs = this.Intersect(r);
+            if (xs.TryGetHit(out var i))
             {
-                Interlocked.Increment(ref Stats.ShadowRays);
-                var v = light.Position - point;
-                var distance = v.Magnitude();
-                var direction = v.Normalize();
-                var r = new Ray(point, direction);
-                var xs = this.Intersect(r);
-                if (xs.TryGetHit(out var i))
+                if (i.T < distance)
                 {
-                    if (i.T < distance)
-                    {
-                        hits += 1;
-                    }
+                    return true;
                 }
             }
 
-            return (double)hits / n;
+            return false;
         }
 
-        public bool IsShadowed(Double4 point, ILightSource light)
-        {
-            var shadow = this.Shadow(point, light);
-            return Math.Abs(shadow) > 0.00001;
-        }
+        // public double Shadow(Double4 point, ILightSource source)
+        // {
+        //     var lights = source.GetLights().ToList();
+        //     var n = lights.Count;
+        //     var hits = 0;
+        //     foreach (var light in source.GetLights())
+        //     {
+        //         Interlocked.Increment(ref Stats.ShadowRays);
+        //         var v = light.Position - point;
+        //         var distance = v.Magnitude();
+        //         var direction = v.Normalize();
+        //         var r = new Ray(point, direction);
+        //         var xs = this.Intersect(r);
+        //         if (xs.TryGetHit(out var i))
+        //         {
+        //             if (i.T < distance)
+        //             {
+        //                 hits += 1;
+        //             }
+        //         }
+        //     }
+
+        //     return (double)hits / n;
+        // }
+
+        // public bool IsShadowed(Double4 point, ILightSource light)
+        // {
+        //     var shadow = this.Shadow(point, light);
+        //     return Math.Abs(shadow) > 0.00001;
+        // }
     }
 }

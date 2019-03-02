@@ -67,7 +67,7 @@ namespace Pixie.Core
             Double4 point,
             Double4 eyev,
             Double4 normalv,
-            double shadow = 0.0)
+            double intensity = 1.0)
         {
             Color color, ambient, diffuse, specular;
 
@@ -109,7 +109,7 @@ namespace Pixie.Core
                 }
             }
 
-            return ambient + (1.0 - shadow) * (diffuse + specular);
+            return ambient + intensity * (diffuse + specular);
         }
     }
 }

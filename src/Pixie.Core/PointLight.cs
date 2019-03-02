@@ -3,7 +3,7 @@ namespace Pixie.Core
     using System;
     using System.Collections.Generic;
 
-    public class PointLight : ILight, ILightSource
+    public class PointLight : ILight
     {
         public PointLight(Double4 position, Color intensity)
         {
@@ -36,7 +36,10 @@ namespace Pixie.Core
             this.Position.Equals(other.Position) &&
             this.Intensity.Equals(other.Intensity);
 
-        public IEnumerable<ILight> GetLights() =>
-            new[] { this };
+        public double IntensityAt(Double4 point, World w)
+        {
+            var shadow = w.IsShadowed(this.Position, point);
+            return shadow ? 0.0 : 1.0;
+        }
     }
 }

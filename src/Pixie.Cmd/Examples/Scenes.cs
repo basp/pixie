@@ -1603,24 +1603,16 @@ namespace Pixie.Cmd.Examples
                 },
             };
 
-            // var light1 = new PointLight(
-            //     Double4.Point(-10, 10, -10),
-            //     Color.White);
-
-            var areaLight = new AreaLight(
-                Double4.Point(-8, 16, -2),
-                Color.White,
-                Double4.Vector(8, 0, 0),
-                Double4.Vector(0, 0, 8),
-                5,
-                5);
+            var light1 = new PointLight(
+                Double4.Point(-10, 10, -10),
+                Color.White);
 
             world.Objects.Add(sky);
             world.Objects.Add(floor);
             world.Objects.Add(sphere);
             world.Objects.Add(smallSphere1);
             world.Objects.Add(smallSphere2);
-            world.Lights.Add(areaLight);
+            world.Lights.Add(light1);
 
             var camera = new Camera(width, height, Math.PI / 4)
             {
