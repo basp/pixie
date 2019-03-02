@@ -187,5 +187,38 @@ namespace Pixie.Tests
             var result = box.Intersect(r);
             Assert.Equal(expected, result);
         }
+
+        [Theory]
+        [InlineData(15, 1, 2, -1, 0, 0, true)]
+        [InlineData(-5, -1, 4, 1, 0, 0, true)]
+        [InlineData(7, 6, 5, 0, -1, 0, true)]
+        [InlineData(9, -5, 6, 0, 1, 0, true)]
+        [InlineData(8, 2, 12, 0, 0, -1, true)]
+        [InlineData(6, 0, -5, 0, 0, 1, true)]
+        [InlineData(8, 1, 3.5, 0, 0, 1, true)]
+        [InlineData(9, -1, -8, 2, 4, 6, false)]
+        [InlineData(8, 3, -4, 6, 2, 4, false)]
+        [InlineData(9, -1, -2, 4, 6, 2, false)]
+        [InlineData(4, 0, 9, 0, 0, -1, false)]
+        [InlineData(8, 6, -1, 0, -1, 0, false)]
+        [InlineData(12, 5, 4, -1, 0, 0, false)]
+        public void IntersectingRayWithNonCubicBoundingBox(
+            double ox,
+            double oy,
+            double oz,
+            double dx,
+            double dy,
+            double dz,
+            bool expected)
+        {
+            var box = new BoundingBox(
+                Double4.Point(5, -2, 0),
+                Double4.Point(11, 4, 7));
+            var origin = Double4.Point(ox, oy, oz);
+            var direction = Double4.Vector(dx, dy, dz).Normalize();
+            var r = new Ray(origin, direction);
+            var result = box.Intersect(r);
+            Assert.Equal(expected, result);
+        }
     }
 }

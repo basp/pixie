@@ -122,10 +122,10 @@ namespace Pixie.Core
 
         const double Epsilon = 0.00001;
 
-        private static void CheckAxis(double origin, double direction, out double min, out double max)
+        private static void CheckAxis(double origin, double direction, double tmin, double tmax, out double min, out double max)
         {
-            var tminNum = -1 - origin;
-            var tmaxNum = 1 - origin;
+            var tminNum = (tmin - origin);
+            var tmaxNum = (tmax - origin);
 
             if (Math.Abs(direction) >= Epsilon)
             {
@@ -148,9 +148,9 @@ namespace Pixie.Core
 
         public bool Intersect(Ray ray)
         {
-            CheckAxis(ray.Origin.X, ray.Direction.X, out var xtmin, out var xtmax);
-            CheckAxis(ray.Origin.Y, ray.Direction.Y, out var ytmin, out var ytmax);
-            CheckAxis(ray.Origin.Z, ray.Direction.Z, out var ztmin, out var ztmax);
+            CheckAxis(ray.Origin.X, ray.Direction.X, this.Min.X, this.Max.X, out var xtmin, out var xtmax);
+            CheckAxis(ray.Origin.Y, ray.Direction.Y, this.Min.Y, this.Max.Y, out var ytmin, out var ytmax);
+            CheckAxis(ray.Origin.Z, ray.Direction.Z, this.Min.Z, this.Max.Z, out var ztmin, out var ztmax);
 
             var tmin = Math.Max(xtmin, Math.Max(ytmin, ztmin));
             var tmax = Math.Min(xtmax, Math.Min(ytmax, ztmax));
