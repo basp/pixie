@@ -9,7 +9,7 @@ namespace Pixie.Core
         protected Double4x4 invt = Double4x4.Identity;
 
         public bool Shadow { get; set; } = true;
-        
+
         public Material Material { get; set; } = new Material();
 
         public Shape Parent { get; set; } = null;
@@ -51,6 +51,9 @@ namespace Pixie.Core
         public virtual BoundingBox Bounds() =>
             BoundingBox.Infinity;
 
+        public virtual BoundingBox ParentSpaceBounds() =>
+            this.Bounds() * this.transform;
+
         public Double4 WorldToObject(Double4 point)
         {
             if (this.HasParent)
@@ -67,7 +70,7 @@ namespace Pixie.Core
             n.W = 0;
             n = n.Normalize();
 
-            if(this.HasParent)
+            if (this.HasParent)
             {
                 n = this.Parent.NormalToWorld(n);
             }

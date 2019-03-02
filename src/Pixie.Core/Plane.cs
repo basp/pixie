@@ -8,8 +8,8 @@ namespace Pixie.Core
 
         public override BoundingBox Bounds()
         {
-            var min = Double4.Point(double.NegativeInfinity, -Epsilon, double.NegativeInfinity);
-            var max = Double4.Point(double.PositiveInfinity, Epsilon, double.PositiveInfinity);
+            var min = Double4.Point(double.NegativeInfinity, 0, double.NegativeInfinity);
+            var max = Double4.Point(double.PositiveInfinity, 0, double.PositiveInfinity);
             return new BoundingBox(min, max);
         }
 

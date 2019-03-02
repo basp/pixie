@@ -38,7 +38,7 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public  void RayItersectingPlaneFromAbove()
+        public void RayItersectingPlaneFromAbove()
         {
             var p = new Plane();
             var r = new Ray(Double4.Point(0, 1, 0), Double4.Vector(0, -1, 0));
@@ -57,6 +57,21 @@ namespace Pixie.Tests
             Assert.Single(xs);
             Assert.Equal(1, xs[0].T);
             Assert.Equal(p, xs[0].Object);
+        }
+
+        [Fact]
+        public void PlaneHasBoundingBox()
+        {
+            var s = new Plane();
+            var box = s.Bounds();
+
+            Assert.True(double.IsNegativeInfinity(box.Min.X));
+            Assert.Equal(0, box.Min.Y);
+            Assert.True(double.IsNegativeInfinity(box.Min.Z));
+
+            Assert.True(double.IsPositiveInfinity(box.Max.X));
+            Assert.Equal(0, box.Max.Y);
+            Assert.True(double.IsPositiveInfinity(box.Max.Z));
         }
     }
 }

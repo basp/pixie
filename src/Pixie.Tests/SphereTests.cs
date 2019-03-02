@@ -172,5 +172,14 @@ namespace Pixie.Tests
             Assert.Equal(1.0, s.Material.Transparency);
             Assert.Equal(1.5, s.Material.RefractiveIndex);
         }
+
+        [Fact]
+        public void SphereHasBoundingBox()
+        {
+            var s = new Sphere();
+            var box = s.Bounds();
+            Assert.Equal(Double4.Point(-1, -1, -1), box.Min);
+            Assert.Equal(Double4.Point(1, 1, 1), box.Max);
+        }
     }
 }

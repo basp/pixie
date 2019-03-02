@@ -4,20 +4,6 @@ namespace Pixie.Tests
     using Xunit;
     using Pixie.Core;
 
-    class TestShape : Shape
-    {
-        public Ray SavedRay { get; set; }
-
-        public override IntersectionList LocalIntersect(Ray ray)
-        {
-            this.SavedRay = ray;
-            return IntersectionList.Empty();
-        }
-
-        public override Double4 LocalNormalAt(Double4 point) =>
-            Double4.Vector(point.X, point.Y, point.Z);
-    }
-
     public class ShapeTests
     {
         [Fact]
@@ -105,12 +91,12 @@ namespace Pixie.Tests
         {
             var s = new TestShape()
             {
-                Transform = 
+                Transform =
                     Transform.Scale(1, 0.5, 1) *
                     Transform.RotateZ(Math.PI / 5),
             };
 
-            var n = s.NormalAt(Double4.Point(0, Math.Sqrt(2)/2, -Math.Sqrt(2)/2));
+            var n = s.NormalAt(Double4.Point(0, Math.Sqrt(2) / 2, -Math.Sqrt(2) / 2));
             var expected = Double4.Vector(0, 0.97014, -0.24254);
             const double eps = 0.00001;
             var comparer = Double4.GetEqualityComparer(eps);
@@ -122,6 +108,36 @@ namespace Pixie.Tests
         {
             var s = new TestShape();
             Assert.Null(s.Parent);
+        }
+
+        [Fact]
+        public void TestShapeHasArbitraryBounds()
+        {
+            var s = new TestShape();
+            var box = s.Bounds();
+            Assert.Equal(
+                Double4.Point(-1, -1, -1),
+                box.Min);
+            Assert.Equal(
+                Double4.Point(1, 1, 1),
+                box.Max);
+        }
+
+        [Fact]
+        public void QueryShapeBoundingBoxInParentSpace()
+        {
+            var shape = new Sphere();
+            shape.Transform = 
+                Transform.Translate(1,-3,5) *
+                Transform.Scale(0.5, 2, 4);
+            
+            var box = shape.ParentSpaceBounds();
+            Assert.Equal(
+                Double4.Point(0.5,-5,1),
+                box.Min);
+            Assert.Equal(
+                Double4.Point(1.5,-1,9),
+                box.Max);
         }
     }
 }

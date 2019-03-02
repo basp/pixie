@@ -99,5 +99,38 @@ namespace Pixie.Tests
                 Assert.Equal(c.normal, n);
             }
         }
+
+        [Fact]
+        public void UnboundedConeHasBoundingBox()
+        {
+            var shape = new Cone();
+            var box = shape.Bounds();
+
+            Assert.True(double.IsNegativeInfinity(box.Min.X));
+            Assert.True(double.IsNegativeInfinity(box.Min.Y));
+            Assert.True(double.IsNegativeInfinity(box.Min.Z));
+
+            Assert.True(double.IsPositiveInfinity(box.Max.X));
+            Assert.True(double.IsPositiveInfinity(box.Max.Y));
+            Assert.True(double.IsPositiveInfinity(box.Max.Z));
+        }
+
+        [Fact]
+        public void BoundedConeHasBoundingBox()
+        {
+            var shape = new Cone()
+            {
+                Minimum = -5,
+                Maximum = 3,
+            };
+
+            var box = shape.Bounds();
+            Assert.Equal(
+                Double4.Point(-5, -5, -5),
+                box.Min);
+            Assert.Equal(
+                Double4.Point(5, 3, 5),
+                box.Max);
+        }
     }
 }

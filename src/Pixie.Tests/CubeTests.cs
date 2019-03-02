@@ -80,5 +80,20 @@ namespace Pixie.Tests
             var n = c.LocalNormalAt(p);
             Assert.Equal(expected, n);
         }
+
+        [Fact]
+        public void CubeHasBoundingBox()
+        {
+            var shape = new Cube();
+            var box = shape.Bounds();
+
+            Assert.Equal(
+                Double4.Point(-1, -1, -1),
+                box.Min);
+
+            Assert.Equal(
+                Double4.Point(1, 1, 1),
+                box.Max);
+        }
     }
 }

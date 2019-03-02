@@ -115,6 +115,22 @@ namespace Pixie.Tests
             var xs = t.LocalIntersect(r);
             Assert.Single(xs);
             Assert.Equal(2, xs[0].T);
-        }        
+        }
+
+        [Fact]
+        public void TriangleHasBoundingBox()
+        {
+            var p1 = Double4.Point(-3, 7, 2);
+            var p2 = Double4.Point(6, 2, -4);
+            var p3 = Double4.Point(2, -1, -1);
+            var shape = new Triangle(p1, p2, p3);
+            var box = shape.Bounds();
+            Assert.Equal(
+                Double4.Point(-3, -1, -4),
+                box.Min);
+            Assert.Equal(
+                Double4.Point(6, 7, 2),
+                box.Max);
+        }
     }
 }

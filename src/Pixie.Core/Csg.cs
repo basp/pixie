@@ -96,5 +96,13 @@ namespace Pixie.Core
 
         public override bool Includes(Shape obj) =>
             this.Left.Includes(obj) || this.Right.Includes(obj);
+
+        public override BoundingBox Bounds()
+        {
+            var box = BoundingBox.Empty;
+            box += this.Left.ParentSpaceBounds();
+            box += this.Right.ParentSpaceBounds();
+            return box;
+        }
     }
 }

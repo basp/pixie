@@ -164,5 +164,37 @@ namespace Pixie.Tests
             var expected = Double4.Vector(nx, ny, nz);
             Assert.Equal(expected, n);
         }
+
+        [Fact]
+        public void UnboundedCylinderHasBoundingBox()
+        {
+            var shape = new Cylinder();
+            var box = shape.Bounds();
+
+            Assert.Equal(-1, box.Min.X);
+            Assert.True(double.IsNegativeInfinity(box.Min.Y));
+            Assert.Equal(-1, box.Min.Z);
+
+            Assert.Equal(1, box.Max.X);
+            Assert.True(double.IsInfinity(box.Max.Y));
+            Assert.Equal(1, box.Max.Z);
+        }
+
+        [Fact]
+        public void BoundedCylinderHasBoundingBox()
+        {
+            var shape = new Cylinder();
+            shape.Minimum = -5;
+            shape.Maximum = 3;
+
+            var box = shape.Bounds();
+            Assert.Equal(
+                Double4.Point(-1, -5, -1),
+                box.Min);
+
+            Assert.Equal(
+                Double4.Point(1, 3, 1),
+                box.Max);
+        }
     }
 }

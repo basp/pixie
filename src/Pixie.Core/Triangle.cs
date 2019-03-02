@@ -61,5 +61,14 @@ namespace Pixie.Core
 
         public override Double4 LocalNormalAt(Double4 point) =>
             this.Normal;
+
+        public override BoundingBox Bounds()
+        {
+            var box = BoundingBox.Empty;
+            box += this.P1;
+            box += this.P2;
+            box += this.P3;
+            return box;
+        }
     }
 }

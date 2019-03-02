@@ -4,7 +4,7 @@ namespace Pixie.Core
     using System.Collections.Generic;
 
     /// <summary>
-    /// Compares two values for approximate equality.
+    /// Base class for approximate equality comparers.
     /// </summary>
     /// <remarks>
     /// You don't really need to deal with approximate equality often
@@ -16,7 +16,7 @@ namespace Pixie.Core
     {
         private readonly double epsilon;
 
-        public ApproxEqualityComparer(double epsilon = 0.000001)
+        protected ApproxEqualityComparer(double epsilon = 0.000001)
         {
             this.epsilon = epsilon;
         }

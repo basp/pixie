@@ -38,9 +38,9 @@ namespace Pixie.Tests
         public void IntersectRayWithNonEmptyGroup()
         {
             var g = new Group();
-            
+
             var s1 = new Sphere();
-            
+
             var s2 = new Sphere()
             {
                 Transform =
@@ -129,7 +129,7 @@ namespace Pixie.Tests
 
             g2.Add(s);
 
-            var v = Double4.Vector(Math.Sqrt(3)/3, Math.Sqrt(3)/3, Math.Sqrt(3)/3);
+            var v = Double4.Vector(Math.Sqrt(3) / 3, Math.Sqrt(3) / 3, Math.Sqrt(3) / 3);
             var n = s.NormalToWorld(v);
             const double eps = 0.0001;
             var comparer = Double4.GetEqualityComparer(eps);
@@ -165,6 +165,57 @@ namespace Pixie.Tests
             var comparer = Double4.GetEqualityComparer(eps);
             var expected = Double4.Vector(0.2857, 0.4286, -0.8571);
             Assert.Equal(expected, n, comparer);
+        }
+
+        [Fact]
+        public void GroupHasBoundingBoxThatContainsItsChildren()
+        {
+            var s = new Sphere()
+            {
+                Transform =
+                    Transform.Translate(2, 5, -3) *
+                    Transform.Scale(2, 2, 2),
+            };
+
+            var c = new Cylinder()
+            {
+                Minimum = -2,
+                Maximum = 2,
+                Transform =
+                    Transform.Translate(-4, -1, 4) *
+                    Transform.Scale(0.5, 1, 0.5),
+            };
+
+            var shape = new Group();
+            shape.Add(s);
+            shape.Add(c);
+
+            var box = shape.Bounds();
+            Assert.Equal(
+                Double4.Point(-4.5, -3, -5),
+                box.Min);
+            Assert.Equal(
+                Double4.Point(4, 7, 4.5),
+                box.Max);
+        }
+
+        [Fact]
+        public void CsgHasBoundingBoxThatContainsItsChildren()
+        {
+            var left = new Sphere();
+            var right = new Sphere()
+            {
+                Transform = Transform.Translate(2, 3, 4),
+            };
+
+            var shape = new Csg(Operation.Difference, left, right);
+            var box = shape.Bounds();
+            Assert.Equal(
+                Double4.Point(-1, -1, -1),
+                box.Min);
+            Assert.Equal(
+                Double4.Point(3, 4, 5),
+                box.Max);
         }
     }
 }

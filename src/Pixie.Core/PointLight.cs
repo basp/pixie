@@ -52,8 +52,10 @@ namespace Pixie.Core
             return shadow ? 0.0 : 1.0;
         }
 
-        public Double4 PointOnLight(double u, double v) => this.Position;
+        public Double4 PointOnLight(double u, double v) => 
+            this.Position;
 
-        public IEnumerable<Double4> Sample() => new[] { this.Position };
+        public IEnumerable<Double4> Sample() => 
+            new[] { this.Position };
     }
 }
