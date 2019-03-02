@@ -7,7 +7,7 @@ namespace Pixie.Core
 
     public class Group : Shape, IList<Shape>
     {
-        private Bounds3 bounds = Bounds3.Infinity;
+        private BoundingBox bounds = BoundingBox.Infinity;
 
         private List<Shape> children = new List<Shape>();
 
@@ -61,7 +61,7 @@ namespace Pixie.Core
 
         public bool IntersectBounds(Ray ray)
         {
-            var bounds = this.Bounds();
+            var bounds = new BoundingBox();
 
             CheckAxis(
                 ray.Origin.X,
@@ -102,7 +102,7 @@ namespace Pixie.Core
         {
             if (this.children.Count == 0)
             {
-                this.bounds = Bounds3.Infinity;
+                this.bounds = BoundingBox.Infinity;
             }
 
             var corners = this.children
@@ -119,10 +119,10 @@ namespace Pixie.Core
                 corners.Max(c => c.Y),
                 corners.Max(c => c.Z));
 
-            this.bounds = new Bounds3(min, max);
+            this.bounds = new BoundingBox(min, max);
         }
 
-        public override Bounds3 Bounds() => this.bounds;
+        public override BoundingBox Bounds() => this.bounds;
 
         public override IntersectionList LocalIntersect(Ray ray)
         {

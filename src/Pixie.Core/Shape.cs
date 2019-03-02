@@ -48,8 +48,8 @@ namespace Pixie.Core
 
         public abstract Double4 LocalNormalAt(Double4 point);
 
-        public virtual Bounds3 Bounds() =>
-            Bounds3.Infinity;
+        public virtual BoundingBox Bounds() =>
+            BoundingBox.Infinity;
 
         public Double4 WorldToObject(Double4 point)
         {

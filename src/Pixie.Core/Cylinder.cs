@@ -117,11 +117,11 @@ namespace Pixie.Core
             return Double4.Vector(point.X, 0, point.Z);
         }
 
-        public override Bounds3 Bounds()
+        public override BoundingBox Bounds()
         {
             var min = Double4.Point(-1, this.Minimum, -1);
             var max = Double4.Point(1, this.Maximum, 1);
-            return new Bounds3(min, max);
+            return new BoundingBox(min, max);
         }
     }
 }

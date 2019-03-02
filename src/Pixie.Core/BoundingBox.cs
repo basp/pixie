@@ -3,10 +3,10 @@ namespace Pixie.Core
     using System.Collections.Generic;
     using System.Linq;
 
-    public struct Bounds3
+    public struct BoundingBox
     {
-        public static Bounds3 Infinity =>
-            new Bounds3(
+        public static BoundingBox Infinity =>
+            new BoundingBox(
                 Double4.Point(
                     double.NegativeInfinity,
                     double.NegativeInfinity,
@@ -16,10 +16,22 @@ namespace Pixie.Core
                     double.PositiveInfinity,
                     double.PositiveInfinity));
 
+        public static BoundingBox Empty =>
+            new BoundingBox(
+                Double4.Point(
+                    double.PositiveInfinity,
+                    double.PositiveInfinity,
+                    double.PositiveInfinity),
+                Double4.Point(
+                    double.NegativeInfinity,
+                    double.NegativeInfinity,
+                    double.NegativeInfinity));
+
+
         public readonly Double4 Min;
         public readonly Double4 Max;
 
-        public Bounds3(Double4 min, Double4 max)
+        public BoundingBox(Double4 min, Double4 max)
         {
             this.Min = min;
             this.Max = max;
