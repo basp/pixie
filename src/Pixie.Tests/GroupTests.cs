@@ -317,5 +317,43 @@ namespace Pixie.Tests
             Assert.Contains(s1, (Group)subgroup[0]);
             Assert.Contains(s2, (Group)subgroup[1]);
         }
+
+        [Fact]
+        public void SubdivideGroupWithTooFewChildren()
+        {
+            var s1 = new Sphere()
+            {
+                Transform = Transform.Translate(-2, 0, 0),
+            };
+
+            var s2 = new Sphere()
+            {
+                Transform = Transform.Translate(2, 1, 0),
+            };
+
+            var s3 = new Sphere()
+            {
+                Transform = Transform.Translate(2, -1, 0),
+            };
+
+            var subgroup = new Group();
+            subgroup.Add(s1);
+            subgroup.Add(s2);
+            subgroup.Add(s3);
+
+            var s4 = new Sphere();
+            var g = new Group();
+            g.Add(subgroup);
+            g.Add(s4);
+
+            g.Divide(3);
+
+            Assert.Equal(subgroup, g[0]);
+            Assert.Equal(s4, g[1]);
+            Assert.Equal(2, subgroup.Count);
+            Assert.Contains(s1, (Group)subgroup[0]);
+            Assert.Contains(s2, (Group)subgroup[1]);
+            Assert.Contains(s3, (Group)subgroup[1]);
+        }
     }
 }

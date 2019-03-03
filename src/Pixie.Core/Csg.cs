@@ -110,5 +110,11 @@ namespace Pixie.Core
             box += this.Right.ParentSpaceBounds();
             return box;
         }
+
+        public override void Divide(double threshold)
+        {
+            this.Left.Divide(threshold);
+            this.Right.Divide(threshold);
+        }
     }
 }

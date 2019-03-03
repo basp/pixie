@@ -141,5 +141,45 @@ namespace Pixie.Tests
             Assert.NotNull(left.SavedRay);
             Assert.NotNull(right.SavedRay);
         }
+
+        [Fact]
+        public void SubdividingCsgShapeSubdividesItsChildren()
+        {
+            var s1 = new Sphere()
+            {
+                Transform = Transform.Translate(-1.5, 0, 0),
+            };
+
+            var s2 = new Sphere()
+            {
+                Transform = Transform.Translate(1.5, 0, 0),
+            };
+
+            var left = new Group();
+            left.Add(s1);
+            left.Add(s2);
+
+            var s3 = new Sphere()
+            {
+                Transform = Transform.Translate(0, 0, -1.5),
+            };
+
+            var s4 = new Sphere()
+            {
+                Transform = Transform.Translate(0, 0, 1.5),
+            };
+
+            var right = new Group();
+            right.Add(s3);
+            right.Add(s4);
+
+            var shape = new Csg(Operation.Difference, left, right);
+            shape.Divide(1);
+
+            Assert.Contains(s1, (Group)left[0]);
+            Assert.Contains(s2, (Group)left[1]);
+            Assert.Contains(s3, (Group)right[0]);
+            Assert.Contains(s4, (Group)right[1]);
+        }
     }
 }
