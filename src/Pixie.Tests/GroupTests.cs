@@ -217,5 +217,105 @@ namespace Pixie.Tests
                 Double4.Point(3, 4, 5),
                 box.Max);
         }
+
+        [Fact]
+        public void IntersectGroupDoesNotIntersectChildrenIfBoxIsMissed()
+        {
+            var child = new TestShape();
+            var shape = new Group();
+            shape.Add(child);
+            var r = new Ray(
+                Double4.Point(0, 0, -5),
+                Double4.Vector(0, 1, 0));
+            var xs = shape.Intersect(r);
+            Assert.Null(child.SavedRay);
+        }
+
+        [Fact]
+        public void IntersectGroupTestsChildrenIfBoxHit()
+        {
+            var child = new TestShape();
+            var shape = new Group();
+            shape.Add(child);
+            var r = new Ray(
+                Double4.Point(0, 0, -5),
+                Double4.Vector(0, 0, 1));
+            var xs = shape.Intersect(r);
+            Assert.NotNull(child.SavedRay);
+        }
+
+        [Fact]
+        public void PartitionGroupChildren()
+        {
+            var s1 = new Sphere()
+            {
+                Transform = Transform.Translate(-2, 0, 0),
+            };
+
+            var s2 = new Sphere()
+            {
+                Transform = Transform.Translate(2, 0, 0),
+            };
+
+            var s3 = new Sphere();
+
+            var g = new Group();
+            g.Add(s1);
+            g.Add(s2);
+            g.Add(s3);
+            g.Partition(out var left, out var right);
+
+            Assert.Single(g);
+            Assert.Contains(s3, g);
+            Assert.Single(left);
+            Assert.Contains(s1, left);
+            Assert.Single(right);
+            Assert.Contains(s2, right);
+        }
+
+        [Fact]
+        public void CreatingSubGroupFromListOfChildren()
+        {
+            var s1 = new Sphere();
+            var s2 = new Sphere();
+            var g = new Group();
+            g.Subgroup(s1, s2);
+
+            Assert.Single(g);
+            Assert.Contains(s1, (Group)g[0]);
+            Assert.Contains(s2, (Group)g[0]);
+        }
+
+        [Fact]
+        public void SubdivideGroupPartitionsItsChildren()
+        {
+            var s1 = new Sphere()
+            {
+                Transform = Transform.Translate(-2, -2, 0),
+            };
+
+            var s2 = new Sphere()
+            {
+                Transform = Transform.Translate(-2, 2, 0),
+            };
+
+            var s3 = new Sphere()
+            {
+                Transform = Transform.Scale(4, 4, 4),
+            };
+
+            var g = new Group();
+            g.Add(s1);
+            g.Add(s2);
+            g.Add(s3);
+
+            g.Divide(1);
+
+            var subgroup = (Group)g[1];
+
+            Assert.Equal(s3, g[0]);
+            Assert.Contains(s1, (Group)subgroup[0]);
+            Assert.Contains(s2, (Group)subgroup[1]);
+        }
     }
 }

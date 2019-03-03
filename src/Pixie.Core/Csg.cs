@@ -82,6 +82,12 @@ namespace Pixie.Core
 
         public override IntersectionList LocalIntersect(Ray ray)
         {
+            var bounds = this.Bounds();
+            if (!bounds.Intersect(ray))
+            {
+                return IntersectionList.Empty();
+            }
+
             var xs = new List<Intersection>();
             xs.AddRange(this.Left.Intersect(ray));
             xs.AddRange(this.Right.Intersect(ray));

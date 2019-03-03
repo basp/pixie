@@ -56,8 +56,9 @@ namespace Pixie.Tests
             var s = new TestShape();
             s.Transform = Transform.Scale(2, 2, 2);
             var xs = s.Intersect(r);
-            Assert.Equal(Double4.Point(0, 0, -2.5), s.SavedRay.Origin);
-            Assert.Equal(Double4.Vector(0, 0, 0.5), s.SavedRay.Direction);
+            var savedRay = s.SavedRay.Value;
+            Assert.Equal(Double4.Point(0, 0, -2.5), savedRay.Origin);
+            Assert.Equal(Double4.Vector(0, 0, 0.5), savedRay.Direction);
         }
 
         [Fact]
@@ -67,8 +68,9 @@ namespace Pixie.Tests
             var s = new TestShape();
             s.Transform = Transform.Translate(5, 0, 0);
             var xs = s.Intersect(r);
-            Assert.Equal(Double4.Point(-5, 0, -5), s.SavedRay.Origin);
-            Assert.Equal(Double4.Vector(0, 0, 1), s.SavedRay.Direction);
+            var savedRay = s.SavedRay.Value;
+            Assert.Equal(Double4.Point(-5, 0, -5), savedRay.Origin);
+            Assert.Equal(Double4.Vector(0, 0, 1), savedRay.Direction);
         }
 
         [Fact]

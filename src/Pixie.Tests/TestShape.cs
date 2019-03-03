@@ -1,10 +1,11 @@
 namespace Pixie.Tests
 {
+    using System;
     using Pixie.Core;
 
     class TestShape : Shape
     {
-        public Ray SavedRay { get; set; }
+        public Nullable<Ray> SavedRay { get; set; }
 
         public override IntersectionList LocalIntersect(Ray ray)
         {

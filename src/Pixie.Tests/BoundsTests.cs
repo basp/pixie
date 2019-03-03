@@ -220,5 +220,58 @@ namespace Pixie.Tests
             var result = box.Intersect(r);
             Assert.Equal(expected, result);
         }
+
+        [Fact]
+        public void SplitPerfectCube()
+        {
+            var box = new BoundingBox(
+                Double4.Point(-1, -4, -5),
+                Double4.Point(9, 6, 5));
+
+            box.Split(out var left, out var right);
+            Assert.Equal(Double4.Point(-1, -4, -5), left.Min);
+            Assert.Equal(Double4.Point(4, 6, 5), left.Max);
+            Assert.Equal(Double4.Point(4, -4, -5), right.Min);
+            Assert.Equal(Double4.Point(9, 6, 5), right.Max);
+        }
+
+        [Fact]
+        public void SplitXWideBox()
+        {
+            var box = new BoundingBox(
+                Double4.Point(-1, -2, -3),
+                Double4.Point(9, 5.5, 3));
+            box.Split(out var left, out var right);
+            Assert.Equal(Double4.Point(-1, -2, -3), left.Min);
+            Assert.Equal(Double4.Point(4, 5.5, 3), left.Max);
+            Assert.Equal(Double4.Point(4, -2, -3), right.Min);
+            Assert.Equal(Double4.Point(9, 5.5, 3), right.Max);
+        }
+
+        [Fact]
+        public void SplitYWideBox()
+        {
+            var box = new BoundingBox(
+                Double4.Point(-1, -2, -3),
+                Double4.Point(5, 8, 3));
+            box.Split(out var left, out var right);
+            Assert.Equal(Double4.Point(-1, -2, -3), left.Min);
+            Assert.Equal(Double4.Point(5, 3, 3), left.Max);
+            Assert.Equal(Double4.Point(-1, 3, -3), right.Min);
+            Assert.Equal(Double4.Point(5, 8, 3), right.Max);
+        }
+
+        [Fact]
+        public void SplitZWideBox()
+        {
+            var box = new BoundingBox(
+                Double4.Point(-1, -2, -3),
+                Double4.Point(5, 3, 7));
+            box.Split(out var left, out var right);
+            Assert.Equal(Double4.Point(-1, -2, -3), left.Min);
+            Assert.Equal(Double4.Point(5, 3, 2), left.Max);
+            Assert.Equal(Double4.Point(-1, -2, 2), right.Min);
+            Assert.Equal(Double4.Point(5, 3, 7), right.Max);
+        }
     }
 }

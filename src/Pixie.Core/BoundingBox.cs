@@ -162,5 +162,44 @@ namespace Pixie.Core
 
             return true;
         }
+
+        public void Split(out BoundingBox left, out BoundingBox right)
+        {
+            var dx = this.Max.X - this.Min.X;
+            var dy = this.Max.Y - this.Min.Y;
+            var dz = this.Max.Z - this.Min.Z;
+
+            var greatest = Math.Max(dx, Math.Max(dy, dz));
+
+            var x0 = this.Min.X;
+            var y0 = this.Min.Y;
+            var z0 = this.Min.Z;
+
+            var x1 = this.Max.X;
+            var y1 = this.Max.Y;
+            var z1 = this.Max.Z;
+
+            if (greatest == dx)
+            {
+                x1 = x0 + dx / 2.0;
+                x0 = x1;
+            }
+            else if (greatest == dy)
+            {
+                y1 = y0 + dy / 2.0;
+                y0 = y1;
+            }
+            else
+            {
+                z1 = z0 + dz / 2.0;
+                z0 = z1;
+            }
+
+            var midMin = Double4.Point(x0, y0, z0);
+            var midMax = Double4.Point(x1, y1, z1);
+
+            left = new BoundingBox(this.Min, midMax);
+            right = new BoundingBox(midMin, this.Max);
+        }
     }
 }

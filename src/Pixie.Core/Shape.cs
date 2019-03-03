@@ -54,6 +54,10 @@ namespace Pixie.Core
         public virtual BoundingBox ParentSpaceBounds() =>
             this.Bounds() * this.transform;
 
+        public virtual void Divide(double threshold)
+        {
+        }
+
         public Double4 WorldToObject(Double4 point)
         {
             if (this.HasParent)

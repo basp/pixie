@@ -18,7 +18,7 @@ namespace Pixie.Tests
         }
 
         [Theory]
-        
+
         [InlineData(Operation.Union, true, true, true, false)]
         [InlineData(Operation.Union, true, true, false, true)]
         [InlineData(Operation.Union, true, false, true, false)]
@@ -57,7 +57,7 @@ namespace Pixie.Tests
                 lhit,
                 inl,
                 inr);
-            
+
             Assert.Equal(expected, actual);
         }
 
@@ -78,7 +78,7 @@ namespace Pixie.Tests
                 new Intersection(2, s2),
                 new Intersection(3, s1),
                 new Intersection(4, s2));
-            
+
             var result = csg.FilterIntersections(xs);
             Assert.Equal(2, result.Count);
             Assert.Equal(xs[x0], result[0]);
@@ -113,5 +113,33 @@ namespace Pixie.Tests
             Assert.Equal(6.5, xs[1].T);
             Assert.Equal(s2, xs[1].Object);
         }
-    }   
+
+        [Fact]
+        public void IntersectCsgDoesNotTestChildrenIfBoxMissed()
+        {
+            var left = new TestShape();
+            var right = new TestShape();
+            var shape = new Csg(Operation.Difference, left, right);
+            var r = new Ray(
+                Double4.Point(0, 0, -5),
+                Double4.Vector(0, 1, 0));
+            var xs = shape.Intersect(r);
+            Assert.Null(left.SavedRay);
+            Assert.Null(right.SavedRay);
+        }
+
+        [Fact]
+        public void IntersectCsgTestsChildrenIfBoxHit()
+        {
+            var left = new TestShape();
+            var right = new TestShape();
+            var shape = new Csg(Operation.Difference, left, right);
+            var r = new Ray(
+                Double4.Point(0, 0, -5),
+                Double4.Vector(0, 0, 1));
+            var xs = shape.Intersect(r);
+            Assert.NotNull(left.SavedRay);
+            Assert.NotNull(right.SavedRay);
+        }
+    }
 }

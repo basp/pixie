@@ -7,8 +7,6 @@ namespace Pixie.Core
 
     public class Group : Shape, IList<Shape>
     {
-        private BoundingBox bounds = BoundingBox.Infinity;
-
         private List<Shape> children = new List<Shape>();
 
         public Shape this[int index]
@@ -21,112 +19,21 @@ namespace Pixie.Core
 
         public bool IsReadOnly => false;
 
-        private const double Epsilon = 0.0001;
-
-        private static double Max(double a, double b, double c) =>
-            Math.Max(a, Math.Max(b, c));
-
-        private static double Min(double a, double b, double c) =>
-            Math.Min(a, Math.Min(b, c));
-
-        private static void CheckAxis(
-            double origin,
-            double direction,
-            double tmin,
-            double tmax,
-            out double min,
-            out double max)
+        public override BoundingBox Bounds()
         {
-            var tminNum = tmin - origin;
-            var tmaxNum = tmax - origin;
-
-            if (Math.Abs(direction) >= Epsilon)
+            var box = BoundingBox.Empty;
+            foreach (var child in this.children)
             {
-                min = tminNum / direction;
-                max = tmaxNum / direction;
-            }
-            else
-            {
-                min = tminNum * double.PositiveInfinity;
-                max = tmaxNum * double.PositiveInfinity;
+                box += child.ParentSpaceBounds();
             }
 
-            if (min > max)
-            {
-                var tmp = min;
-                min = max;
-                max = tmp;
-            }
+            return box;
         }
-
-        public bool IntersectBounds(Ray ray)
-        {
-            var bounds = new BoundingBox();
-
-            CheckAxis(
-                ray.Origin.X,
-                ray.Direction.X,
-                bounds.Min.X,
-                bounds.Max.X,
-                out var xtmin,
-                out var xtmax);
-
-            CheckAxis(
-                ray.Origin.Y,
-                ray.Direction.Y,
-                bounds.Min.Y,
-                bounds.Max.Y,
-                out var ytmin,
-                out var ytmax);
-
-            CheckAxis(
-                ray.Origin.Z,
-                ray.Direction.Z,
-                bounds.Min.Z,
-                bounds.Max.Z,
-                out var ztmin,
-                out var ztmax);
-
-            var tmin = Max(xtmin, ytmin, ztmin);
-            var tmax = Min(xtmax, ytmax, ztmax);
-
-            if (tmin > tmax)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private void UpdateBounds()
-        {
-            if (this.children.Count == 0)
-            {
-                this.bounds = BoundingBox.Infinity;
-            }
-
-            var corners = this.children
-                .SelectMany(x => x.Bounds().Corners().Select(c => x.Transform * c))
-                .ToList();
-
-            var min = Double4.Point(
-                corners.Min(c => c.X),
-                corners.Min(c => c.Y),
-                corners.Min(c => c.Z));
-
-            var max = Double4.Point(
-                corners.Max(c => c.X),
-                corners.Max(c => c.Y),
-                corners.Max(c => c.Z));
-
-            this.bounds = new BoundingBox(min, max);
-        }
-
-        public override BoundingBox Bounds() => this.bounds;
 
         public override IntersectionList LocalIntersect(Ray ray)
         {
-            if (!this.IntersectBounds(ray))
+            var bounds = this.Bounds();
+            if (!bounds.Intersect(ray))
             {
                 return IntersectionList.Empty();
             }
@@ -153,17 +60,76 @@ namespace Pixie.Core
             return false;
         }
 
+        public void Partition(
+            out IList<Shape> left,
+            out IList<Shape> right)
+        {
+            left = new List<Shape>();
+            right = new List<Shape>();
+
+            this.Bounds().Split(out var leftBox, out var rightBox);
+            var ss = this.children.ToArray();
+            foreach (var s in ss)
+            {
+                var sBounds = s.ParentSpaceBounds();
+
+                if (leftBox.Contains(sBounds))
+                {
+                    this.Remove(s);
+                    left.Add(s);
+                    continue;
+                }
+
+                if (rightBox.Contains(sBounds))
+                {
+                    this.Remove(s);
+                    right.Add(s);
+                    continue;
+                }
+            }
+        }
+
+        public void Subgroup(params Shape[] shapes)
+        {
+            var subgroup = new Group();
+            foreach (var s in shapes)
+            {
+                subgroup.Add(s);
+            }
+
+            this.Add(subgroup);
+        }
+
+        public override void Divide(double threshold)
+        {
+            if (threshold <= this.Count)
+            {
+                this.Partition(out var left, out var right);
+                if (left.Count > 0)
+                {
+                    this.Subgroup(left.ToArray());
+                }
+                if (right.Count > 0)
+                {
+                    this.Subgroup(right.ToArray());
+                }
+            }
+
+            foreach (var s in this.children)
+            {
+                s.Divide(threshold);
+            }
+        }
+
         public void Add(Shape item)
         {
             item.Parent = this;
             this.children.Add(item);
-            this.UpdateBounds();
         }
 
         public void Clear()
         {
             this.children.Clear();
-            this.UpdateBounds();
         }
 
         public bool Contains(Shape item) =>
@@ -182,7 +148,6 @@ namespace Pixie.Core
         {
             item.Parent = this;
             this.children.Insert(index, item);
-            this.UpdateBounds();
         }
 
         public bool Remove(Shape item)
@@ -191,7 +156,6 @@ namespace Pixie.Core
             if (removed)
             {
                 item.Parent = null;
-                this.UpdateBounds();
             }
 
             return removed;
@@ -201,7 +165,6 @@ namespace Pixie.Core
         {
             this.children[index].Parent = null;
             this.children.RemoveAt(index);
-            this.UpdateBounds();
         }
 
         IEnumerator IEnumerable.GetEnumerator() =>
