@@ -18,6 +18,9 @@ namespace Pixie.Core
         public readonly double G;
         public readonly double B;
 
+        public static Color FromByteValues(byte r, byte g, byte b) =>
+            new Color(r / 255.0, g / 255.0, b / 255.0);
+
         public Color(double r, double g, double b)
         {
             this.R = r;

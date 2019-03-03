@@ -24,17 +24,19 @@
             // var t = Cover.Create(args.Width, args.Height);
             // var t = Test01.Create(args.Width, args.Height);
             // var t = Test02.Create(args.Width, args.Height);
-            var t = Test03.Create(args.Width, args.Height);
-            
+            // var t = Test03.Create(args.Width, args.Height);
+            // var t = Test04.Create(args.Width, args.Height);
+            var t = Test05.Create(args.Width, args.Height);
+
             // Tuples are not super clear (also, still no destructuring?)
             var world = t.Item1;
             var camera = t.Item2;
 
-            Func<ISampler> samplerFactory = () =>
-                new RandomSuperSampler(world, camera, args.N);
-
             // Func<ISampler> samplerFactory = () =>
-            //     new FocalBlurSampler(t.Item1, t.Item2, 3.9, 0.09, args.N);
+            //     new RandomSuperSampler(world, camera, args.N);
+
+            Func<ISampler> samplerFactory = () =>
+                new FocalBlurSampler(t.Item1, t.Item2, 10.96, 0.11, args.N);
 
             var sw = new Stopwatch();
             sw.Start();
