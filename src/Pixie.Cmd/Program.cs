@@ -26,9 +26,8 @@
             // var t = Test02.Create(args.Width, args.Height);
             // var t = Test03.Create(args.Width, args.Height);
             // var t = Test04.Create(args.Width, args.Height);
-            var t = Test05.Create(args.Width, args.Height);
+            var t = Test06.Create(args.Width, args.Height);
 
-            // Tuples are not super clear (also, still no destructuring?)
             var world = t.Item1;
             var camera = t.Item2;
 
