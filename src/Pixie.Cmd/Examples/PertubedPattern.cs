@@ -1,7 +1,5 @@
 namespace Pixie.Cmd.Examples
 {
-    using Pixie.Core;
-
     public class PertubedPattern : Pattern
     {
         public PertubedPattern(Pattern a, Pattern b)

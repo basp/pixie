@@ -1,7 +1,6 @@
 namespace Pixie.Cmd.Examples
 {
     using System;
-    using Pixie.Core;
 
     public class Scenes
     {
@@ -54,7 +53,7 @@ namespace Pixie.Cmd.Examples
 
             var light = new PointLight(
                 Vector4.CreatePosition(-10, 10, -10),
-                Pixie.Core.Color.White);
+                Pixie.Color.White);
 
             world.Lights.Add(light);
 
@@ -98,7 +97,7 @@ namespace Pixie.Cmd.Examples
 
             var light = new PointLight(
                 Vector4.CreatePosition(-10, 10, -10),
-                Pixie.Core.Color.White);
+                Pixie.Color.White);
 
             world.Lights.Add(light);
 

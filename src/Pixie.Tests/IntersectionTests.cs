@@ -1,9 +1,7 @@
 namespace Pixie.Tests
 {
     using System;
-    using Optional;
     using Xunit;
-    using Pixie.Core;
 
     public class IntersectionTests
     {

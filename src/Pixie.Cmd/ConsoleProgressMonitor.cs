@@ -2,7 +2,6 @@ namespace Pixie.Cmd
 {
     using System;
     using System.Diagnostics;
-    using Pixie.Core;
 
     public class ConsoleProgressMonitor : ProgressMonitor
     {

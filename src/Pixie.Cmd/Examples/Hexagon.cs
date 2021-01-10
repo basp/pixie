@@ -1,17 +1,16 @@
 namespace Pixie.Cmd.Examples
 {
     using System;
-    using Pixie.Core;
 
     public class Hexagon : Group
     {
         public static Shape Create()
         {
-            var hex = new Pixie.Core.Group();
+            var hex = new Pixie.Group();
             for (var n = 0; n < 6; n++)
             {
                 var side = HexagonSide();
-                side.Transform = Pixie.Core.Transform.RotateY(n * Math.PI / 3);
+                side.Transform = Pixie.Transform.RotateY(n * Math.PI / 3);
 
                 hex.Add(side);
             }
@@ -23,8 +22,8 @@ namespace Pixie.Cmd.Examples
             new Sphere()
             {
                 Transform =
-                    Pixie.Core.Transform.Translate(0, 0, -1) *
-                    Pixie.Core.Transform.Scale(0.25, 0.25, 0.25),
+                    Pixie.Transform.Translate(0, 0, -1) *
+                    Pixie.Transform.Scale(0.25, 0.25, 0.25),
             };
 
         static Shape HexagonEdge() =>
@@ -33,14 +32,14 @@ namespace Pixie.Cmd.Examples
                 Minimum = 0,
                 Maximum = 1,
                 Transform =
-                    Pixie.Core.Transform.Translate(0, 0, -1) *
-                        Pixie.Core.Transform.RotateY(-Math.PI / 6) *
-                        Pixie.Core.Transform.RotateZ(-Math.PI / 2) *
-                        Pixie.Core.Transform.Scale(0.25, 1, 0.25),
+                    Pixie.Transform.Translate(0, 0, -1) *
+                        Pixie.Transform.RotateY(-Math.PI / 6) *
+                        Pixie.Transform.RotateZ(-Math.PI / 2) *
+                        Pixie.Transform.Scale(0.25, 1, 0.25),
             };
 
         static Shape HexagonSide() =>
-            new Pixie.Core.Group()
+            new Pixie.Group()
             {
                 HexagonCorner(),
                 HexagonEdge(),

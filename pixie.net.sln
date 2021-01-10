@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{19983429-FF3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pixie.Tests", "src\Pixie.Tests\Pixie.Tests.csproj", "{255AB1AF-2635-4621-BDFE-9F6DC5022DF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pixie.Core", "src\Pixie.Core\Pixie.Core.csproj", "{0601365B-F4BA-4C35-915C-D4971799641E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pixie", "src\Pixie\Pixie.csproj", "{0601365B-F4BA-4C35-915C-D4971799641E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pixie.Cmd", "src\Pixie.Cmd\Pixie.Cmd.csproj", "{1BA65BE3-68E4-4C52-9D5D-07128BB1E8C7}"
 EndProject

@@ -1,9 +1,6 @@
 namespace Pixie.Tests
 {
-    using System;
-    using System.Collections.Generic;
     using Xunit;
-    using Pixie.Core;
 
     public class RayTests
     {

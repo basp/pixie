@@ -1,7 +1,6 @@
 namespace Pixie.Tests
 {
     using Xunit;
-    using Pixie.Core;
 
     public class Matrix2x2Tests
     {

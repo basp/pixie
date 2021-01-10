@@ -1,13 +1,10 @@
 ﻿namespace Pixie.Cmd
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Drawing;
     using System.IO;
     using PowerArgs;
-    using Pixie.Core;
-    using Pixie.Cmd.Examples;
+    using Examples;
 
     [ArgExceptionBehavior(ArgExceptionPolicy.StandardExceptionHandling)]
     class Program

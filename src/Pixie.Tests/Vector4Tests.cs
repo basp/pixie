@@ -2,7 +2,6 @@ namespace Pixie.Tests
 {
     using System;
     using Xunit;
-    using Pixie.Core;
 
     public class Vector4Tests
     {

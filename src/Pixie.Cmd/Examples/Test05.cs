@@ -1,7 +1,6 @@
 namespace Pixie.Cmd.Examples
 {
     using System;
-    using Pixie.Core;
 
     public static class Test05
     {

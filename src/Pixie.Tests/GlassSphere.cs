@@ -1,7 +1,5 @@
 namespace Pixie.Tests
 {
-    using Pixie.Core;
-
     public class GlassSphere : Sphere
     {
         public GlassSphere()

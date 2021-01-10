@@ -1,7 +1,6 @@
 namespace Pixie.Tests
 {
     using System;
-    using Pixie.Core;
 
     class TestShape : Shape
     {
