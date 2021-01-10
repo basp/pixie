@@ -23,8 +23,8 @@ namespace Pixie.Core
         private readonly double halfWidth;
         private readonly double halfHeight;
         private readonly double pixelSize;
-        private Double4x4 transform;
-        private Double4x4 transformInv;
+        private Matrix4x4 transform;
+        private Matrix4x4 transformInv;
 
         /// <summary>
         /// Constructs a new <c>Camera</c> instance.
@@ -52,7 +52,7 @@ namespace Pixie.Core
             }
 
             this.pixelSize = (this.halfWidth * 2) / this.hsize;
-            this.transform = Double4x4.Identity;
+            this.transform = Matrix4x4.Identity;
             this.transformInv = this.transform.Inverse();
         }
 
@@ -68,7 +68,7 @@ namespace Pixie.Core
 
         public double HalfHeight => this.halfHeight;
 
-        public Double4x4 Transform
+        public Matrix4x4 Transform
         {
             get => this.transform;
             set
@@ -78,7 +78,7 @@ namespace Pixie.Core
             }
         }
 
-        public Double4x4 TransformInv => this.transformInv;
+        public Matrix4x4 TransformInv => this.transformInv;
 
         public IProgressMonitor ProgressMonitor { get; set; } =
             new ProgressMonitor();

@@ -95,7 +95,7 @@ namespace Pixie.Core
                 IntersectionList.Create(xs.ToArray()));
         }
 
-        public override Double4 LocalNormalAt(Double4 point)
+        public override Vector4 LocalNormalAt(Vector4 point)
         {
             throw new NotImplementedException();
         }

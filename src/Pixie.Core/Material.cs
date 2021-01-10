@@ -64,9 +64,9 @@ namespace Pixie.Core
         public Color Li(
             Shape obj,
             ILight light,
-            Double4 point,
-            Double4 eyev,
-            Double4 normalv,
+            Vector4 point,
+            Vector4 eyev,
+            Vector4 normalv,
             double intensity = 1.0)
         {
             Color color, ambient, diffuse, specular;
@@ -87,7 +87,7 @@ namespace Pixie.Core
             foreach (var lightPos in light.Sample())
             {
                 var lightv = (lightPos - point).Normalize();
-                var lightDotNormal = Double4.Dot(lightv, normalv);
+                var lightDotNormal = Vector4.Dot(lightv, normalv);
 
                 if (lightDotNormal < 0)
                 {
@@ -98,8 +98,8 @@ namespace Pixie.Core
                 {
                     diffuse = effectiveColor * this.Diffuse * lightDotNormal;
 
-                    var reflectv = Double4.Reflect(-lightv, normalv);
-                    var reflectDotEye = Double4.Dot(reflectv, eyev);
+                    var reflectv = Vector4.Reflect(-lightv, normalv);
+                    var reflectDotEye = Vector4.Dot(reflectv, eyev);
 
                     if (reflectDotEye <= 0)
                     {

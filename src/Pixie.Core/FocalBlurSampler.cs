@@ -43,8 +43,8 @@ namespace Pixie.Core
 
             var inv = this.camera.TransformInv;
 
-            var pixel = inv * Double4.Point(worldX, worldY, -1);
-            var origin = inv * Double4.Point(0, 0, 0);
+            var pixel = inv * Vector4.CreatePosition(worldX, worldY, -1);
+            var origin = inv * Vector4.CreatePosition(0, 0, 0);
             var direction = (pixel - origin).Normalize();
 
             return new Ray(origin, direction);
@@ -54,15 +54,15 @@ namespace Pixie.Core
         // and multiple threads trying to mess around with the
         // random number generator. So now every thread gets its 
         // own sampler and every sampler gets its own rng.
-        private Double4 RandomInUnitDisk()
+        private Vector4 RandomInUnitDisk()
         {
-            Double4 v;
+            Vector4 v;
             do
             {
-                v = 2.0 * Double4.Vector(
+                v = 2.0 * Vector4.CreateDirection(
                     rng.NextDouble(),
                     rng.NextDouble(),
-                    0.0) - Double4.Vector(1, 1, 0);
+                    0.0) - Vector4.CreateDirection(1, 1, 0);
             }
             while (v.Dot(v) >= 1.0); // force vector in disk
             return v;

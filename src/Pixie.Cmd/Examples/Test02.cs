@@ -10,15 +10,15 @@ namespace Pixie.Cmd.Examples
             var camera = new Camera(width, height, 1.152)
             {
                 Transform = Transform.View(
-                    Double4.Point(-2.6, 1.5, -3.9),
-                    Double4.Point(-0.6, 1, -0.8),
-                    Double4.Vector(0, 1, 0)),
+                    Vector4.CreatePosition(-2.6, 1.5, -3.9),
+                    Vector4.CreatePosition(-0.6, 1, -0.8),
+                    Vector4.CreateDirection(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };
 
             var light = new PointLight(
-                Double4.Point(-4.9, 4.9, -1),
+                Vector4.CreatePosition(-4.9, 4.9, -1),
                 Color.White);
 
             var wallMaterial = new Material()
@@ -28,7 +28,7 @@ namespace Pixie.Cmd.Examples
                     new Color(0.55, 0.55, 0.55))
                 {
                     Transform = 
-                        Double4x4.Identity
+                        Matrix4x4.Identity
                             .Scale(0.25, 0.25, 0.25)
                             .RotateY(1.5708),
                 },
@@ -41,7 +41,7 @@ namespace Pixie.Cmd.Examples
             var floor = new Plane()
             {
                 Transform = 
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .RotateY(0.31415),
 
                 Material = new Material()
@@ -72,7 +72,7 @@ namespace Pixie.Cmd.Examples
             var westWall = new Plane()
             {
                 Transform = 
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .RotateY(1.5708)
                         .RotateZ(1.5708)
                         .Translate(-5, 0, 0),
@@ -83,7 +83,7 @@ namespace Pixie.Cmd.Examples
             var eastWall = new Plane()
             {
                 Transform =
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .RotateY(1.5708)
                         .RotateZ(1.5708)
                         .Translate(5, 0, 0),
@@ -94,7 +94,7 @@ namespace Pixie.Cmd.Examples
             var northWall = new Plane()
             {
                 Transform =
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .RotateX(1.5708)
                         .Translate(0, 0, 5),
 
@@ -104,7 +104,7 @@ namespace Pixie.Cmd.Examples
             var southWall = new Plane()
             {
                 Transform =
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .RotateX(1.5708)
                         .Translate(0, 0, -5),
 
@@ -114,7 +114,7 @@ namespace Pixie.Cmd.Examples
             var s1 = new Sphere()
             {
                 Transform =
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .Scale(0.4, 0.4, 0.4)
                         .Translate(4.6, 0.4, 1),
                 
@@ -128,7 +128,7 @@ namespace Pixie.Cmd.Examples
             var s2 = new Sphere()
             {
                 Transform = 
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .Scale(0.3, 0.3, 0.3)
                         .Translate(4.7, 0.3, 0.4),
                 
@@ -142,7 +142,7 @@ namespace Pixie.Cmd.Examples
             var s3 = new Sphere()
             {
                 Transform = 
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .Scale(0.5, 0.5, 0.5)
                         .Translate(-1, 0.5, 4.5),
                 
@@ -156,7 +156,7 @@ namespace Pixie.Cmd.Examples
             var s4 = new Sphere()
             {
                 Transform = 
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .Scale(0.3, 0.3, 0.3)
                         .Translate(-1.7, 0.3, 4.7),
                 
@@ -170,7 +170,7 @@ namespace Pixie.Cmd.Examples
             var redSphere = new Sphere()
             {
                 Transform = 
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .Translate(-0.6, 1, 0.6),
                 
                 Material = new Material()
@@ -184,7 +184,7 @@ namespace Pixie.Cmd.Examples
             var blueGlassSphere = new Sphere()
             {
                 Transform = 
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .Scale(0.7, 0.7, 0.7)
                         .Translate(0.6, 0.7, -0.6),
                 
@@ -204,7 +204,7 @@ namespace Pixie.Cmd.Examples
             var greenGlassSphere = new Sphere()
             {
                 Transform = 
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .Scale(0.5, 0.5, 0.5)
                         .Translate(-0.7, 0.5, -0.8),
                 

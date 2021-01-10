@@ -10,7 +10,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestRayIntersectsSphereAtTwoPoints()
         {
-            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Equal(2, xs.Count);
@@ -21,7 +21,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestRayIntersectsSphereAtTangent()
         {
-            var r = new Ray(Double4.Point(0, 1, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 1, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Equal(2, xs.Count);
@@ -32,7 +32,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestRayMissesSphere()
         {
-            var r = new Ray(Double4.Point(0, 2, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 2, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Empty(xs);
@@ -41,7 +41,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestRayOriginatesInsideSphere()
         {
-            var r = new Ray(Double4.Point(0, 0, 0), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Equal(2, xs.Count);
@@ -52,7 +52,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestSphereIsBehindRay()
         {
-            var r = new Ray(Double4.Point(0, 0, 5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, 5), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Equal(2, xs.Count);
@@ -63,7 +63,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestIntersectScaledSphere()
         {
-            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere()
             {
                 Transform = Transform.Scale(2, 2, 2),
@@ -78,7 +78,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestIntersectTranslatedSphere()
         {
-            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere()
             {
                 Transform = Transform.Translate(5, 0, 0),
@@ -92,8 +92,8 @@ namespace Pixie.Tests
         public void TestNormalOnSphereAtPointOnXAxis()
         {
             var s = new Sphere();
-            var n = s.NormalAt(Double4.Point(1, 0, 0));
-            var expected = Double4.Vector(1, 0, 0);
+            var n = s.NormalAt(Vector4.CreatePosition(1, 0, 0));
+            var expected = Vector4.CreateDirection(1, 0, 0);
             Assert.Equal(expected, n);
         }
 
@@ -101,8 +101,8 @@ namespace Pixie.Tests
         public void TestNormalOnSphereAtPointOnYAxis()
         {
             var s = new Sphere();
-            var n = s.NormalAt(Double4.Point(0, 1, 0));
-            var expected = Double4.Vector(0, 1, 0);
+            var n = s.NormalAt(Vector4.CreatePosition(0, 1, 0));
+            var expected = Vector4.CreateDirection(0, 1, 0);
             Assert.Equal(expected, n);
         }
 
@@ -110,8 +110,8 @@ namespace Pixie.Tests
         public void TestNormalOnSphereAtPointOnZAxis()
         {
             var s = new Sphere();
-            var n = s.NormalAt(Double4.Point(0, 0, 1));
-            var expected = Double4.Vector(0, 0, 1);
+            var n = s.NormalAt(Vector4.CreatePosition(0, 0, 1));
+            var expected = Vector4.CreateDirection(0, 0, 1);
             Assert.Equal(expected, n);
         }
 
@@ -120,11 +120,11 @@ namespace Pixie.Tests
         {
             var sqrt3over3 = Math.Sqrt(3) / 3;
             var s = new Sphere();
-            var p = Double4.Point(sqrt3over3, sqrt3over3, sqrt3over3);
+            var p = Vector4.CreatePosition(sqrt3over3, sqrt3over3, sqrt3over3);
             var n = s.NormalAt(p);
-            var expected = Double4.Vector(sqrt3over3, sqrt3over3, sqrt3over3);
+            var expected = Vector4.CreateDirection(sqrt3over3, sqrt3over3, sqrt3over3);
             const double eps = 0.0000001;
-            var comparer = Double4.GetEqualityComparer(eps);
+            var comparer = Vector4.GetEqualityComparer(eps);
             Assert.Equal(expected, n, comparer);
         }
 
@@ -132,13 +132,13 @@ namespace Pixie.Tests
         public void TestNormalIsNormalized()
         {
             var s = new Sphere();
-            var p = Double4.Point(
+            var p = Vector4.CreatePosition(
                 Math.Sqrt(3) / 3,
                 Math.Sqrt(3) / 3,
                 Math.Sqrt(3) / 3);
             var n = s.NormalAt(p);
             const double eps = 0.0000001;
-            var comparer = Double4.GetEqualityComparer(eps);
+            var comparer = Vector4.GetEqualityComparer(eps);
             Assert.Equal(n.Normalize(), n, comparer);
         }
 
@@ -168,7 +168,7 @@ namespace Pixie.Tests
         public void HelperForSphereWithGlassyMaterial()
         {
             var s = new GlassSphere();
-            Assert.Equal(Double4x4.Identity, s.Transform);
+            Assert.Equal(Matrix4x4.Identity, s.Transform);
             Assert.Equal(1.0, s.Material.Transparency);
             Assert.Equal(1.5, s.Material.RefractiveIndex);
         }
@@ -178,8 +178,8 @@ namespace Pixie.Tests
         {
             var s = new Sphere();
             var box = s.Bounds();
-            Assert.Equal(Double4.Point(-1, -1, -1), box.Min);
-            Assert.Equal(Double4.Point(1, 1, 1), box.Max);
+            Assert.Equal(Vector4.CreatePosition(-1, -1, -1), box.Min);
+            Assert.Equal(Vector4.CreatePosition(1, 1, 1), box.Max);
         }
     }
 }

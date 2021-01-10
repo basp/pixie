@@ -101,26 +101,26 @@ namespace Pixie.Core
             return IntersectionList.Create(xs.ToArray());
         }
 
-        public override Double4 LocalNormalAt(Double4 point)
+        public override Vector4 LocalNormalAt(Vector4 point)
         {
             var dist = point.X * point.X + point.Z * point.Z;
             if (dist < 1 && point.Y >= this.Maximum - Epsilon)
             {
-                return Double4.Vector(0, 1, 0);
+                return Vector4.CreateDirection(0, 1, 0);
             }
 
             if (dist < 1 && point.Y <= this.Minimum + Epsilon)
             {
-                return Double4.Vector(0, -1, 0);
+                return Vector4.CreateDirection(0, -1, 0);
             }
 
-            return Double4.Vector(point.X, 0, point.Z);
+            return Vector4.CreateDirection(point.X, 0, point.Z);
         }
 
         public override BoundingBox Bounds()
         {
-            var min = Double4.Point(-1, this.Minimum, -1);
-            var max = Double4.Point(1, this.Maximum, 1);
+            var min = Vector4.CreatePosition(-1, this.Minimum, -1);
+            var max = Vector4.CreatePosition(1, this.Maximum, 1);
             return new BoundingBox(min, max);
         }
     }

@@ -11,14 +11,14 @@ namespace Pixie.Tests
         {
             var box = BoundingBox.Empty;
             Assert.Equal(
-                Double4.Point(
+                Vector4.CreatePosition(
                     double.PositiveInfinity,
                     double.PositiveInfinity,
                     double.PositiveInfinity),
                 box.Min);
 
             Assert.Equal(
-                Double4.Point(
+                Vector4.CreatePosition(
                     double.NegativeInfinity,
                     double.NegativeInfinity,
                     double.NegativeInfinity),
@@ -29,15 +29,15 @@ namespace Pixie.Tests
         public void CreateBoundingBoxWithVolume()
         {
             var box = new BoundingBox(
-                Double4.Point(-1, -2, -3),
-                Double4.Point(3, 2, 1));
+                Vector4.CreatePosition(-1, -2, -3),
+                Vector4.CreatePosition(3, 2, 1));
 
             Assert.Equal(
-                Double4.Point(-1, -2, -3),
+                Vector4.CreatePosition(-1, -2, -3),
                 box.Min);
 
             Assert.Equal(
-                Double4.Point(3, 2, 1),
+                Vector4.CreatePosition(3, 2, 1),
                 box.Max);
         }
 
@@ -45,18 +45,18 @@ namespace Pixie.Tests
         public void AddingPointsToAnEmptyBoundingBox()
         {
             var box = BoundingBox.Empty;
-            var p1 = Double4.Point(-5, 2, 0);
-            var p2 = Double4.Point(7, 0, -3);
+            var p1 = Vector4.CreatePosition(-5, 2, 0);
+            var p2 = Vector4.CreatePosition(7, 0, -3);
 
             box = box.Add(p1);
             box = box.Add(p2);
 
             Assert.Equal(
-                Double4.Point(-5, 0, -3),
+                Vector4.CreatePosition(-5, 0, -3),
                 box.Min);
 
             Assert.Equal(
-                Double4.Point(7, 2, 0),
+                Vector4.CreatePosition(7, 2, 0),
                 box.Max);
         }
 
@@ -64,19 +64,19 @@ namespace Pixie.Tests
         public void AddBoundingBoxToAnother()
         {
             var box1 = new BoundingBox(
-                Double4.Point(-5, -2, 0),
-                Double4.Point(7, 4, 4));
+                Vector4.CreatePosition(-5, -2, 0),
+                Vector4.CreatePosition(7, 4, 4));
             var box2 = new BoundingBox(
-                Double4.Point(8, -7, -2),
-                Double4.Point(14, 2, 8));
+                Vector4.CreatePosition(8, -7, -2),
+                Vector4.CreatePosition(14, 2, 8));
 
             box1 += box2;
 
             Assert.Equal(
-                Double4.Point(-5, -7, -2),
+                Vector4.CreatePosition(-5, -7, -2),
                 box1.Min);
             Assert.Equal(
-                Double4.Point(14, 4, 8),
+                Vector4.CreatePosition(14, 4, 8),
                 box1.Max);
         }
 
@@ -97,10 +97,10 @@ namespace Pixie.Tests
             bool expected)
         {
             var box = new BoundingBox(
-                Double4.Point(5, -2, 0),
-                Double4.Point(11, 4, 7));
+                Vector4.CreatePosition(5, -2, 0),
+                Vector4.CreatePosition(11, 4, 7));
 
-            var p = Double4.Point(px, py, pz);
+            var p = Vector4.CreatePosition(px, py, pz);
             Assert.Equal(expected, box.Contains(p));
         }
 
@@ -119,10 +119,10 @@ namespace Pixie.Tests
             bool expected)
         {
             var box = new BoundingBox(
-                Double4.Point(5, -2, 0),
-                Double4.Point(11, 4, 7));
-            var min = Double4.Point(x0, y0, z0);
-            var max = Double4.Point(x1, y1, z1);
+                Vector4.CreatePosition(5, -2, 0),
+                Vector4.CreatePosition(11, 4, 7));
+            var min = Vector4.CreatePosition(x0, y0, z0);
+            var max = Vector4.CreatePosition(x1, y1, z1);
             var box2 = new BoundingBox(min, max);
             Assert.Equal(expected, box.Contains(box2));
         }
@@ -130,11 +130,11 @@ namespace Pixie.Tests
         [Fact]
         public void TransformBoundingBox()
         {
-            var cmp = Double4.GetEqualityComparer(0.0001);
+            var cmp = Vector4.GetEqualityComparer(0.0001);
 
             var box = new BoundingBox(
-                Double4.Point(-1, -1, -1),
-                Double4.Point(1, 1, 1));
+                Vector4.CreatePosition(-1, -1, -1),
+                Vector4.CreatePosition(1, 1, 1));
 
             var m =
                 Transform.RotateX(Math.PI / 4) *
@@ -143,12 +143,12 @@ namespace Pixie.Tests
             var box2 = box * m;
 
             Assert.Equal(
-                Double4.Point(-1.4142, -1.7071, -1.7071),
+                Vector4.CreatePosition(-1.4142, -1.7071, -1.7071),
                 box2.Min,
                 cmp);
 
             Assert.Equal(
-                Double4.Point(1.4142, 1.7071, 1.7071),
+                Vector4.CreatePosition(1.4142, 1.7071, 1.7071),
                 box2.Max,
                 cmp);
         }
@@ -178,11 +178,11 @@ namespace Pixie.Tests
             bool expected)
         {
             var box = new BoundingBox(
-                Double4.Point(-1, -1, -1),
-                Double4.Point(1, 1, 1));
+                Vector4.CreatePosition(-1, -1, -1),
+                Vector4.CreatePosition(1, 1, 1));
 
-            var origin = Double4.Point(ox, oy, oz);
-            var direction = Double4.Vector(dx, dy, dz).Normalize();
+            var origin = Vector4.CreatePosition(ox, oy, oz);
+            var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
             var r = new Ray(origin, direction);
             var result = box.Intersect(r);
             Assert.Equal(expected, result);
@@ -212,10 +212,10 @@ namespace Pixie.Tests
             bool expected)
         {
             var box = new BoundingBox(
-                Double4.Point(5, -2, 0),
-                Double4.Point(11, 4, 7));
-            var origin = Double4.Point(ox, oy, oz);
-            var direction = Double4.Vector(dx, dy, dz).Normalize();
+                Vector4.CreatePosition(5, -2, 0),
+                Vector4.CreatePosition(11, 4, 7));
+            var origin = Vector4.CreatePosition(ox, oy, oz);
+            var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
             var r = new Ray(origin, direction);
             var result = box.Intersect(r);
             Assert.Equal(expected, result);
@@ -225,53 +225,53 @@ namespace Pixie.Tests
         public void SplitPerfectCube()
         {
             var box = new BoundingBox(
-                Double4.Point(-1, -4, -5),
-                Double4.Point(9, 6, 5));
+                Vector4.CreatePosition(-1, -4, -5),
+                Vector4.CreatePosition(9, 6, 5));
 
             box.Split(out var left, out var right);
-            Assert.Equal(Double4.Point(-1, -4, -5), left.Min);
-            Assert.Equal(Double4.Point(4, 6, 5), left.Max);
-            Assert.Equal(Double4.Point(4, -4, -5), right.Min);
-            Assert.Equal(Double4.Point(9, 6, 5), right.Max);
+            Assert.Equal(Vector4.CreatePosition(-1, -4, -5), left.Min);
+            Assert.Equal(Vector4.CreatePosition(4, 6, 5), left.Max);
+            Assert.Equal(Vector4.CreatePosition(4, -4, -5), right.Min);
+            Assert.Equal(Vector4.CreatePosition(9, 6, 5), right.Max);
         }
 
         [Fact]
         public void SplitXWideBox()
         {
             var box = new BoundingBox(
-                Double4.Point(-1, -2, -3),
-                Double4.Point(9, 5.5, 3));
+                Vector4.CreatePosition(-1, -2, -3),
+                Vector4.CreatePosition(9, 5.5, 3));
             box.Split(out var left, out var right);
-            Assert.Equal(Double4.Point(-1, -2, -3), left.Min);
-            Assert.Equal(Double4.Point(4, 5.5, 3), left.Max);
-            Assert.Equal(Double4.Point(4, -2, -3), right.Min);
-            Assert.Equal(Double4.Point(9, 5.5, 3), right.Max);
+            Assert.Equal(Vector4.CreatePosition(-1, -2, -3), left.Min);
+            Assert.Equal(Vector4.CreatePosition(4, 5.5, 3), left.Max);
+            Assert.Equal(Vector4.CreatePosition(4, -2, -3), right.Min);
+            Assert.Equal(Vector4.CreatePosition(9, 5.5, 3), right.Max);
         }
 
         [Fact]
         public void SplitYWideBox()
         {
             var box = new BoundingBox(
-                Double4.Point(-1, -2, -3),
-                Double4.Point(5, 8, 3));
+                Vector4.CreatePosition(-1, -2, -3),
+                Vector4.CreatePosition(5, 8, 3));
             box.Split(out var left, out var right);
-            Assert.Equal(Double4.Point(-1, -2, -3), left.Min);
-            Assert.Equal(Double4.Point(5, 3, 3), left.Max);
-            Assert.Equal(Double4.Point(-1, 3, -3), right.Min);
-            Assert.Equal(Double4.Point(5, 8, 3), right.Max);
+            Assert.Equal(Vector4.CreatePosition(-1, -2, -3), left.Min);
+            Assert.Equal(Vector4.CreatePosition(5, 3, 3), left.Max);
+            Assert.Equal(Vector4.CreatePosition(-1, 3, -3), right.Min);
+            Assert.Equal(Vector4.CreatePosition(5, 8, 3), right.Max);
         }
 
         [Fact]
         public void SplitZWideBox()
         {
             var box = new BoundingBox(
-                Double4.Point(-1, -2, -3),
-                Double4.Point(5, 3, 7));
+                Vector4.CreatePosition(-1, -2, -3),
+                Vector4.CreatePosition(5, 3, 7));
             box.Split(out var left, out var right);
-            Assert.Equal(Double4.Point(-1, -2, -3), left.Min);
-            Assert.Equal(Double4.Point(5, 3, 2), left.Max);
-            Assert.Equal(Double4.Point(-1, -2, 2), right.Min);
-            Assert.Equal(Double4.Point(5, 3, 7), right.Max);
+            Assert.Equal(Vector4.CreatePosition(-1, -2, -3), left.Min);
+            Assert.Equal(Vector4.CreatePosition(5, 3, 2), left.Max);
+            Assert.Equal(Vector4.CreatePosition(-1, -2, 2), right.Min);
+            Assert.Equal(Vector4.CreatePosition(5, 3, 7), right.Max);
         }
     }
 }

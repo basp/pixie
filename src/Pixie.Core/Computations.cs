@@ -11,17 +11,17 @@ namespace Pixie.Core
 
         public Shape Object;
 
-        public Double4 Point;
+        public Vector4 Point;
 
-        public Double4 OverPoint;
+        public Vector4 OverPoint;
 
-        public Double4 UnderPoint;
+        public Vector4 UnderPoint;
 
-        public Double4 Eyev;
+        public Vector4 Eyev;
 
-        public Double4 Normalv;
+        public Vector4 Normalv;
 
-        public Double4 Reflectv;
+        public Vector4 Reflectv;
 
         public bool Inside;
 

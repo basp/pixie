@@ -10,9 +10,9 @@ namespace Pixie.Cmd.Examples
             var camera = new Camera(width, height, 0.7854)
             {
                 Transform = Transform.View(
-                    Double4.Point(0, 10, 0),
-                    Double4.Point(0, 0, 0),
-                    Double4.Vector(0, 0, 1)),
+                    Vector4.CreatePosition(0, 10, 0),
+                    Vector4.CreatePosition(0, 0, 0),
+                    Vector4.CreateDirection(0, 0, 1)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };
@@ -49,7 +49,7 @@ namespace Pixie.Cmd.Examples
             };
 
             var light = new PointLight(
-                Double4.Point(-10, 10, -10),
+                Vector4.CreatePosition(-10, 10, -10),
                 Color.White);
 
             var world = new World()

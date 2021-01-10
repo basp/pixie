@@ -14,7 +14,7 @@ namespace Pixie.Cmd.Examples
 
         public Pattern B { get; set; }
 
-        public override Color PatternAt(Double4 point)
+        public override Color PatternAt(Vector4 point)
         {
             // var n = NoiseGenerator.GradientCoherentNoise3D(
             //     point.X,

@@ -5,7 +5,7 @@ namespace Pixie.Core
 
     public class PointLight : ILight
     {
-        public PointLight(Double4 position, Color intensity)
+        public PointLight(Vector4 position, Color intensity)
         {
             this.Position = position;
             this.Intensity = intensity;
@@ -13,7 +13,7 @@ namespace Pixie.Core
 
         public Color Intensity { get; }
 
-        public Double4 Position { get; }
+        public Vector4 Position { get; }
 
         public int Samples => 1;
 
@@ -46,16 +46,16 @@ namespace Pixie.Core
             return this.Equals(other);
         }
 
-        public double IntensityAt(Double4 point, World w)
+        public double IntensityAt(Vector4 point, World w)
         {
             var shadow = w.IsShadowed(this.Position, point);
             return shadow ? 0.0 : 1.0;
         }
 
-        public Double4 PointOnLight(double u, double v) => 
+        public Vector4 PointOnLight(double u, double v) => 
             this.Position;
 
-        public IEnumerable<Double4> Sample() => 
+        public IEnumerable<Vector4> Sample() => 
             new[] { this.Position };
     }
 }

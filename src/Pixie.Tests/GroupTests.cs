@@ -10,7 +10,7 @@ namespace Pixie.Tests
         public void CreateNewGroup()
         {
             var g = new Group();
-            Assert.Equal(Double4x4.Identity, g.Transform);
+            Assert.Equal(Matrix4x4.Identity, g.Transform);
             Assert.Empty(g);
         }
 
@@ -29,7 +29,7 @@ namespace Pixie.Tests
         public void IntersectRayWithEmptyGroup()
         {
             var g = new Group();
-            var r = new Ray(Double4.Point(0, 0, 0), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
             var xs = g.LocalIntersect(r);
             Assert.Empty(xs);
         }
@@ -57,7 +57,7 @@ namespace Pixie.Tests
             g.Add(s2);
             g.Add(s3);
 
-            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var xs = g.LocalIntersect(r);
             Assert.Equal(4, xs.Count);
             Assert.Equal(s2, xs[0].Object);
@@ -74,7 +74,7 @@ namespace Pixie.Tests
             var sphere = new Sphere();
             sphere.Transform = Transform.Translate(5, 0, 0);
             g.Add(sphere);
-            var r = new Ray(Double4.Point(10, 0, -10), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(10, 0, -10), Vector4.CreateDirection(0, 0, 1));
             var xs = g.Intersect(r);
             Assert.Equal(2, xs.Count);
         }
@@ -101,10 +101,10 @@ namespace Pixie.Tests
 
             g2.Add(s);
 
-            var p = s.WorldToObject(Double4.Point(-2, 0, -10));
+            var p = s.WorldToObject(Vector4.CreatePosition(-2, 0, -10));
             const double eps = 0.00001;
-            var comparer = Double4.GetEqualityComparer(eps);
-            Assert.Equal(Double4.Point(0, 0, -1), p, comparer);
+            var comparer = Vector4.GetEqualityComparer(eps);
+            Assert.Equal(Vector4.CreatePosition(0, 0, -1), p, comparer);
         }
 
         [Fact]
@@ -129,11 +129,11 @@ namespace Pixie.Tests
 
             g2.Add(s);
 
-            var v = Double4.Vector(Math.Sqrt(3) / 3, Math.Sqrt(3) / 3, Math.Sqrt(3) / 3);
+            var v = Vector4.CreateDirection(Math.Sqrt(3) / 3, Math.Sqrt(3) / 3, Math.Sqrt(3) / 3);
             var n = s.NormalToWorld(v);
             const double eps = 0.0001;
-            var comparer = Double4.GetEqualityComparer(eps);
-            var expected = Double4.Vector(0.2857, 0.4286, -0.8571);
+            var comparer = Vector4.GetEqualityComparer(eps);
+            var expected = Vector4.CreateDirection(0.2857, 0.4286, -0.8571);
             Assert.Equal(expected, n, comparer);
         }
 
@@ -159,11 +159,11 @@ namespace Pixie.Tests
 
             g2.Add(s);
 
-            var p = Double4.Point(1.7321, 1.1547, -5.5774);
+            var p = Vector4.CreatePosition(1.7321, 1.1547, -5.5774);
             var n = s.NormalAt(p);
             const double eps = 0.0001;
-            var comparer = Double4.GetEqualityComparer(eps);
-            var expected = Double4.Vector(0.2857, 0.4286, -0.8571);
+            var comparer = Vector4.GetEqualityComparer(eps);
+            var expected = Vector4.CreateDirection(0.2857, 0.4286, -0.8571);
             Assert.Equal(expected, n, comparer);
         }
 
@@ -192,10 +192,10 @@ namespace Pixie.Tests
 
             var box = shape.Bounds();
             Assert.Equal(
-                Double4.Point(-4.5, -3, -5),
+                Vector4.CreatePosition(-4.5, -3, -5),
                 box.Min);
             Assert.Equal(
-                Double4.Point(4, 7, 4.5),
+                Vector4.CreatePosition(4, 7, 4.5),
                 box.Max);
         }
 
@@ -211,10 +211,10 @@ namespace Pixie.Tests
             var shape = new Csg(Operation.Difference, left, right);
             var box = shape.Bounds();
             Assert.Equal(
-                Double4.Point(-1, -1, -1),
+                Vector4.CreatePosition(-1, -1, -1),
                 box.Min);
             Assert.Equal(
-                Double4.Point(3, 4, 5),
+                Vector4.CreatePosition(3, 4, 5),
                 box.Max);
         }
 
@@ -225,8 +225,8 @@ namespace Pixie.Tests
             var shape = new Group();
             shape.Add(child);
             var r = new Ray(
-                Double4.Point(0, 0, -5),
-                Double4.Vector(0, 1, 0));
+                Vector4.CreatePosition(0, 0, -5),
+                Vector4.CreateDirection(0, 1, 0));
             var xs = shape.Intersect(r);
             Assert.Null(child.SavedRay);
         }
@@ -238,8 +238,8 @@ namespace Pixie.Tests
             var shape = new Group();
             shape.Add(child);
             var r = new Ray(
-                Double4.Point(0, 0, -5),
-                Double4.Vector(0, 0, 1));
+                Vector4.CreatePosition(0, 0, -5),
+                Vector4.CreateDirection(0, 0, 1));
             var xs = shape.Intersect(r);
             Assert.NotNull(child.SavedRay);
         }

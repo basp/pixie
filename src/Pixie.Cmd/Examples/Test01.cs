@@ -7,7 +7,7 @@ namespace Pixie.Cmd.Examples
     {
         const double eps = 0.0001;
 
-        public override Color PatternAt(Double4 point)
+        public override Color PatternAt(Vector4 point)
         {
             var ix = Math.Floor(point.X);
             var f = Math.Abs(point.X - ix);
@@ -42,7 +42,7 @@ namespace Pixie.Cmd.Examples
         {
             // var pat1 = new TestPattern1()
             // {
-            //     Transform = Double4x4.Identity * 
+            //     Transform = Matrix4x4.Identity * 
             //         Transform.Scale(2.1, 1, 1.7) *
             //         Transform.RotateY(Math.PI / 4),
             // };
@@ -69,7 +69,7 @@ namespace Pixie.Cmd.Examples
                     Shininess = 300,
                 },
 
-                Transform = Double4x4.Identity *
+                Transform = Matrix4x4.Identity *
                     Transform.Scale(0.5, 0.5, 0.5) *
                     Transform.Translate(0, 1, 0),
             };
@@ -85,7 +85,7 @@ namespace Pixie.Cmd.Examples
                     Shininess = 300,
                 },
 
-                Transform = Double4x4.Identity *
+                Transform = Matrix4x4.Identity *
                     Transform.Scale(0.3, 0.3, 0.3) *
                     Transform.Translate(0, 1, -2.5),
             };
@@ -97,13 +97,13 @@ namespace Pixie.Cmd.Examples
                     Color = new Color(0.72, 0.11, 0.32),
                 },
 
-                Transform = Double4x4.Identity *
+                Transform = Matrix4x4.Identity *
                     Transform.Scale(0.5, 0.5, 0.5) *
                     Transform.Translate(0, 1, -4),
             };
 
             var l1 = new PointLight(
-                Double4.Point(-100, 40, -20),
+                Vector4.CreatePosition(-100, 40, -20),
                 new Color(1, 1, 1));
 
             var world = new World();
@@ -116,9 +116,9 @@ namespace Pixie.Cmd.Examples
             var cam = new Camera(width, height, Math.PI / 4)
             {
                 Transform = Transform.View(
-                    Double4.Point(0, 2, -3),
-                    Double4.Point(0, 0, 0),
-                    Double4.Vector(0, 1, 0)),
+                    Vector4.CreatePosition(0, 2, -3),
+                    Vector4.CreatePosition(0, 0, 0),
+                    Vector4.CreateDirection(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };

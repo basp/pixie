@@ -5,10 +5,10 @@ namespace Pixie.Core
     public class AreaLight : ILight
     {
         public AreaLight(
-            Double4 corner,
-            Double4 fullUvec,
+            Vector4 corner,
+            Vector4 fullUvec,
             int usteps,
-            Double4 fullVvec,
+            Vector4 fullVvec,
             int vsteps,
             Color intensity)
         {
@@ -21,13 +21,13 @@ namespace Pixie.Core
             this.Position = corner + 0.5 * (fullUvec + fullVvec);
         }
 
-        public Double4 Corner { get; set; }
+        public Vector4 Corner { get; set; }
 
-        public Double4 Uvec { get; set; }
+        public Vector4 Uvec { get; set; }
 
         public int Usteps { get; set; }
 
-        public Double4 Vvec { get; set; }
+        public Vector4 Vvec { get; set; }
 
         public int Vsteps { get; set; }
 
@@ -35,7 +35,7 @@ namespace Pixie.Core
 
         public Color Intensity { get; set; }
 
-        public Double4 Position { get; }
+        public Vector4 Position { get; }
 
         public ISequence Jitter { get; set; } = new Sequence(0.5);
 
@@ -44,7 +44,7 @@ namespace Pixie.Core
             throw new System.NotImplementedException();
         }
 
-        public double IntensityAt(Double4 point, World w)
+        public double IntensityAt(Vector4 point, World w)
         {
             var total = 0.0;
             for (var v = 0; v < this.Vsteps; v++)
@@ -62,7 +62,7 @@ namespace Pixie.Core
             return total / this.Samples;
         }
 
-        public IEnumerable<Double4> Sample()
+        public IEnumerable<Vector4> Sample()
         {
             for (var v = 0; v < this.Vsteps; v++)
             {
@@ -73,7 +73,7 @@ namespace Pixie.Core
             }
         }
 
-        public Double4 PointOnLight(double u, double v) =>
+        public Vector4 PointOnLight(double u, double v) =>
             this.Corner +
                 this.Uvec * (u + this.Jitter.Next()) +
                 this.Vvec * (v + this.Jitter.Next());

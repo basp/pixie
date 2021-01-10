@@ -119,7 +119,7 @@ namespace Pixie.Core
             return Color.Black;
         }
 
-        public bool IsShadowed(Double4 lightPosition, Double4 point)
+        public bool IsShadowed(Vector4 lightPosition, Vector4 point)
         {
             Interlocked.Increment(ref Stats.ShadowRays);
             var v = lightPosition - point;
@@ -138,7 +138,7 @@ namespace Pixie.Core
             return false;
         }
 
-        // public double Shadow(Double4 point, ILightSource source)
+        // public double Shadow(Vector4 point, ILightSource source)
         // {
         //     var lights = source.GetLights().ToList();
         //     var n = lights.Count;
@@ -163,7 +163,7 @@ namespace Pixie.Core
         //     return (double)hits / n;
         // }
 
-        // public bool IsShadowed(Double4 point, ILightSource light)
+        // public bool IsShadowed(Vector4 point, ILightSource light)
         // {
         //     var shadow = this.Shadow(point, light);
         //     return Math.Abs(shadow) > 0.00001;

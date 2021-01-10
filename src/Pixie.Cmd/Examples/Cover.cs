@@ -11,20 +11,20 @@ namespace Pixie.Cmd.Examples
             {
                 Transform =
                     Transform.View(
-                        Double4.Point(-6, 6, -10),
-                        Double4.Point(6, 0, 6),
-                        Double4.Vector(-0.45, 1, 0)),
+                        Vector4.CreatePosition(-6, 6, -10),
+                        Vector4.CreatePosition(6, 0, 6),
+                        Vector4.CreateDirection(-0.45, 1, 0)),
 
                 ProgressMonitor = 
                     new ParallelConsoleProgressMonitor(height),
             };
 
             var light1 = new PointLight(
-                Double4.Point(50, 100, -50),
+                Vector4.CreatePosition(50, 100, -50),
                 new Color(1, 1, 1));
 
             var light2 = new PointLight(
-                Double4.Point(-400, 50, -10),
+                Vector4.CreatePosition(-400, 50, -10),
                 new Color(0.2, 0.2, 0.2));
 
             var whiteMaterial = new Material()
@@ -52,7 +52,7 @@ namespace Pixie.Cmd.Examples
             });
 
             var standardTransform =
-                Double4x4.Identity
+                Matrix4x4.Identity
                     .Translate(1, -1, 1)
                     .Scale(0.5, 0.5, 0.5);
 
@@ -76,7 +76,7 @@ namespace Pixie.Cmd.Examples
                 },
 
                 Transform = 
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .RotateX(Math.PI / 2)
                         .Translate(0, 0, 500),
             };

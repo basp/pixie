@@ -25,7 +25,7 @@ Next we need a light source, we'll offset this a bit so it shines
 from a nice angle.
 ```
 var light = new PointLight(
-    Double4.Point(10, 10, -10),
+    Vector4.CreatePosition(10, 10, -10),
     Color.White);
 ```
 
@@ -43,9 +43,9 @@ are all in unit size and centered around the origin by default we just need
 to position our camera a few units back.
 ```
 var cam = new Camera(
-    Double4.Point(-2, 1, -5),
-    Double4.Point(0, 0.5, 0),
-    Double4.Vector(0, 1, 0));
+    Vector4.CreatePosition(-2, 1, -5),
+    Vector4.CreatePosition(0, 0.5, 0),
+    Vector4.CreateDirection(0, 1, 0));
 ```
 
 And with a camera we can render and save the image as follows.
@@ -57,14 +57,14 @@ img.SavePpm(@".\out.ppm");
 ## geometry
 Pixie does not really distinguish between points and vectors on a low level. This allows for some freedom but also for some mishaps. For instance, it is very much possible to perform an addition operation on two points even though this makes little sense from a math perspective.
 
-Both points and vectors are represented as instances of `Double4` structures. In the case of points, the *w* component equals one and otherwise zero. It is recommended to use the `Double4.Vector` and `Double4.Point` factory methods to create values of these kinds.
+Both points and vectors are represented as instances of `Vector4` structures. In the case of points, the *w* component equals one and otherwise zero. It is recommended to use the `Vector4.CreateDirection` and `Vector4.CreatePosition` factory methods to create values of these kinds.
 
 Points and vectors in Pixie support all the operations that you would expect to perform on them (and a little bit more as mentioned above). 
 
 Such as for example:
 ```
-var p0 = Double4.Point(0, 0, 0);
-var p1 = Double4.Point(1, 0, 1.5);
+var p0 = Vector4.CreatePosition(0, 0, 0);
+var p1 = Vector4.CreatePosition(1, 0, 1.5);
 var v = p1 - p0;
 var v2 = v * 2;
 var vn = v2.Normalize();
@@ -109,7 +109,7 @@ can easily transform them to the place where we want them to sit in the world. T
 Pixie has `PointLight` and `AreaLight` sources but can be easily extended using the `ILightSource` and `ILight` interfaces.
 ```
 var light = new PointLight(
-    Double4.Point(10, 10, -10),
+    Vector4.CreatePosition(10, 10, -10),
     new Color(1, 1, 1));
 ```
 

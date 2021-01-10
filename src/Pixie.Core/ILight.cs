@@ -9,10 +9,10 @@ namespace Pixie.Core
 
         int Samples { get; }   
 
-        double IntensityAt(Double4 point, World w);
+        double IntensityAt(Vector4 point, World w);
 
-        Double4 PointOnLight(double u, double v);   
+        Vector4 PointOnLight(double u, double v);   
 
-        IEnumerable<Double4> Sample();      
+        IEnumerable<Vector4> Sample();      
     }
 }

@@ -15,10 +15,10 @@ namespace Pixie.Tests
 
         public override BoundingBox Bounds() =>
             new BoundingBox(
-                Double4.Point(-1, -1, -1),
-                Double4.Point(1, 1, 1));
+                Vector4.CreatePosition(-1, -1, -1),
+                Vector4.CreatePosition(1, 1, 1));
 
-        public override Double4 LocalNormalAt(Double4 point) =>
-            Double4.Vector(point.X, point.Y, point.Z);
+        public override Vector4 LocalNormalAt(Vector4 point) =>
+            Vector4.CreateDirection(point.X, point.Y, point.Z);
     }
 }

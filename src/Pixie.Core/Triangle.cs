@@ -6,7 +6,7 @@ namespace Pixie.Core
     {
         private const double Epsilon = 0.00001;
 
-        public Triangle(Double4 p1, Double4 p2, Double4 p3)
+        public Triangle(Vector4 p1, Vector4 p2, Vector4 p3)
         {
             this.P1 = p1;
             this.P2 = p2;
@@ -16,17 +16,17 @@ namespace Pixie.Core
             this.Normal = this.E2.Cross(this.E1).Normalize();
         }
 
-        public Double4 P1 { get; }
+        public Vector4 P1 { get; }
 
-        public Double4 P2 { get; }
+        public Vector4 P2 { get; }
 
-        public Double4 P3 { get; }
+        public Vector4 P3 { get; }
 
-        public Double4 E1 { get; }
+        public Vector4 E1 { get; }
 
-        public Double4 E2 { get; }
+        public Vector4 E2 { get; }
 
-        public Double4 Normal { get; }
+        public Vector4 Normal { get; }
 
         public override IntersectionList LocalIntersect(Ray ray)
         {
@@ -59,7 +59,7 @@ namespace Pixie.Core
                 new Intersection(t, this));
         }
 
-        public override Double4 LocalNormalAt(Double4 point) =>
+        public override Vector4 LocalNormalAt(Vector4 point) =>
             this.Normal;
 
         public override BoundingBox Bounds()

@@ -8,59 +8,59 @@ namespace Pixie.Core
     {
         public static BoundingBox Infinity =>
             new BoundingBox(
-                Double4.Point(
+                Vector4.CreatePosition(
                     double.NegativeInfinity,
                     double.NegativeInfinity,
                     double.NegativeInfinity),
-                Double4.Point(
+                Vector4.CreatePosition(
                     double.PositiveInfinity,
                     double.PositiveInfinity,
                     double.PositiveInfinity));
 
         public static BoundingBox Empty =>
             new BoundingBox(
-                Double4.Point(
+                Vector4.CreatePosition(
                     double.PositiveInfinity,
                     double.PositiveInfinity,
                     double.PositiveInfinity),
-                Double4.Point(
+                Vector4.CreatePosition(
                     double.NegativeInfinity,
                     double.NegativeInfinity,
                     double.NegativeInfinity));
 
 
-        public readonly Double4 Min;
-        public readonly Double4 Max;
+        public readonly Vector4 Min;
+        public readonly Vector4 Max;
 
-        public BoundingBox(Double4 min, Double4 max)
+        public BoundingBox(Vector4 min, Vector4 max)
         {
             this.Min = min;
             this.Max = max;
         }
 
-        public static BoundingBox operator +(BoundingBox box, Double4 p) =>
+        public static BoundingBox operator +(BoundingBox box, Vector4 p) =>
             BoundingBox.Add(box, p);
 
         public static BoundingBox operator +(BoundingBox a, BoundingBox b) =>
             BoundingBox.Add(a, b);
 
-        public static BoundingBox operator *(BoundingBox b, Double4x4 m) =>
+        public static BoundingBox operator *(BoundingBox b, Matrix4x4 m) =>
             BoundingBox.Multiply(b, m);
 
-        public BoundingBox Add(Double4 point) =>
+        public BoundingBox Add(Vector4 point) =>
             BoundingBox.Add(this, point);
 
         public BoundingBox Add(BoundingBox b) =>
             BoundingBox.Add(this, b);
 
-        public static BoundingBox Add(BoundingBox box, Double4 point)
+        public static BoundingBox Add(BoundingBox box, Vector4 point)
         {
-            var min = Double4.Point(
+            var min = Vector4.CreatePosition(
                 Math.Min(box.Min.X, point.X),
                 Math.Min(box.Min.Y, point.Y),
                 Math.Min(box.Min.Z, point.Z));
 
-            var max = Double4.Point(
+            var max = Vector4.CreatePosition(
                 Math.Max(box.Max.X, point.X),
                 Math.Max(box.Max.Y, point.Y),
                 Math.Max(box.Max.Z, point.Z));
@@ -75,15 +75,15 @@ namespace Pixie.Core
             return a;
         }
 
-        public static BoundingBox Multiply(BoundingBox b, Double4x4 m)
+        public static BoundingBox Multiply(BoundingBox b, Matrix4x4 m)
         {
             var p1 = b.Min;
-            var p2 = Double4.Point(b.Min.X, b.Min.Y, b.Max.Z);
-            var p3 = Double4.Point(b.Min.X, b.Max.Y, b.Min.Z);
-            var p4 = Double4.Point(b.Min.X, b.Max.Y, b.Max.Z);
-            var p5 = Double4.Point(b.Max.X, b.Min.Y, b.Min.Z);
-            var p6 = Double4.Point(b.Max.X, b.Min.Y, b.Max.Z);
-            var p7 = Double4.Point(b.Max.X, b.Max.Y, b.Min.Z);
+            var p2 = Vector4.CreatePosition(b.Min.X, b.Min.Y, b.Max.Z);
+            var p3 = Vector4.CreatePosition(b.Min.X, b.Max.Y, b.Min.Z);
+            var p4 = Vector4.CreatePosition(b.Min.X, b.Max.Y, b.Max.Z);
+            var p5 = Vector4.CreatePosition(b.Max.X, b.Min.Y, b.Min.Z);
+            var p6 = Vector4.CreatePosition(b.Max.X, b.Min.Y, b.Max.Z);
+            var p7 = Vector4.CreatePosition(b.Max.X, b.Max.Y, b.Min.Z);
             var p8 = b.Max;
 
             var box2 = BoundingBox.Empty;
@@ -96,22 +96,22 @@ namespace Pixie.Core
             return box2;
         }
 
-        public IEnumerable<Double4> Corners()
+        public IEnumerable<Vector4> Corners()
         {
-            return new List<Double4>()
+            return new List<Vector4>()
             {
                 this.Min,
-                Double4.Point(this.Min.X, this.Min.Y, this.Max.Z),
-                Double4.Point(this.Min.X, this.Max.Y, this.Min.Z),
-                Double4.Point(this.Min.X, this.Max.Y, this.Max.Z),
-                Double4.Point(this.Max.X, this.Min.Y, this.Min.Z),
-                Double4.Point(this.Max.X, this.Min.Y, this.Max.Z),
-                Double4.Point(this.Max.X, this.Max.Y, this.Min.Z),
+                Vector4.CreatePosition(this.Min.X, this.Min.Y, this.Max.Z),
+                Vector4.CreatePosition(this.Min.X, this.Max.Y, this.Min.Z),
+                Vector4.CreatePosition(this.Min.X, this.Max.Y, this.Max.Z),
+                Vector4.CreatePosition(this.Max.X, this.Min.Y, this.Min.Z),
+                Vector4.CreatePosition(this.Max.X, this.Min.Y, this.Max.Z),
+                Vector4.CreatePosition(this.Max.X, this.Max.Y, this.Min.Z),
                 this.Max,
             };
         }
 
-        public bool Contains(Double4 p) =>
+        public bool Contains(Vector4 p) =>
             this.Min.X <= p.X && p.X <= this.Max.X &&
             this.Min.Y <= p.Y && p.Y <= this.Max.Y &&
             this.Min.Z <= p.Z && p.Z <= this.Max.Z;
@@ -195,8 +195,8 @@ namespace Pixie.Core
                 z0 = z1;
             }
 
-            var midMin = Double4.Point(x0, y0, z0);
-            var midMax = Double4.Point(x1, y1, z1);
+            var midMin = Vector4.CreatePosition(x0, y0, z0);
+            var midMax = Vector4.CreatePosition(x1, y1, z1);
 
             left = new BoundingBox(this.Min, midMax);
             right = new BoundingBox(midMin, this.Max);

@@ -24,7 +24,7 @@ namespace Pixie.Core
         public IEnumerable<Ray> Supersample(int px, int py)
         {
             var inv = this.camera.TransformInv;
-            var origin = inv * Double4.Point(0, 0, 0);
+            var origin = inv * Vector4.CreatePosition(0, 0, 0);
 
             var pixelSize = this.camera.PixelSize;
             var halfWidth = this.camera.HalfWidth;
@@ -47,7 +47,7 @@ namespace Pixie.Core
                 var worldX = halfWidth - xOffset;
                 var worldY = halfHeight - yOffset;
 
-                var pixel = inv * Double4.Point(worldX, worldY, -1);
+                var pixel = inv * Vector4.CreatePosition(worldX, worldY, -1);
                 var direction = (pixel - origin).Normalize();
 
                 yield return new Ray(origin, direction);

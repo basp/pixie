@@ -13,9 +13,9 @@ namespace Pixie.Tests
             var s = new DefaultSampler(new World(), c);
             var r = s.RayForPixel(100, 50);
             const double epsilon = 0.00001;
-            var comparer = Double4.GetEqualityComparer(epsilon);
-            Assert.Equal(Double4.Point(0, 0, 0), r.Origin, comparer);
-            Assert.Equal(Double4.Vector(0, 0, -1), r.Direction, comparer);
+            var comparer = Vector4.GetEqualityComparer(epsilon);
+            Assert.Equal(Vector4.CreatePosition(0, 0, 0), r.Origin, comparer);
+            Assert.Equal(Vector4.CreateDirection(0, 0, -1), r.Direction, comparer);
         }
 
         [Fact]
@@ -24,10 +24,10 @@ namespace Pixie.Tests
             var c = new Camera(201, 101, Math.PI / 2);
             var s = new DefaultSampler(new World(), c);
             var r = s.RayForPixel(0, 0);
-            var expectedOrigin = Double4.Point(0, 0, 0);
-            var expectedDirection = Double4.Vector(0.66519, 0.33259, -0.66851);
+            var expectedOrigin = Vector4.CreatePosition(0, 0, 0);
+            var expectedDirection = Vector4.CreateDirection(0.66519, 0.33259, -0.66851);
             const double epsilon = 0.00001;
-            var comparer = Double4.GetEqualityComparer(epsilon);
+            var comparer = Vector4.GetEqualityComparer(epsilon);
             Assert.Equal(expectedOrigin, r.Origin, comparer);
             Assert.Equal(expectedDirection, r.Direction, comparer);
         }
@@ -42,14 +42,14 @@ namespace Pixie.Tests
 
             var s = new DefaultSampler(new World(), c);
             var r = s.RayForPixel(100, 50);
-            var expectedOrigin = Double4.Point(0, 2, -5);
-            var expectedDirection = Double4.Vector(
+            var expectedOrigin = Vector4.CreatePosition(0, 2, -5);
+            var expectedDirection = Vector4.CreateDirection(
                 Math.Sqrt(2) / 2,
                 0,
                 -Math.Sqrt(2) / 2);
 
             const double epsilon = 0.00001;
-            var comparer = Double4.GetEqualityComparer(epsilon);
+            var comparer = Vector4.GetEqualityComparer(epsilon);
             Assert.Equal(expectedOrigin, r.Origin, comparer);
             Assert.Equal(expectedDirection, r.Direction, comparer);
         }

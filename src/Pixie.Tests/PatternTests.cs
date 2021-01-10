@@ -21,37 +21,37 @@ namespace Pixie.Tests
         public void StripePatternIsConstantInY()
         {
             var pat = new StripePattern(white, black);
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 1, 0)));
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 2, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 1, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 2, 0)));
         }
 
         [Fact]
         public void StripePatternIsConstantInZ()
         {
             var pat = new StripePattern(white, black);
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 1)));
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 2)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 0, 1)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 0, 2)));
         }
 
         [Fact]
         public void StripePatternAlternatesInX()
         {
             var pat = new StripePattern(white, black);
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0.9, 0, 0)));
-            Assert.Equal(black, pat.PatternAt(Double4.Point(1, 0, 0)));
-            Assert.Equal(black, pat.PatternAt(Double4.Point(-0.1, 0, 0)));
-            Assert.Equal(black, pat.PatternAt(Double4.Point(-1, 0, 0)));
-            Assert.Equal(white, pat.PatternAt(Double4.Point(-1.1, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0.9, 0, 0)));
+            Assert.Equal(black, pat.PatternAt(Vector4.CreatePosition(1, 0, 0)));
+            Assert.Equal(black, pat.PatternAt(Vector4.CreatePosition(-0.1, 0, 0)));
+            Assert.Equal(black, pat.PatternAt(Vector4.CreatePosition(-1, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(-1.1, 0, 0)));
         }
 
         [Fact]
         public void DefaultPatternTransformation()
         {
             var pat = new TestPattern();
-            Assert.Equal(Double4x4.Identity, pat.Transform);
+            Assert.Equal(Matrix4x4.Identity, pat.Transform);
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace Pixie.Tests
             };
 
             var pat = new TestPattern();
-            var c = pat.PatternAt(obj, Double4.Point(2, 3, 4));
+            var c = pat.PatternAt(obj, Vector4.CreatePosition(2, 3, 4));
             var expected = new Color(1, 1.5, 2);
             Assert.Equal(expected, c);
         }
@@ -88,7 +88,7 @@ namespace Pixie.Tests
                 Transform = Transform.Scale(2, 2, 2),
             };
 
-            var c = pat.PatternAt(obj, Double4.Point(2, 3, 4));
+            var c = pat.PatternAt(obj, Vector4.CreatePosition(2, 3, 4));
             var expected = new Color(1, 1.5, 2);
             Assert.Equal(expected, c);
         }
@@ -106,7 +106,7 @@ namespace Pixie.Tests
                 Transform = Transform.Translate(0.5, 1, 1.5),
             };
 
-            var c = pat.PatternAt(obj, Double4.Point(2.5, 3, 3.5));
+            var c = pat.PatternAt(obj, Vector4.CreatePosition(2.5, 3, 3.5));
             var expected = new Color(0.75, 0.5, 0.25);
             Assert.Equal(expected, c);
         }
@@ -115,47 +115,47 @@ namespace Pixie.Tests
         public void GradientLinearlyInterpolatesBetweenColors()
         {
             var pat = new GradientPattern(white, black);
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
-            Assert.Equal(new Color(0.75, 0.75, 0.75), pat.PatternAt(Double4.Point(0.25, 0, 0)));
-            Assert.Equal(new Color(0.5, 0.5, 0.5), pat.PatternAt(Double4.Point(0.5, 0, 0)));
-            Assert.Equal(new Color(0.25, 0.25, 0.25), pat.PatternAt(Double4.Point(0.75, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 0, 0)));
+            Assert.Equal(new Color(0.75, 0.75, 0.75), pat.PatternAt(Vector4.CreatePosition(0.25, 0, 0)));
+            Assert.Equal(new Color(0.5, 0.5, 0.5), pat.PatternAt(Vector4.CreatePosition(0.5, 0, 0)));
+            Assert.Equal(new Color(0.25, 0.25, 0.25), pat.PatternAt(Vector4.CreatePosition(0.75, 0, 0)));
         }
 
         [Fact]
         public void RingShouldExtendInXAndY()
         {
             var pat = new RingPattern(white, black);
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
-            Assert.Equal(black, pat.PatternAt(Double4.Point(1, 0, 0)));
-            Assert.Equal(black, pat.PatternAt(Double4.Point(0, 0, 1)));
-            Assert.Equal(black, pat.PatternAt(Double4.Point(0.708, 0, 0.708)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 0, 0)));
+            Assert.Equal(black, pat.PatternAt(Vector4.CreatePosition(1, 0, 0)));
+            Assert.Equal(black, pat.PatternAt(Vector4.CreatePosition(0, 0, 1)));
+            Assert.Equal(black, pat.PatternAt(Vector4.CreatePosition(0.708, 0, 0.708)));
         }
 
         [Fact]
         public void CheckersShouldRepeatInX()
         {
             var pat = new CheckersPattern(white, black);
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0.99, 0, 0)));
-            Assert.Equal(black, pat.PatternAt(Double4.Point(1.01, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0.99, 0, 0)));
+            Assert.Equal(black, pat.PatternAt(Vector4.CreatePosition(1.01, 0, 0)));
         }
 
         [Fact]
         public void CheckersShouldRepeatInY()
         {
             var pat = new CheckersPattern(white, black);
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0.99, 0)));
-            Assert.Equal(black, pat.PatternAt(Double4.Point(0, 1.01, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 0.99, 0)));
+            Assert.Equal(black, pat.PatternAt(Vector4.CreatePosition(0, 1.01, 0)));
         }
 
         [Fact]
         public void CheckersShouldRepeatInZ()
         {
             var pat = new CheckersPattern(white, black);
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0)));
-            Assert.Equal(white, pat.PatternAt(Double4.Point(0, 0, 0.99)));
-            Assert.Equal(black, pat.PatternAt(Double4.Point(0, 0, 1.01)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 0, 0)));
+            Assert.Equal(white, pat.PatternAt(Vector4.CreatePosition(0, 0, 0.99)));
+            Assert.Equal(black, pat.PatternAt(Vector4.CreatePosition(0, 0, 1.01)));
         }
     }
 }

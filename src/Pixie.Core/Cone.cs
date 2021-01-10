@@ -109,17 +109,17 @@ namespace Pixie.Core
             return IntersectionList.Create(xs.ToArray());
         }
 
-        public override Double4 LocalNormalAt(Double4 point)
+        public override Vector4 LocalNormalAt(Vector4 point)
         {
             var dist = point.X * point.X + point.Z * point.Z;
             if (dist < 1 && point.Y >= this.Maximum - Epsilon)
             {
-                return Double4.Vector(0, 1, 0);
+                return Vector4.CreateDirection(0, 1, 0);
             }
 
             if (dist < 1 && point.Y <= this.Minimum + Epsilon)
             {
-                return Double4.Vector(0, -1, 0);
+                return Vector4.CreateDirection(0, -1, 0);
             }
 
             var y = Math.Sqrt(dist);
@@ -128,7 +128,7 @@ namespace Pixie.Core
                 y = -y;
             }
 
-            return Double4.Vector(point.X, y, point.Z);
+            return Vector4.CreateDirection(point.X, y, point.Z);
         }
 
         public override BoundingBox Bounds()
@@ -137,8 +137,8 @@ namespace Pixie.Core
                 Math.Abs(this.Minimum),
                 Math.Abs(this.Maximum));
 
-            var min = Double4.Point(-r, this.Minimum, -r);
-            var max = Double4.Point(r, this.Maximum, r);
+            var min = Vector4.CreatePosition(-r, this.Minimum, -r);
+            var max = Vector4.CreatePosition(r, this.Maximum, r);
             return new BoundingBox(min, max);
         }
     }

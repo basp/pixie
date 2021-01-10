@@ -4,11 +4,11 @@ namespace Pixie.Core
 
     public abstract class Pattern
     {
-        protected Double4x4 transform = Double4x4.Identity;
+        protected Matrix4x4 transform = Matrix4x4.Identity;
 
-        protected Double4x4 inv = Double4x4.Identity;
+        protected Matrix4x4 inv = Matrix4x4.Identity;
 
-        public Double4x4 Transform
+        public Matrix4x4 Transform
         {
             get => this.transform;
             set
@@ -18,15 +18,15 @@ namespace Pixie.Core
             }
         }
 
-        public Double4x4 Inverse => this.inv;
+        public Matrix4x4 Inverse => this.inv;
 
-        public virtual Color PatternAt(Shape obj, Double4 point)
+        public virtual Color PatternAt(Shape obj, Vector4 point)
         {
             point = obj.WorldToObject(point);
             point = this.Inverse * point;
             return this.PatternAt(point);
         }
 
-        public abstract Color PatternAt(Double4 point);
+        public abstract Color PatternAt(Vector4 point);
     }
 }

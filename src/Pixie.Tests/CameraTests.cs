@@ -16,7 +16,7 @@ namespace Pixie.Tests
             Assert.Equal(hsize, c.HorizontalSize);
             Assert.Equal(vsize, c.VerticalSize);
             Assert.Equal(fov, c.FieldOfView);
-            Assert.Equal(Double4x4.Identity, c.Transform);
+            Assert.Equal(Matrix4x4.Identity, c.Transform);
         }
 
         [Fact]
@@ -39,9 +39,9 @@ namespace Pixie.Tests
         public void RenderingWorldWithCamera()
         {
             var w = new DefaultWorld();
-            var from = Double4.Point(0, 0, -5);
-            var to = Double4.Point(0, 0, 0);
-            var up = Double4.Vector(0, 1, 0);
+            var from = Vector4.CreatePosition(0, 0, -5);
+            var to = Vector4.CreatePosition(0, 0, 0);
+            var up = Vector4.CreateDirection(0, 1, 0);
             var c = new Camera(11, 11, Math.PI / 2)
             {
                 Transform = Transform.View(from, to, up),

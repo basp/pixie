@@ -14,7 +14,7 @@ namespace Pixie.Core
 
         public Color B { get; set; }
 
-        public override Color PatternAt(Double4 point)
+        public override Color PatternAt(Vector4 point)
         {
             var distance = this.B - this.A;
             var fraction = CalculateFraction(point.X, point.Z);

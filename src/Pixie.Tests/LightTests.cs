@@ -10,7 +10,7 @@ namespace Pixie.Tests
         public void TestPointLightHasPositionAndIntensity()
         {
             var intensity = new Color(1, 1, 1);
-            var position = Double4.Point(0, 0, 0);
+            var position = Vector4.CreatePosition(0, 0, 0);
             var light = new PointLight(position, intensity);
             Assert.Equal(position, light.Position);
             Assert.Equal(intensity, light.Intensity);
@@ -32,7 +32,7 @@ namespace Pixie.Tests
         {
             var w = new DefaultWorld();
             var light = w.Lights[0];
-            var pt = Double4.Point(px, py, pz);
+            var pt = Vector4.CreatePosition(px, py, pz);
             var intensity = light.IntensityAt(pt, w);
             Assert.Equal(result, intensity);
         }
@@ -40,9 +40,9 @@ namespace Pixie.Tests
         [Fact]
         public void CreatingAnAreaLight()
         {
-            var corner = Double4.Point(0, 0, 0);
-            var v1 = Double4.Vector(2, 0, 0);
-            var v2 = Double4.Vector(0, 0, 1);
+            var corner = Vector4.CreatePosition(0, 0, 0);
+            var v1 = Vector4.CreateDirection(2, 0, 0);
+            var v2 = Vector4.CreateDirection(0, 0, 1);
             var light = new AreaLight(
                 corner,
                 v1,
@@ -52,12 +52,12 @@ namespace Pixie.Tests
                 Color.White);
 
             Assert.Equal(corner, light.Corner);
-            Assert.Equal(Double4.Vector(0.5, 0, 0), light.Uvec);
+            Assert.Equal(Vector4.CreateDirection(0.5, 0, 0), light.Uvec);
             Assert.Equal(4, light.Usteps);
-            Assert.Equal(Double4.Vector(0, 0, 0.5), light.Vvec);
+            Assert.Equal(Vector4.CreateDirection(0, 0, 0.5), light.Vvec);
             Assert.Equal(2, light.Vsteps);
             Assert.Equal(8, light.Samples);
-            Assert.Equal(Double4.Point(1, 0, 0.5), light.Position);
+            Assert.Equal(Vector4.CreatePosition(1, 0, 0.5), light.Position);
         }
 
         [Theory]
@@ -73,9 +73,9 @@ namespace Pixie.Tests
             double ry,
             double rz)
         {
-            var corner = Double4.Point(0, 0, 0);
-            var v1 = Double4.Vector(2, 0, 0);
-            var v2 = Double4.Vector(0, 0, 1);
+            var corner = Vector4.CreatePosition(0, 0, 0);
+            var v1 = Vector4.CreateDirection(2, 0, 0);
+            var v2 = Vector4.CreateDirection(0, 0, 1);
             var light = new AreaLight(
                 corner,
                 v1,
@@ -85,7 +85,7 @@ namespace Pixie.Tests
                 Color.White);
 
             var pt = light.PointOnLight(u, v);
-            var expected = Double4.Point(rx, ry, rz);
+            var expected = Vector4.CreatePosition(rx, ry, rz);
             Assert.Equal(expected, pt);
         }
 
@@ -102,9 +102,9 @@ namespace Pixie.Tests
             double result)
         {
             var w = new DefaultWorld();
-            var corner = Double4.Point(-0.5, -0.5, -5);
-            var v1 = Double4.Vector(1, 0, 0);
-            var v2 = Double4.Vector(0, 1, 0);
+            var corner = Vector4.CreatePosition(-0.5, -0.5, -5);
+            var v1 = Vector4.CreateDirection(1, 0, 0);
+            var v2 = Vector4.CreateDirection(0, 1, 0);
             var light = new AreaLight(
                 corner,
                 v1,
@@ -113,7 +113,7 @@ namespace Pixie.Tests
                 2,
                 Color.White);
 
-            var pt = Double4.Point(px, py, pz);
+            var pt = Vector4.CreatePosition(px, py, pz);
             var intensity = light.IntensityAt(pt, w);
             Assert.Equal(result, intensity);
         }
@@ -131,9 +131,9 @@ namespace Pixie.Tests
             double ry,
             double rz)
         {
-            var corner = Double4.Point(0, 0, 0);
-            var v1 = Double4.Vector(2, 0, 0);
-            var v2 = Double4.Vector(0, 0, 1);
+            var corner = Vector4.CreatePosition(0, 0, 0);
+            var v1 = Vector4.CreateDirection(2, 0, 0);
+            var v2 = Vector4.CreateDirection(0, 0, 1);
             var light = new AreaLight(
                 corner,
                 v1,
@@ -146,7 +146,7 @@ namespace Pixie.Tests
             };
 
             var pt = light.PointOnLight(u, v);
-            var expected = Double4.Point(rx, ry, rz);
+            var expected = Vector4.CreatePosition(rx, ry, rz);
             Assert.Equal(expected, pt);
         }
 
@@ -163,9 +163,9 @@ namespace Pixie.Tests
             double result)
         {
             var w = new DefaultWorld();
-            var corner = Double4.Point(-0.5, -0.5, -5);
-            var v1 = Double4.Vector(1, 0, 0);
-            var v2 = Double4.Vector(0, 1, 0);
+            var corner = Vector4.CreatePosition(-0.5, -0.5, -5);
+            var v1 = Vector4.CreateDirection(1, 0, 0);
+            var v2 = Vector4.CreateDirection(0, 1, 0);
             var light = new AreaLight(
                 corner,
                 v1,
@@ -177,7 +177,7 @@ namespace Pixie.Tests
                 Jitter = new Sequence(0.7, 0.3, 0.9, 0.1, 0.5),
             };
 
-            var pt = Double4.Point(px, py, pz);
+            var pt = Vector4.CreatePosition(px, py, pz);
             var intensity = light.IntensityAt(pt, w);
             Assert.Equal(result, intensity);
         }

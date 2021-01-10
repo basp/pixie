@@ -55,7 +55,7 @@ namespace Pixie.Core
                 new Intersection(tmax, this));
         }
 
-        public override Double4 LocalNormalAt(Double4 point)
+        public override Vector4 LocalNormalAt(Vector4 point)
         {
             var maxc = Max(
                 Math.Abs(point.X),
@@ -64,22 +64,22 @@ namespace Pixie.Core
 
             if (maxc == Math.Abs(point.X))
             {
-                return Double4.Vector(point.X, 0, 0);
+                return Vector4.CreateDirection(point.X, 0, 0);
             }
             else if (maxc == Math.Abs(point.Y))
             {
-                return Double4.Vector(0, point.Y, 0);
+                return Vector4.CreateDirection(0, point.Y, 0);
             }
             else
             {
-                return Double4.Vector(0, 0, point.Z);
+                return Vector4.CreateDirection(0, 0, point.Z);
             }
         }
 
         public override BoundingBox Bounds()
         {
-            var min = Double4.Point(-1, -1, -1);
-            var max = Double4.Point(1, 1, 1);
+            var min = Vector4.CreatePosition(-1, -1, -1);
+            var max = Vector4.CreatePosition(1, 1, 1);
             return new BoundingBox(min, max);
         }
     }

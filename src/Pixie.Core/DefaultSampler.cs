@@ -28,8 +28,8 @@ namespace Pixie.Core
 
             var inv = this.camera.TransformInv;
 
-            var pixel = inv * Double4.Point(worldX, worldY, -1);
-            var origin = inv * Double4.Point(0, 0, 0);
+            var pixel = inv * Vector4.CreatePosition(worldX, worldY, -1);
+            var origin = inv * Vector4.CreatePosition(0, 0, 0);
             var direction = (pixel - origin).Normalize();
 
             return new Ray(origin, direction);

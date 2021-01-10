@@ -25,8 +25,8 @@ namespace Pixie.Tests
             double t2)
         {
             var c = new Cube();
-            var origin = Double4.Point(ox, oy, oz);
-            var direction = Double4.Vector(dx, dy, dz);
+            var origin = Vector4.CreatePosition(ox, oy, oz);
+            var direction = Vector4.CreateDirection(dx, dy, dz);
             var r = new Ray(origin, direction);
             var xs = c.LocalIntersect(r);
             Assert.Equal(2, xs.Count);
@@ -50,8 +50,8 @@ namespace Pixie.Tests
             double dz)
         {
             var c = new Cube();
-            var origin = Double4.Point(ox, oy, oz);
-            var direction = Double4.Vector(dx, dy, dz);
+            var origin = Vector4.CreatePosition(ox, oy, oz);
+            var direction = Vector4.CreateDirection(dx, dy, dz);
             var r = new Ray(origin, direction);
             var xs = c.LocalIntersect(r);
             Assert.Empty(xs);
@@ -75,8 +75,8 @@ namespace Pixie.Tests
             double dz)
         {
             var c = new Cube();
-            var p = Double4.Point(ox, oy, oz);
-            var expected = Double4.Vector(dx, dy, dz);
+            var p = Vector4.CreatePosition(ox, oy, oz);
+            var expected = Vector4.CreateDirection(dx, dy, dz);
             var n = c.LocalNormalAt(p);
             Assert.Equal(expected, n);
         }
@@ -88,11 +88,11 @@ namespace Pixie.Tests
             var box = shape.Bounds();
 
             Assert.Equal(
-                Double4.Point(-1, -1, -1),
+                Vector4.CreatePosition(-1, -1, -1),
                 box.Min);
 
             Assert.Equal(
-                Double4.Point(1, 1, 1),
+                Vector4.CreatePosition(1, 1, 1),
                 box.Max);
         }
     }

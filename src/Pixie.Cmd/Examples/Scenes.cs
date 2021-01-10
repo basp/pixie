@@ -53,7 +53,7 @@ namespace Pixie.Cmd.Examples
             }
 
             var light = new PointLight(
-                Double4.Point(-10, 10, -10),
+                Vector4.CreatePosition(-10, 10, -10),
                 Pixie.Core.Color.White);
 
             world.Lights.Add(light);
@@ -97,7 +97,7 @@ namespace Pixie.Cmd.Examples
             world.Objects.Add(sphere);
 
             var light = new PointLight(
-                Double4.Point(-10, 10, -10),
+                Vector4.CreatePosition(-10, 10, -10),
                 Pixie.Core.Color.White);
 
             world.Lights.Add(light);
@@ -239,7 +239,7 @@ namespace Pixie.Cmd.Examples
             }
 
             var light = new PointLight(
-                Double4.Point(-10, 10, -10),
+                Vector4.CreatePosition(-10, 10, -10),
                 Color.White);
 
             world.Lights.Add(light);
@@ -303,7 +303,7 @@ namespace Pixie.Cmd.Examples
             }
 
 
-            var light = new PointLight(Double4.Point(-10, 10, -10), Color.White);
+            var light = new PointLight(Vector4.CreatePosition(-10, 10, -10), Color.White);
             world.Lights.Add(light);
 
             return world;
@@ -425,7 +425,7 @@ namespace Pixie.Cmd.Examples
             }
 
 
-            var l1 = new PointLight(Double4.Point(-1, 4, 1), Color.White);
+            var l1 = new PointLight(Vector4.CreatePosition(-1, 4, 1), Color.White);
             world.Lights.Add(l1);
 
             return world;
@@ -532,7 +532,7 @@ namespace Pixie.Cmd.Examples
             world.Objects.Add(c3);
 
             var light = new PointLight(
-                Double4.Point(-10, 8, 1),
+                Vector4.CreatePosition(-10, 8, 1),
                 Color.White);
 
             world.Lights.Add(light);
@@ -540,9 +540,9 @@ namespace Pixie.Cmd.Examples
             var camera = new Camera(width, height, Math.PI / 3.3)
             {
                 Transform = Transform.View(
-                    Double4.Point(-3.25, 2.2, -4.2),
-                    Double4.Point(0, 0.3, 0),
-                    Double4.Vector(0, 1, 0)),
+                    Vector4.CreatePosition(-3.25, 2.2, -4.2),
+                    Vector4.CreatePosition(0, 0.3, 0),
+                    Vector4.CreateDirection(0, 1, 0)),
 
                 ProgressMonitor =
                     new ParallelConsoleProgressMonitor(height),
@@ -630,7 +630,7 @@ namespace Pixie.Cmd.Examples
             world.Objects.Add(s2);
 
             var light = new PointLight(
-                Double4.Point(0, 10, -2),
+                Vector4.CreatePosition(0, 10, -2),
                 Color.White);
 
             world.Lights.Add(light);
@@ -638,9 +638,9 @@ namespace Pixie.Cmd.Examples
             var camera = new Camera(width, height, Math.PI / 3)
             {
                 Transform = Transform.View(
-                    Double4.Point(0.6, 1.0, -2.3),
-                    Double4.Point(0, 0.25, 0),
-                    Double4.Vector(0, 1, 0)),
+                    Vector4.CreatePosition(0.6, 1.0, -2.3),
+                    Vector4.CreatePosition(0, 0.25, 0),
+                    Vector4.CreateDirection(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };
@@ -891,7 +891,7 @@ namespace Pixie.Cmd.Examples
             world.Objects.Add(c3);
 
             var light = new PointLight(
-                Double4.Point(-5, 10, -2),
+                Vector4.CreatePosition(-5, 10, -2),
                 Color.White);
 
             world.Lights.Add(light);
@@ -899,9 +899,9 @@ namespace Pixie.Cmd.Examples
             var camera = new Camera(width, height, Math.PI / 4)
             {
                 Transform = Transform.View(
-                    Double4.Point(2.5, 2.5, -5.5),
-                    Double4.Point(0.1, 0.9, -1.0),
-                    Double4.Vector(0, 1, 0)),
+                    Vector4.CreatePosition(2.5, 2.5, -5.5),
+                    Vector4.CreatePosition(0.1, 0.9, -1.0),
+                    Vector4.CreateDirection(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };
@@ -1022,15 +1022,15 @@ namespace Pixie.Cmd.Examples
                     Transform.Scale(20, 1, 20),
             };
 
-            var light = new PointLight(Double4.Point(0, 5, 0), Color.White);
+            var light = new PointLight(Vector4.CreatePosition(0, 5, 0), Color.White);
             world.Lights.Add(light);
 
             var camera = new Camera(width, height, Math.PI / 4.2)
             {
                 Transform = Transform.View(
-                    Double4.Point(-5, 5, -5),
-                    Double4.Point(0, 0, 0),
-                    Double4.Vector(0, 0, 1)),
+                    Vector4.CreatePosition(-5, 5, -5),
+                    Vector4.CreatePosition(0, 0, 0),
+                    Vector4.CreateDirection(0, 0, 1)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };
@@ -1083,15 +1083,15 @@ namespace Pixie.Cmd.Examples
 
             world.Objects.Add(cone);
 
-            var light = new PointLight(Double4.Point(-2, 2, -5), Color.White);
+            var light = new PointLight(Vector4.CreatePosition(-2, 2, -5), Color.White);
             world.Lights.Add(light);
 
             var camera = new Camera(width, height, Math.PI / 3)
             {
                 Transform = Transform.View(
-                    Double4.Point(0, 3, -3),
-                    Double4.Point(0, 0.5, 0),
-                    Double4.Vector(0, 1, 0)),
+                    Vector4.CreatePosition(0, 3, -3),
+                    Vector4.CreatePosition(0, 0.5, 0),
+                    Vector4.CreateDirection(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };
@@ -1107,7 +1107,7 @@ namespace Pixie.Cmd.Examples
             world.Objects.Add(hex);
 
             var light = new PointLight(
-                Double4.Point(-10, 10, -10),
+                Vector4.CreatePosition(-10, 10, -10),
                 Color.White);
 
             world.Lights.Add(light);
@@ -1115,9 +1115,9 @@ namespace Pixie.Cmd.Examples
             var camera = new Camera(width, height, Math.PI / 4.2)
             {
                 Transform = Transform.View(
-                    Double4.Point(-4, 5, -3),
-                    Double4.Point(0, 0.5, 0),
-                    Double4.Vector(0, 1, 0)),
+                    Vector4.CreatePosition(-4, 5, -3),
+                    Vector4.CreatePosition(0, 0.5, 0),
+                    Vector4.CreateDirection(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };
@@ -1304,13 +1304,13 @@ namespace Pixie.Cmd.Examples
             }
 
             var l1 = new PointLight(
-                Double4.Point(-10, 10, -10),
+                Vector4.CreatePosition(-10, 10, -10),
                 new Color(0.6, 0.6, 0.6));
 
             world.Lights.Add(l1);
 
             var l2 = new PointLight(
-                Double4.Point(10, 10, -10),
+                Vector4.CreatePosition(10, 10, -10),
                 new Color(0.6, 0.6, 0.6));
 
             world.Lights.Add(l2);
@@ -1318,9 +1318,9 @@ namespace Pixie.Cmd.Examples
             var camera = new Camera(width, height, Math.PI / 2)
             {
                 Transform = Transform.View(
-                    Double4.Point(0.0, 3.2, -4),
-                    Double4.Point(0, 0.5, 0),
-                    Double4.Vector(0, 1, 0)),
+                    Vector4.CreatePosition(0.0, 3.2, -4),
+                    Vector4.CreatePosition(0, 0.5, 0),
+                    Vector4.CreateDirection(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };
@@ -1404,7 +1404,7 @@ namespace Pixie.Cmd.Examples
             world.Objects.Add(diff1);
 
             var light = new PointLight(
-                Double4.Point(10, 10, -10),
+                Vector4.CreatePosition(10, 10, -10),
                 Color.White);
 
             world.Lights.Add(light);
@@ -1412,9 +1412,9 @@ namespace Pixie.Cmd.Examples
             var camera = new Camera(width, height, Math.PI / 4.8)
             {
                 Transform = Transform.View(
-                    Double4.Point(3.5, 3.5, -5),
-                    Double4.Point(0, 0.0, 0),
-                    Double4.Vector(0, 1, 0)),
+                    Vector4.CreatePosition(3.5, 3.5, -5),
+                    Vector4.CreatePosition(0, 0.0, 0),
+                    Vector4.CreateDirection(0, 1, 0)),
 
                 ProgressMonitor =
                     new ParallelConsoleProgressMonitor(height),
@@ -1497,11 +1497,11 @@ namespace Pixie.Cmd.Examples
             world.Objects.Add(art6);
 
             var l1 = new PointLight(
-                Double4.Point(5, 10, 10),
+                Vector4.CreatePosition(5, 10, 10),
                 new Color(0.7, 0.7, 0.7));
 
             var l2 = new PointLight(
-                Double4.Point(-3, 10, 10),
+                Vector4.CreatePosition(-3, 10, 10),
                 new Color(0.7, 0.7, 0.7));
 
             world.Lights.Add(l1);
@@ -1510,9 +1510,9 @@ namespace Pixie.Cmd.Examples
             var camera = new Camera(width, height, Math.PI / 4.5)
             {
                 Transform = Transform.View(
-                    Double4.Point(1, 2.5, -5),
-                    Double4.Point(0, 0.0, 0),
-                    Double4.Vector(0, 1, 0)),
+                    Vector4.CreatePosition(1, 2.5, -5),
+                    Vector4.CreatePosition(0, 0.0, 0),
+                    Vector4.CreateDirection(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };
@@ -1604,7 +1604,7 @@ namespace Pixie.Cmd.Examples
             };
 
             var light1 = new PointLight(
-                Double4.Point(-10, 10, -10),
+                Vector4.CreatePosition(-10, 10, -10),
                 Color.White);
 
             world.Objects.Add(sky);
@@ -1617,9 +1617,9 @@ namespace Pixie.Cmd.Examples
             var camera = new Camera(width, height, Math.PI / 4)
             {
                 Transform = Transform.View(
-                    Double4.Point(2.4, 1.08, -5.4),
-                    Double4.Point(0, 0.7, 0),
-                    Double4.Vector(0, 1, 0)),
+                    Vector4.CreatePosition(2.4, 1.08, -5.4),
+                    Vector4.CreatePosition(0, 0.7, 0),
+                    Vector4.CreateDirection(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };

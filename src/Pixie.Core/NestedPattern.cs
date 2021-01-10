@@ -17,7 +17,7 @@ namespace Pixie.Core
 
         public Pattern B { get; set; }
 
-        public override Color PatternAt(Double4 point)
+        public override Color PatternAt(Vector4 point)
         {
             var ta = this.Op.PatternAt(point);
             var tb = Color.White - ta;

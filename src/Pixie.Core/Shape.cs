@@ -2,11 +2,11 @@ namespace Pixie.Core
 {
     public abstract class Shape
     {
-        protected Double4x4 transform = Double4x4.Identity;
+        protected Matrix4x4 transform = Matrix4x4.Identity;
 
-        protected Double4x4 inv = Double4x4.Identity;
+        protected Matrix4x4 inv = Matrix4x4.Identity;
 
-        protected Double4x4 invt = Double4x4.Identity;
+        protected Matrix4x4 invt = Matrix4x4.Identity;
 
         public bool Shadow { get; set; } = true;
 
@@ -18,7 +18,7 @@ namespace Pixie.Core
 
         public virtual bool Includes(Shape obj) => obj == this;
 
-        public Double4x4 Transform
+        public Matrix4x4 Transform
         {
             get => this.transform;
             set
@@ -29,7 +29,7 @@ namespace Pixie.Core
             }
         }
 
-        public Double4x4 Inverse => this.inv;
+        public Matrix4x4 Inverse => this.inv;
 
         public virtual IntersectionList Intersect(Ray ray)
         {
@@ -37,7 +37,7 @@ namespace Pixie.Core
             return this.LocalIntersect(ray);
         }
 
-        public virtual Double4 NormalAt(Double4 point)
+        public virtual Vector4 NormalAt(Vector4 point)
         {
             var localPoint = this.WorldToObject(point);
             var localNormal = this.LocalNormalAt(localPoint);
@@ -46,7 +46,7 @@ namespace Pixie.Core
 
         public abstract IntersectionList LocalIntersect(Ray ray);
 
-        public abstract Double4 LocalNormalAt(Double4 point);
+        public abstract Vector4 LocalNormalAt(Vector4 point);
 
         public virtual BoundingBox Bounds() =>
             BoundingBox.Infinity;
@@ -58,7 +58,7 @@ namespace Pixie.Core
         {
         }
 
-        public Double4 WorldToObject(Double4 point)
+        public Vector4 WorldToObject(Vector4 point)
         {
             if (this.HasParent)
             {
@@ -68,10 +68,10 @@ namespace Pixie.Core
             return this.inv * point;
         }
 
-        public Double4 NormalToWorld(Double4 n)
+        public Vector4 NormalToWorld(Vector4 n)
         {
             n = this.invt * n;
-            n.W = 0;
+            n = new Vector4(n.X, n.Y, n.Z, 0);
             n = n.Normalize();
 
             if (this.HasParent)

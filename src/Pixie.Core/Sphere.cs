@@ -4,16 +4,16 @@ namespace Pixie.Core
 
     public class Sphere : Shape, IEquatable<Sphere>
     {
-        public override Double4 LocalNormalAt(Double4 point) =>
-            point - Double4.Zero;
+        public override Vector4 LocalNormalAt(Vector4 point) =>
+            point - Vector4.Zero;
 
         public override IntersectionList LocalIntersect(Ray ray)
         {
-            var sphereToRay = ray.Origin - Double4.Point(0, 0, 0);
+            var sphereToRay = ray.Origin - Vector4.CreatePosition(0, 0, 0);
 
-            var a = Double4.Dot(ray.Direction, ray.Direction);
-            var b = 2 * Double4.Dot(ray.Direction, sphereToRay);
-            var c = Double4.Dot(sphereToRay, sphereToRay) - 1;
+            var a = Vector4.Dot(ray.Direction, ray.Direction);
+            var b = 2 * Vector4.Dot(ray.Direction, sphereToRay);
+            var c = Vector4.Dot(sphereToRay, sphereToRay) - 1;
 
             var discriminant = b * b - 4 * a * c;
 
@@ -44,8 +44,8 @@ namespace Pixie.Core
 
         public override BoundingBox Bounds()
         {
-            var min = Double4.Point(-1, -1, -1);
-            var max = Double4.Point(1, 1, 1);
+            var min = Vector4.CreatePosition(-1, -1, -1);
+            var max = Vector4.CreatePosition(1, 1, 1);
             return new BoundingBox(min, max);
         }
     }

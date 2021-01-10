@@ -89,7 +89,7 @@ namespace Pixie.Tests
         public void RayMissesCsgObject()
         {
             var c = new Csg(Operation.Union, new Sphere(), new Cube());
-            var r = new Ray(Double4.Point(0, 2, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 2, -5), Vector4.CreateDirection(0, 0, 1));
             var xs = c.LocalIntersect(r);
             Assert.Empty(xs);
         }
@@ -105,7 +105,7 @@ namespace Pixie.Tests
             };
 
             var c = new Csg(Operation.Union, s1, s2);
-            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var xs = c.LocalIntersect(r);
             Assert.Equal(2, xs.Count);
             Assert.Equal(4, xs[0].T);
@@ -121,8 +121,8 @@ namespace Pixie.Tests
             var right = new TestShape();
             var shape = new Csg(Operation.Difference, left, right);
             var r = new Ray(
-                Double4.Point(0, 0, -5),
-                Double4.Vector(0, 1, 0));
+                Vector4.CreatePosition(0, 0, -5),
+                Vector4.CreateDirection(0, 1, 0));
             var xs = shape.Intersect(r);
             Assert.Null(left.SavedRay);
             Assert.Null(right.SavedRay);
@@ -135,8 +135,8 @@ namespace Pixie.Tests
             var right = new TestShape();
             var shape = new Csg(Operation.Difference, left, right);
             var r = new Ray(
-                Double4.Point(0, 0, -5),
-                Double4.Vector(0, 0, 1));
+                Vector4.CreatePosition(0, 0, -5),
+                Vector4.CreateDirection(0, 0, 1));
             var xs = shape.Intersect(r);
             Assert.NotNull(left.SavedRay);
             Assert.NotNull(right.SavedRay);

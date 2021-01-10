@@ -8,8 +8,8 @@ namespace Pixie.Core
 
         public override BoundingBox Bounds()
         {
-            var min = Double4.Point(double.NegativeInfinity, 0, double.NegativeInfinity);
-            var max = Double4.Point(double.PositiveInfinity, 0, double.PositiveInfinity);
+            var min = Vector4.CreatePosition(double.NegativeInfinity, 0, double.NegativeInfinity);
+            var max = Vector4.CreatePosition(double.PositiveInfinity, 0, double.PositiveInfinity);
             return new BoundingBox(min, max);
         }
 
@@ -25,7 +25,7 @@ namespace Pixie.Core
             return IntersectionList.Create(i);
         }
 
-        public override Double4 LocalNormalAt(Double4 point) =>
-            Double4.Vector(0, 1, 0);
+        public override Vector4 LocalNormalAt(Vector4 point) =>
+            Vector4.CreateDirection(0, 1, 0);
     }
 }

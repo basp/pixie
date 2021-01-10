@@ -80,20 +80,20 @@ namespace Pixie.Tests
         [Fact]
         public void PrecomputingIntersectionState()
         {
-            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var shape = new Sphere();
             var i = new Intersection(4, shape);
             var comps = i.Precompute(r);
             Assert.Equal(i.T, comps.T);
-            Assert.Equal(Double4.Point(0, 0, -1), comps.Point);
-            Assert.Equal(Double4.Vector(0, 0, -1), comps.Eyev);
-            Assert.Equal(Double4.Vector(0, 0, -1), comps.Normalv);
+            Assert.Equal(Vector4.CreatePosition(0, 0, -1), comps.Point);
+            Assert.Equal(Vector4.CreateDirection(0, 0, -1), comps.Eyev);
+            Assert.Equal(Vector4.CreateDirection(0, 0, -1), comps.Normalv);
         }
 
         [Fact]
         public void HitWhenIntersectionOnOutside()
         {
-            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var shape = new Sphere();
             var i = new Intersection(4, shape);
             var comps = i.Precompute(r);
@@ -103,20 +103,20 @@ namespace Pixie.Tests
         [Fact]
         public void HitWhenIntersectionOnInside()
         {
-            var r = new Ray(Double4.Point(0, 0, 0), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
             var shape = new Sphere();
             var i = new Intersection(1, shape);
             var comps = i.Precompute(r);
-            Assert.Equal(Double4.Point(0, 0, 1), comps.Point);
-            Assert.Equal(Double4.Vector(0, 0, -1), comps.Eyev);
-            Assert.Equal(Double4.Vector(0, 0, -1), comps.Normalv);
+            Assert.Equal(Vector4.CreatePosition(0, 0, 1), comps.Point);
+            Assert.Equal(Vector4.CreateDirection(0, 0, -1), comps.Eyev);
+            Assert.Equal(Vector4.CreateDirection(0, 0, -1), comps.Normalv);
             Assert.True(comps.Inside);
         }
 
         [Fact]
         public void HitShouldOffsetThePoint()
         {
-            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var shape = new Sphere
             {
                 Transform = Transform.Translate(0, 0, 1),
@@ -132,10 +132,10 @@ namespace Pixie.Tests
         public void PrecomputingTheReflectionVector()
         {
             var shape = new Plane();
-            var r = new Ray(Double4.Point(0, 1, -1), Double4.Vector(0, -Math.Sqrt(2) / 2, Math.Sqrt(2) / 2));
+            var r = new Ray(Vector4.CreatePosition(0, 1, -1), Vector4.CreateDirection(0, -Math.Sqrt(2) / 2, Math.Sqrt(2) / 2));
             var i = new Intersection(Math.Sqrt(2), shape);
             var comps = i.Precompute(r);
-            var expected = Double4.Vector(0, Math.Sqrt(2) / 2, Math.Sqrt(2) / 2);
+            var expected = Vector4.CreateDirection(0, Math.Sqrt(2) / 2, Math.Sqrt(2) / 2);
             Assert.Equal(expected, comps.Reflectv);
         }
 
@@ -167,7 +167,7 @@ namespace Pixie.Tests
             b.Material.RefractiveIndex = 2.0;
             c.Material.RefractiveIndex = 2.5;
 
-            var r = new Ray(Double4.Point(0, 0, -4), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, -4), Vector4.CreateDirection(0, 0, 1));
             var xs = IntersectionList.Create(
                 new Intersection(2, a),
                 new Intersection(2.75, b),
@@ -184,7 +184,7 @@ namespace Pixie.Tests
         [Fact]
         public void UnderPointIsOffsetBelowTheSurface()
         {
-            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var shape = new GlassSphere()
             {
                 Transform = Transform.Translate(0, 0, 1),
@@ -202,8 +202,8 @@ namespace Pixie.Tests
         {
             var shape = new GlassSphere();
             var r = new Ray(
-                Double4.Point(0, 0, Math.Sqrt(2)/2), 
-                Double4.Vector(0, 1, 0));
+                Vector4.CreatePosition(0, 0, Math.Sqrt(2)/2), 
+                Vector4.CreateDirection(0, 1, 0));
             
             var xs = IntersectionList.Create(
                 new Intersection(-Math.Sqrt(2)/2, shape),
@@ -218,7 +218,7 @@ namespace Pixie.Tests
         public void SchlickApproxWithPerpendicularViewingAngle()
         {
             var shape = new GlassSphere();
-            var r = new Ray(Double4.Point(0, 0, 0), Double4.Vector(0, 1, 0));
+            var r = new Ray(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 1, 0));
             var xs = IntersectionList.Create(
                 new Intersection(-1, shape),
                 new Intersection(1, shape));
@@ -233,7 +233,7 @@ namespace Pixie.Tests
         public void SchlickApproxWithSmallAngleAndN2GreaterThanN1()
         {
             var shape = new GlassSphere();
-            var r = new Ray(Double4.Point(0, 0.99, -2), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0.99, -2), Vector4.CreateDirection(0, 0, 1));
             var xs = IntersectionList.Create(
                 new Intersection(1.8589, shape));
             var comps = xs[0].Precompute(r, xs);

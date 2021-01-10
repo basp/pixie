@@ -13,17 +13,17 @@ namespace Pixie.Core
             throw new System.NotImplementedException();
         }
 
-        public double IntensityAt(Double4 point, World w)
+        public double IntensityAt(Vector4 point, World w)
         {
             throw new System.NotImplementedException();
         }
 
-        public Double4 PointOnLight(double u, double v)
+        public Vector4 PointOnLight(double u, double v)
         {
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<Double4> Sample()
+        public IEnumerable<Vector4> Sample()
         {
             throw new System.NotImplementedException();
         }

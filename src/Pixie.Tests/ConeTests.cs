@@ -21,8 +21,8 @@ namespace Pixie.Tests
             double t1)
         {
             var shape = new Cone();
-            var origin = Double4.Point(ox, oy, oz);
-            var direction = Double4.Vector(dx, dy, dz).Normalize();
+            var origin = Vector4.CreatePosition(ox, oy, oz);
+            var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
             var r = new Ray(origin, direction);
             var xs = shape.LocalIntersect(r);
             const int prec = 5;
@@ -35,8 +35,8 @@ namespace Pixie.Tests
         public void IntersectConeWithRayParallelToOneOfItsHalves()
         {
             var shape = new Cone();
-            var direction = Double4.Vector(0, 1, 1).Normalize();
-            var r = new Ray(Double4.Point(0, 0, -1), direction);
+            var direction = Vector4.CreateDirection(0, 1, 1).Normalize();
+            var r = new Ray(Vector4.CreatePosition(0, 0, -1), direction);
             var xs = shape.LocalIntersect(r);
             const int prec = 5;
             Assert.Single(xs);
@@ -63,8 +63,8 @@ namespace Pixie.Tests
                 IsClosed = true,
             };
 
-            var origin = Double4.Point(ox, oy, oz);
-            var direction = Double4.Vector(dx, dy, dz).Normalize();
+            var origin = Vector4.CreatePosition(ox, oy, oz);
+            var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
             var r = new Ray(origin, direction);
             var xs = shape.LocalIntersect(r);
             Assert.Equal(count, xs.Count);
@@ -78,18 +78,18 @@ namespace Pixie.Tests
             {
                 new
                 {
-                    point = Double4.Point(0, 0, 0),
-                    normal = Double4.Vector(0, 0, 0),
+                    point = Vector4.CreatePosition(0, 0, 0),
+                    normal = Vector4.CreateDirection(0, 0, 0),
                 },
                 new
                 {
-                    point = Double4.Point(1, 1, 1),
-                    normal = Double4.Vector(1, -Math.Sqrt(2), 1),
+                    point = Vector4.CreatePosition(1, 1, 1),
+                    normal = Vector4.CreateDirection(1, -Math.Sqrt(2), 1),
                 },
                 new
                 {
-                    point = Double4.Point(-1, -1, 0),
-                    normal = Double4.Vector(-1, 1, 0),
+                    point = Vector4.CreatePosition(-1, -1, 0),
+                    normal = Vector4.CreateDirection(-1, 1, 0),
                 }
             };
 
@@ -126,10 +126,10 @@ namespace Pixie.Tests
 
             var box = shape.Bounds();
             Assert.Equal(
-                Double4.Point(-5, -5, -5),
+                Vector4.CreatePosition(-5, -5, -5),
                 box.Min);
             Assert.Equal(
-                Double4.Point(5, 3, 5),
+                Vector4.CreatePosition(5, 3, 5),
                 box.Max);
         }
     }

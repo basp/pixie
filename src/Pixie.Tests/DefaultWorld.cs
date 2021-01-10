@@ -22,7 +22,7 @@ namespace Pixie.Tests
             };
 
             var light = new PointLight(
-                Double4.Point(-10, 10, -10),
+                Vector4.CreatePosition(-10, 10, -10),
                 Color.White);
 
             this.Objects.Add(s1);

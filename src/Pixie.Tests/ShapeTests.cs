@@ -10,7 +10,7 @@ namespace Pixie.Tests
         public void DefaultTransformation()
         {
             var s = new TestShape();
-            Assert.Equal(Double4x4.Identity, s.Transform);
+            Assert.Equal(Matrix4x4.Identity, s.Transform);
         }
 
         [Fact]
@@ -52,25 +52,25 @@ namespace Pixie.Tests
         [Fact]
         public void IntersectScaledShapeWithRay()
         {
-            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new TestShape();
             s.Transform = Transform.Scale(2, 2, 2);
             var xs = s.Intersect(r);
             var savedRay = s.SavedRay.Value;
-            Assert.Equal(Double4.Point(0, 0, -2.5), savedRay.Origin);
-            Assert.Equal(Double4.Vector(0, 0, 0.5), savedRay.Direction);
+            Assert.Equal(Vector4.CreatePosition(0, 0, -2.5), savedRay.Origin);
+            Assert.Equal(Vector4.CreateDirection(0, 0, 0.5), savedRay.Direction);
         }
 
         [Fact]
         public void IntersectTranslatedShapeWithRay()
         {
-            var r = new Ray(Double4.Point(0, 0, -5), Double4.Vector(0, 0, 1));
+            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new TestShape();
             s.Transform = Transform.Translate(5, 0, 0);
             var xs = s.Intersect(r);
             var savedRay = s.SavedRay.Value;
-            Assert.Equal(Double4.Point(-5, 0, -5), savedRay.Origin);
-            Assert.Equal(Double4.Vector(0, 0, 1), savedRay.Direction);
+            Assert.Equal(Vector4.CreatePosition(-5, 0, -5), savedRay.Origin);
+            Assert.Equal(Vector4.CreateDirection(0, 0, 1), savedRay.Direction);
         }
 
         [Fact]
@@ -81,10 +81,10 @@ namespace Pixie.Tests
                 Transform = Transform.Translate(0, 1, 0),
             };
 
-            var n = s.NormalAt(Double4.Point(0, 1.70711, -0.70711));
-            var expected = Double4.Vector(0, 0.70711, -0.70711);
+            var n = s.NormalAt(Vector4.CreatePosition(0, 1.70711, -0.70711));
+            var expected = Vector4.CreateDirection(0, 0.70711, -0.70711);
             const double eps = 0.00001;
-            var comparer = Double4.GetEqualityComparer(eps);
+            var comparer = Vector4.GetEqualityComparer(eps);
             Assert.Equal(expected, n, comparer);
         }
 
@@ -98,10 +98,10 @@ namespace Pixie.Tests
                     Transform.RotateZ(Math.PI / 5),
             };
 
-            var n = s.NormalAt(Double4.Point(0, Math.Sqrt(2) / 2, -Math.Sqrt(2) / 2));
-            var expected = Double4.Vector(0, 0.97014, -0.24254);
+            var n = s.NormalAt(Vector4.CreatePosition(0, Math.Sqrt(2) / 2, -Math.Sqrt(2) / 2));
+            var expected = Vector4.CreateDirection(0, 0.97014, -0.24254);
             const double eps = 0.00001;
-            var comparer = Double4.GetEqualityComparer(eps);
+            var comparer = Vector4.GetEqualityComparer(eps);
             Assert.Equal(expected, n, comparer);
         }
 
@@ -118,10 +118,10 @@ namespace Pixie.Tests
             var s = new TestShape();
             var box = s.Bounds();
             Assert.Equal(
-                Double4.Point(-1, -1, -1),
+                Vector4.CreatePosition(-1, -1, -1),
                 box.Min);
             Assert.Equal(
-                Double4.Point(1, 1, 1),
+                Vector4.CreatePosition(1, 1, 1),
                 box.Max);
         }
 
@@ -135,10 +135,10 @@ namespace Pixie.Tests
             
             var box = shape.ParentSpaceBounds();
             Assert.Equal(
-                Double4.Point(0.5,-5,1),
+                Vector4.CreatePosition(0.5,-5,1),
                 box.Min);
             Assert.Equal(
-                Double4.Point(1.5,-1,9),
+                Vector4.CreatePosition(1.5,-1,9),
                 box.Max);
         }
     }

@@ -10,18 +10,18 @@ namespace Pixie.Cmd.Examples
             var camera = new Camera(width, height, 0.7854)
             {
                 Transform = Transform.View(
-                    Double4.Point(-3, 1, 2.5),
-                    Double4.Point(0, 0.5, 0),
-                    Double4.Vector(0, 1, 0)),
+                    Vector4.CreatePosition(-3, 1, 2.5),
+                    Vector4.CreatePosition(0, 0.5, 0),
+                    Vector4.CreateDirection(0, 1, 0)),
 
                 ProgressMonitor = new ParallelConsoleProgressMonitor(height),
             };
 
             var light = new AreaLight(
-                Double4.Point(-1, 2, 4),
-                Double4.Vector(2, 0, 0),
+                Vector4.CreatePosition(-1, 2, 4),
+                Vector4.CreateDirection(2, 0, 0),
                 10,
-                Double4.Vector(0, 2, 0),
+                Vector4.CreateDirection(0, 2, 0),
                 10,
                 new Color(1.5, 1.5, 1.5))
             {
@@ -39,7 +39,7 @@ namespace Pixie.Cmd.Examples
                 },
 
                 Transform =
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .Scale(1, 1, 0.01)
                         .Translate(0, 3, 4),
 
@@ -60,7 +60,7 @@ namespace Pixie.Cmd.Examples
             var sphere1 = new Sphere()
             {
                 Transform =
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .Scale(0.5, 0.5, 0.5)
                         .Translate(0.5, 0.5, 0),
 
@@ -77,7 +77,7 @@ namespace Pixie.Cmd.Examples
             var sphere2 = new Sphere()
             {
                 Transform =
-                    Double4x4.Identity
+                    Matrix4x4.Identity
                         .Scale(0.33, 0.33, 0.33)
                         .Translate(-0.25, 0.33, 0),
 

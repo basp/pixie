@@ -7,7 +7,7 @@ namespace Pixie.Tests
     public class MaterialTests
     {
         private Material m = new Material();
-        private Double4 position = Double4.Point(0, 0, 0);
+        private Vector4 position = Vector4.CreatePosition(0, 0, 0);
         private Shape sphere = new Sphere();
 
 
@@ -25,10 +25,10 @@ namespace Pixie.Tests
         [Fact]
         public void TestLightingWitheyeBetweenLightAndSurface()
         {
-            var eyev = Double4.Vector(0, 0, -1);
-            var normalv = Double4.Vector(0, 0, -1);
+            var eyev = Vector4.CreateDirection(0, 0, -1);
+            var normalv = Vector4.CreateDirection(0, 0, -1);
             var light = new PointLight(
-                Double4.Point(0, 0, -10),
+                Vector4.CreatePosition(0, 0, -10),
                 Color.White);
             var result = m.Li(sphere, light, position, eyev, normalv);
             var expected = new Color(1.9, 1.9, 1.9);
@@ -39,10 +39,10 @@ namespace Pixie.Tests
         [Fact]
         public void TestLightingwithEyeBetweenLightAndSurfaceAmdEyeOffset45Deg()
         {
-            var eyev = Double4.Vector(0, Math.Sqrt(2) / 2, -Math.Sqrt(2) / 2);
-            var normalv = Double4.Vector(0, 0, -1);
+            var eyev = Vector4.CreateDirection(0, Math.Sqrt(2) / 2, -Math.Sqrt(2) / 2);
+            var normalv = Vector4.CreateDirection(0, 0, -1);
             var light = new PointLight(
-                Double4.Point(0, 0, -10),
+                Vector4.CreatePosition(0, 0, -10),
                 Color.White);
             var result = m.Li(sphere, light, position, eyev, normalv);
             var expected = Color.White;
@@ -52,10 +52,10 @@ namespace Pixie.Tests
         [Fact]
         public void TestLightingWithEyeOppositeSurfaceLightOffset45Deg()
         {
-            var eyev = Double4.Vector(0, 0, -1);
-            var normalv = Double4.Vector(0, 0, -1);
+            var eyev = Vector4.CreateDirection(0, 0, -1);
+            var normalv = Vector4.CreateDirection(0, 0, -1);
             var light = new PointLight(
-                Double4.Point(0, 10, -10),
+                Vector4.CreatePosition(0, 10, -10),
                 Color.White);
             var result = m.Li(sphere, light, position, eyev, normalv);
             var expected = new Color(0.7364, 0.7364, 0.7364);
@@ -67,10 +67,10 @@ namespace Pixie.Tests
         [Fact]
         public void TestLightingWithEyeInPathOfReflectionVector()
         {
-            var eyev = Double4.Vector(0, -Math.Sqrt(2) / 2, -Math.Sqrt(2) / 2);
-            var normalv = Double4.Vector(0, 0, -1);
+            var eyev = Vector4.CreateDirection(0, -Math.Sqrt(2) / 2, -Math.Sqrt(2) / 2);
+            var normalv = Vector4.CreateDirection(0, 0, -1);
             var light = new PointLight(
-                Double4.Point(0, 10, -10),
+                Vector4.CreatePosition(0, 10, -10),
                 Color.White);
             var result = m.Li(sphere, light, position, eyev, normalv);
             var expected = new Color(1.6364, 1.6364, 1.6364);
@@ -83,10 +83,10 @@ namespace Pixie.Tests
         [Fact]
         public void TestLightingWithLightBehindSurface()
         {
-            var eyev = Double4.Vector(0, 0, -1);
-            var normalv = Double4.Vector(0, 0, -1);
+            var eyev = Vector4.CreateDirection(0, 0, -1);
+            var normalv = Vector4.CreateDirection(0, 0, -1);
             var light = new PointLight(
-                Double4.Point(0, 0, 10),
+                Vector4.CreatePosition(0, 0, 10),
                 Color.White);
             var result = m.Li(sphere, light, position, eyev, normalv);
             var expected = new Color(0.1, 0.1, 0.1);
@@ -96,9 +96,9 @@ namespace Pixie.Tests
         [Fact]
         public void LightingWithSurfaceInShadow()
         {
-            var eyev = Double4.Vector(0, 0, -1);
-            var normalv = Double4.Vector(0, 0, -1);
-            var light = new PointLight(Double4.Point(0, 0, -10), Color.White);
+            var eyev = Vector4.CreateDirection(0, 0, -1);
+            var normalv = Vector4.CreateDirection(0, 0, -1);
+            var light = new PointLight(Vector4.CreatePosition(0, 0, -10), Color.White);
             var c = m.Li(sphere, light, position, eyev, normalv, intensity: 0.0);
             var expected = new Color(0.1, 0.1, 0.1);
             Assert.Equal(expected, c);
@@ -111,11 +111,11 @@ namespace Pixie.Tests
             m.Ambient = 1;
             m.Diffuse = 0;
             m.Specular = 0;
-            var eyev = Double4.Vector(0, 0, -1);
-            var normalv = Double4.Vector(0, 0, -1);
-            var light = new PointLight(Double4.Point(0, 0, -10), Color.White);
-            var c1 = m.Li(sphere, light, Double4.Point(0.9, 0, 0), eyev, normalv);
-            var c2 = m.Li(sphere, light, Double4.Point(1.1, 0, 0), eyev, normalv);
+            var eyev = Vector4.CreateDirection(0, 0, -1);
+            var normalv = Vector4.CreateDirection(0, 0, -1);
+            var light = new PointLight(Vector4.CreatePosition(0, 0, -10), Color.White);
+            var c1 = m.Li(sphere, light, Vector4.CreatePosition(0.9, 0, 0), eyev, normalv);
+            var c2 = m.Li(sphere, light, Vector4.CreatePosition(1.1, 0, 0), eyev, normalv);
             Assert.Equal(Color.White, c1);
             Assert.Equal(Color.Black, c2);
         }
@@ -148,7 +148,7 @@ namespace Pixie.Tests
             var w = new DefaultWorld();
             w.Lights = new ILight[]
             {
-                new PointLight(Double4.Point(0, 0, -10), Color.White),
+                new PointLight(Vector4.CreatePosition(0, 0, -10), Color.White),
             };
 
             var shape = w.Objects[0];
@@ -156,9 +156,9 @@ namespace Pixie.Tests
             shape.Material.Diffuse = 0.9;
             shape.Material.Specular = 0;
             shape.Material.Color = new Color(1, 1, 1);
-            var pt = Double4.Point(0, 0, -1);
-            var eyev = Double4.Vector(0, 0, -1);
-            var normalv = Double4.Vector(0, 0, -1);
+            var pt = Vector4.CreatePosition(0, 0, -1);
+            var eyev = Vector4.CreateDirection(0, 0, -1);
+            var normalv = Vector4.CreateDirection(0, 0, -1);
             var result = shape.Material.Li(
                 shape, 
                 w.Lights[0], 

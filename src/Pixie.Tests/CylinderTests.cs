@@ -19,8 +19,8 @@ namespace Pixie.Tests
             double dz)
         {
             var cyl = new Cylinder();
-            var origin = Double4.Point(ox, oy, oz);
-            var direction = Double4.Vector(dx, dy, dz).Normalize();
+            var origin = Vector4.CreatePosition(ox, oy, oz);
+            var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
             var r = new Ray(origin, direction);
             var xs = cyl.LocalIntersect(r);
             Assert.Empty(xs);
@@ -40,8 +40,8 @@ namespace Pixie.Tests
             double t0,
             double t1)
         {
-            var origin = Double4.Point(ox, oy, oz);
-            var direction = Double4.Vector(dx, dy, dz).Normalize();
+            var origin = Vector4.CreatePosition(ox, oy, oz);
+            var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
             var cyl = new Cylinder();
             var r = new Ray(origin, direction);
             var xs = cyl.LocalIntersect(r);
@@ -65,8 +65,8 @@ namespace Pixie.Tests
             double nz)
         {
             var cyl = new Cylinder();
-            var p = Double4.Point(px, py, pz);
-            var expected = Double4.Vector(nx, ny, nz);
+            var p = Vector4.CreatePosition(px, py, pz);
+            var expected = Vector4.CreateDirection(nx, ny, nz);
             var n = cyl.LocalNormalAt(p);
             Assert.Equal(expected, n);
         }
@@ -101,8 +101,8 @@ namespace Pixie.Tests
                 Maximum = 2,
             };
 
-            var point = Double4.Point(px, py, pz);
-            var direciton = Double4.Vector(dx, dy, dz).Normalize();
+            var point = Vector4.CreatePosition(px, py, pz);
+            var direciton = Vector4.CreateDirection(dx, dy, dz).Normalize();
             var r = new Ray(point, direciton);
             var xs = cyl.LocalIntersect(r);
             Assert.Equal(count, xs.Count);
@@ -130,8 +130,8 @@ namespace Pixie.Tests
             cyl.Minimum = 1;
             cyl.Maximum = 2;
             cyl.IsClosed = true;
-            var direction = Double4.Vector(dx, dy, dz).Normalize();
-            var point = Double4.Point(ox, oy, oz);
+            var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
+            var point = Vector4.CreatePosition(ox, oy, oz);
             var r = new Ray(point, direction);
             var xs = cyl.LocalIntersect(r);
             Assert.Equal(count, xs.Count);
@@ -159,9 +159,9 @@ namespace Pixie.Tests
                 IsClosed = true,
             };
 
-            var p = Double4.Point(px, py, pz);
+            var p = Vector4.CreatePosition(px, py, pz);
             var n = cyl.LocalNormalAt(p);
-            var expected = Double4.Vector(nx, ny, nz);
+            var expected = Vector4.CreateDirection(nx, ny, nz);
             Assert.Equal(expected, n);
         }
 
@@ -189,11 +189,11 @@ namespace Pixie.Tests
 
             var box = shape.Bounds();
             Assert.Equal(
-                Double4.Point(-1, -5, -1),
+                Vector4.CreatePosition(-1, -5, -1),
                 box.Min);
 
             Assert.Equal(
-                Double4.Point(1, 3, 1),
+                Vector4.CreatePosition(1, 3, 1),
                 box.Max);
         }
     }
