@@ -119,7 +119,8 @@ namespace Pixie.Cmd.Examples
                     Vector4.CreatePosition(0, 0, 0),
                     Vector4.CreateDirection(0, 1, 0)),
 
-                ProgressMonitor = new ParallelConsoleProgressMonitor(height),
+                ProgressMonitorFactory =
+                    (_rows, _cols) => new DefaultProgressMonitor(),
             };
 
             return Tuple.Create(world, cam);

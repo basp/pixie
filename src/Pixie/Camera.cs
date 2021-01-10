@@ -80,8 +80,8 @@ namespace Pixie
 
         public Matrix4x4 TransformInv => this.transformInv;
 
-        public IProgressMonitor ProgressMonitor { get; set; } =
-            new ProgressMonitor();
+        public Func<int, int, IProgressMonitor> ProgressMonitorFactory { get; set; } =
+            (rows, cols) => new ProgressMonitor();
 
         /// <summary>
         /// Renders a world using the default shader. This shader
@@ -106,7 +106,7 @@ namespace Pixie
         /// </summary>
         /// <remarks>
         /// Since we have multiple lines being rendered in parallel it's 
-        /// very importatnt to make sure all the samplers can operate 
+        /// very important to make sure all the samplers can operate 
         /// independently. This takes extra care when implementing a new
         /// sampler.
         /// </remarks>
@@ -117,22 +117,22 @@ namespace Pixie
         public Canvas Render(World w, Func<ISampler> samplerFactory)
         {
             Stats.Reset();
-            this.ProgressMonitor.OnStarted();
-            var img = new Canvas(this.hsize, this.vsize);
-            Parallel.For(0, this.vsize, y =>
+            using (var progress = this.ProgressMonitorFactory(this.vsize, this.hsize))
             {
-                var sampler = samplerFactory();
-                this.ProgressMonitor.OnRowStarted(y);
-                for (var x = 0; x < this.hsize; x++)
+                var img = new Canvas(this.hsize, this.vsize);
+                Parallel.For(0, this.vsize, y =>
                 {
-                    img[x, y] = sampler.Sample(x, y);
-                }
+                    var sampler = samplerFactory();
+                    for (var x = 0; x < this.hsize; x++)
+                    {
+                        img[x, y] = sampler.Sample(x, y);
+                    }
 
-                this.ProgressMonitor.OnRowFinished(y);
-            });
+                    progress.OnRowFinished();
+                });
 
-            this.ProgressMonitor.OnFinished();
-            return img;
+                return img;
+            }
         }
     }
 }

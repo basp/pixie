@@ -14,8 +14,8 @@ namespace Pixie.Cmd.Examples
                         Vector4.CreatePosition(6, 0, 6),
                         Vector4.CreateDirection(-0.45, 1, 0)),
 
-                ProgressMonitor = 
-                    new ParallelConsoleProgressMonitor(height),
+                ProgressMonitorFactory =
+                    (_rows, _cols) => new DefaultProgressMonitor(),
             };
 
             var light1 = new PointLight(
@@ -30,7 +30,7 @@ namespace Pixie.Cmd.Examples
             {
                 Color = new Color(1, 1, 1),
                 Diffuse = 0.7,
-                Ambient = 0.1,
+                Ambient = 0.15,
                 Specular = 0.0,
                 Reflective = 0.1,
             };
@@ -74,7 +74,7 @@ namespace Pixie.Cmd.Examples
                     Specular = 0,
                 },
 
-                Transform = 
+                Transform =
                     Matrix4x4.Identity
                         .RotateX(Math.PI / 2)
                         .Translate(0, 0, 500),
@@ -90,7 +90,7 @@ namespace Pixie.Cmd.Examples
                     Specular = 1.0,
                     Shininess = 200,
                     Reflective = 0.7,
-                    Transparency = 0.7,
+                    Transparency = 0.5,
                     RefractiveIndex = 1.5,
                 },
 
@@ -100,7 +100,7 @@ namespace Pixie.Cmd.Examples
             var cube1 = new Cube()
             {
                 Material = whiteMaterial,
-                Transform = 
+                Transform =
                     mediumObject.Translate(4, 0, 0),
             };
 
@@ -198,7 +198,7 @@ namespace Pixie.Cmd.Examples
             var cube15 = new Cube()
             {
                 Material = purpleMaterial,
-                Transform = 
+                Transform =
                     largeObject.Translate(-0.5, -4.5, 8),
             };
 
@@ -216,9 +216,9 @@ namespace Pixie.Cmd.Examples
                     largeObject.Translate(-0.5, -8.5, 8),
             };
 
-            var world = new World();        
-            world.Objects.Add(plane);            
-            world.Objects.Add(sphere);            
+            var world = new World();
+            world.Objects.Add(plane);
+            world.Objects.Add(sphere);
             world.Objects.Add(cube1);
             world.Objects.Add(cube2);
             world.Objects.Add(cube3);
@@ -237,8 +237,8 @@ namespace Pixie.Cmd.Examples
             world.Objects.Add(cube16);
             world.Objects.Add(cube17);
             world.Lights.Add(light1);
-            // world.Lights.Add(light2);
-            
+            world.Lights.Add(light2);
+
             return Tuple.Create(world, camera);
         }
     }

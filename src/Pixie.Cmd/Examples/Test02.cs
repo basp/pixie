@@ -13,7 +13,8 @@ namespace Pixie.Cmd.Examples
                     Vector4.CreatePosition(-0.6, 1, -0.8),
                     Vector4.CreateDirection(0, 1, 0)),
 
-                ProgressMonitor = new ParallelConsoleProgressMonitor(height),
+                ProgressMonitorFactory =
+                    (_rows, _cols) => new DefaultProgressMonitor(),
             };
 
             var light = new PointLight(

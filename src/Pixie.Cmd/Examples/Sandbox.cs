@@ -16,7 +16,8 @@ namespace Pixie.Cmd.Examples
                 Vector4.CreatePosition(0, 0.25, 0),
                 Vector4.CreateDirection(0, 0, -1));
 
-            cam.ProgressMonitor = new ParallelConsoleProgressMonitor(height);
+            cam.ProgressMonitorFactory =
+                (_rows, _cols) => new DefaultProgressMonitor();
 
             var l1 = new PointLight(Vector4.CreatePosition(-20, 3.5, -50), Color.White);
             var l2 = new PointLight(Vector4.CreatePosition(10, 100, 500), new Color(1, 1, 1));

@@ -23,7 +23,7 @@
             // var t = Test02.Create(args.Width, args.Height);
             // var t = Test03.Create(args.Width, args.Height);
             // var t = Test04.Create(args.Width, args.Height);
-            var t = Test06.Create(args.Width, args.Height);
+            var t = Cover.Create(args.Width, args.Height);
 
             var world = t.Item1;
             var camera = t.Item2;
@@ -31,13 +31,18 @@
             // Func<ISampler> samplerFactory = () =>
             //     new RandomSuperSampler(world, camera, args.N);
 
+            // Func<ISampler> samplerFactory = () =>
+            //     new FocalBlurSampler(t.Item1, t.Item2, 10.96, 0.11, args.N);
+
             Func<ISampler> samplerFactory = () =>
-                new FocalBlurSampler(t.Item1, t.Item2, 10.96, 0.11, args.N);
+                new DefaultSampler(world, camera);
+
+            t.Item2.ProgressMonitorFactory = (rows, _) => 
+                new ProgressBarProgressMonitor(rows);
 
             var sw = new Stopwatch();
             sw.Start();
-            var img = t.Item2.Render(
-                t.Item1);
+            var img = t.Item2.Render(t.Item1, samplerFactory);
 
             img.SavePpm(args.Out);
             sw.Stop();
