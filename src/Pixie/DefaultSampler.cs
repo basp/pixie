@@ -10,13 +10,7 @@ namespace Pixie
         public DefaultSampler(World world, Camera camera)
         {
             this.world = world;
-            this.camera = camera;            
-        }
-
-        public DefaultSampler(Scene scene)
-        {
-            this.world = scene.World;
-            this.camera = scene.Camera;
+            this.camera = camera;        
         }
 
         public Ray RayForPixel(int px, int py)

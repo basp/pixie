@@ -18,41 +18,31 @@
         public static void Render(RenderArgs args)
         {
             var pixels = args.Width * args.Height;
+
             // var t = Cover.Create(args.Width, args.Height);
-            // var t = Test01.Create(args.Width, args.Height);
-            // var t = Test02.Create(args.Width, args.Height);
-            // var t = Test03.Create(args.Width, args.Height);
-            // var t = Test04.Create(args.Width, args.Height);
-            var t = Cover.Create(args.Width, args.Height);
-            var scene = new Scene(t.Item1, t.Item2);
+            World world = null;
+            Camera camera = null;
 
-            // Func<ISampler> samplerFactory = () =>
-            //     new RandomSuperSampler(world, camera, args.N);
-
-            // Func<ISampler> samplerFactory = () =>
-            //     new FocalBlurSampler(t.Item1, t.Item2, 10.96, 0.11, args.N);
-
-            Func<ISampler> samplerFactory = () =>
-                new DefaultSampler(scene);
-
-            t.Item2.ProgressMonitorFactory = (rows, _) => 
-                new ProgressBarProgressMonitor(rows);
+            var scene = new Scene(world, camera)
+            {
+                ProgressMonitorFactory =
+                    (rows, _cols) => new ProgressBarProgressMonitor(rows),
+            };
 
             var sw = new Stopwatch();
             sw.Start();
-            var img = t.Item2.Render(samplerFactory);
-
+            var img = scene.Render();
             img.SavePpm(args.Out);
             sw.Stop();
 
-            // Console.WriteLine($"{sw.Elapsed}");
-            // Console.WriteLine($"{(double)pixels / sw.ElapsedMilliseconds}px/ms");
-            // Console.WriteLine($"Intersection tests: {Stats.Tests}");
-            // Console.WriteLine($"Primary rays:       {Stats.PrimaryRays}");
-            // Console.WriteLine($"Secondary rays:     {Stats.SecondaryRays}");
-            // Console.WriteLine($"Shadow rays:        {Stats.ShadowRays}");
-            // Console.WriteLine($"Super sampling:     {args.N}x");
-            // Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
+            Console.WriteLine($"{sw.Elapsed}");
+            Console.WriteLine($"{(double)pixels / sw.ElapsedMilliseconds}px/ms");
+            Console.WriteLine($"Intersection tests: {Stats.Tests}");
+            Console.WriteLine($"Primary rays:       {Stats.PrimaryRays}");
+            Console.WriteLine($"Secondary rays:     {Stats.SecondaryRays}");
+            Console.WriteLine($"Shadow rays:        {Stats.ShadowRays}");
+            Console.WriteLine($"Super sampling:     {args.N}x");
+            Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
         }
 
         static void Main(string[] args)
