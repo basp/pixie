@@ -7,7 +7,7 @@ namespace Pixie
 
     public class RandomSuperSampler : ISampler
     {
-        private static readonly Random rng = new Random();
+        private readonly Random rng = new Random();
         private readonly World world;
         private readonly Camera camera;
         private readonly int n;
@@ -21,7 +21,21 @@ namespace Pixie
             this.oneOverN = 1.0 / n;
         }
 
-        public IEnumerable<Ray> Supersample(int px, int py)
+        public Color Sample(int x, int y)
+        {
+            var color = Color.Black;
+            var rays = this.Supersample(x, y).ToList();
+            foreach (var ray in rays)
+            {
+                Interlocked.Increment(ref Stats.PrimaryRays);
+                color += this.world.Trace(ray, 5);
+            }
+
+            color *= this.oneOverN;
+            return color;
+        }
+
+        private IEnumerable<Ray> Supersample(int px, int py)
         {
             var inv = this.camera.TransformInv;
             var origin = inv * Vector4.CreatePosition(0, 0, 0);
@@ -52,20 +66,6 @@ namespace Pixie
 
                 yield return new Ray(origin, direction);
             }
-        }
-
-        public Color Sample(int x, int y)
-        {
-            var color = Color.Black;
-            var rays = this.Supersample(x, y).ToList();
-            foreach (var ray in rays)
-            {
-                Interlocked.Increment(ref Stats.PrimaryRays);
-                color += this.world.ColorAt(ray, 5);
-            }
-
-            color *= this.oneOverN;
-            return color;
         }
     }
 }

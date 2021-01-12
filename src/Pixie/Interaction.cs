@@ -3,9 +3,9 @@ namespace Pixie
     using System;
 
     /// <summary>
-    /// Holds precomputed values for an intersection.
+    /// The results of an interaction between a ray and object.
     /// </summary>
-    public struct Computations
+    public struct Interaction
     {
         public double T;
 
@@ -29,7 +29,7 @@ namespace Pixie
 
         public double N2;
 
-        public double Schlick()
+        public double SchlicksApproximation()
         {
             var cos = this.Eyev.Dot(this.Normalv);
             if (this.N1 > this.N2)

@@ -13,12 +13,12 @@ namespace Pixie
             throw new System.NotImplementedException();
         }
 
-        public double IntensityAt(Vector4 point, World w)
+        public double GetIntensity(Vector4 point, World w)
         {
             throw new System.NotImplementedException();
         }
 
-        public Vector4 PointOnLight(double u, double v)
+        public Vector4 GetPoint(double u, double v)
         {
             throw new System.NotImplementedException();
         }

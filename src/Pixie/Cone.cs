@@ -109,7 +109,7 @@ namespace Pixie
             return IntersectionList.Create(xs.ToArray());
         }
 
-        public override Vector4 LocalNormalAt(Vector4 point)
+        public override Vector4 GetLocalNormal(Vector4 point)
         {
             var dist = point.X * point.X + point.Z * point.Z;
             if (dist < 1 && point.Y >= this.Maximum - Epsilon)
@@ -131,7 +131,7 @@ namespace Pixie
             return Vector4.CreateDirection(point.X, y, point.Z);
         }
 
-        public override BoundingBox Bounds()
+        public override BoundingBox GetBounds()
         {
             var r = Math.Max(
                 Math.Abs(this.Minimum),

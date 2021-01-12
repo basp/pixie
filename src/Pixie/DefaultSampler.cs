@@ -13,6 +13,12 @@ namespace Pixie
             this.camera = camera;            
         }
 
+        public DefaultSampler(Scene scene)
+        {
+            this.world = scene.World;
+            this.camera = scene.Camera;
+        }
+
         public Ray RayForPixel(int px, int py)
         {
             var pixelSize = this.camera.PixelSize;
@@ -39,7 +45,7 @@ namespace Pixie
         {
             Interlocked.Increment(ref Stats.PrimaryRays);
             var ray = this.RayForPixel(x, y);
-            return world.ColorAt(ray);
+            return world.Trace(ray);
         }
     }
 }

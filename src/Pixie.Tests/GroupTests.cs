@@ -159,7 +159,7 @@ namespace Pixie.Tests
             g2.Add(s);
 
             var p = Vector4.CreatePosition(1.7321, 1.1547, -5.5774);
-            var n = s.NormalAt(p);
+            var n = s.GetNormal(p);
             const double eps = 0.0001;
             var comparer = Vector4.GetEqualityComparer(eps);
             var expected = Vector4.CreateDirection(0.2857, 0.4286, -0.8571);
@@ -189,7 +189,7 @@ namespace Pixie.Tests
             shape.Add(s);
             shape.Add(c);
 
-            var box = shape.Bounds();
+            var box = shape.GetBounds();
             Assert.Equal(
                 Vector4.CreatePosition(-4.5, -3, -5),
                 box.Min);
@@ -208,7 +208,7 @@ namespace Pixie.Tests
             };
 
             var shape = new Csg(Operation.Difference, left, right);
-            var box = shape.Bounds();
+            var box = shape.GetBounds();
             Assert.Equal(
                 Vector4.CreatePosition(-1, -1, -1),
                 box.Min);

@@ -4,10 +4,13 @@ namespace Pixie
     {
         protected Matrix4x4 transform = Matrix4x4.Identity;
 
+        // cached inverse transform
         protected Matrix4x4 inv = Matrix4x4.Identity;
 
+        // cached inversed transposed transform
         protected Matrix4x4 invt = Matrix4x4.Identity;
 
+        // does object cast shadow?
         public bool Shadow { get; set; } = true;
 
         public Material Material { get; set; } = new Material();
@@ -37,22 +40,22 @@ namespace Pixie
             return this.LocalIntersect(ray);
         }
 
-        public virtual Vector4 NormalAt(Vector4 point)
+        public virtual Vector4 GetNormal(Vector4 point)
         {
             var localPoint = this.WorldToObject(point);
-            var localNormal = this.LocalNormalAt(localPoint);
+            var localNormal = this.GetLocalNormal(localPoint);
             return this.NormalToWorld(localNormal);
         }
 
         public abstract IntersectionList LocalIntersect(Ray ray);
 
-        public abstract Vector4 LocalNormalAt(Vector4 point);
+        public abstract Vector4 GetLocalNormal(Vector4 point);
 
-        public virtual BoundingBox Bounds() =>
+        public virtual BoundingBox GetBounds() =>
             BoundingBox.Infinity;
 
-        public virtual BoundingBox ParentSpaceBounds() =>
-            this.Bounds() * this.transform;
+        public virtual BoundingBox GetParentSpaceBounds() =>
+            this.GetBounds() * this.transform;
 
         public virtual void Divide(double threshold)
         {

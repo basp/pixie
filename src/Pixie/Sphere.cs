@@ -4,7 +4,7 @@ namespace Pixie
 
     public class Sphere : Shape, IEquatable<Sphere>
     {
-        public override Vector4 LocalNormalAt(Vector4 point) =>
+        public override Vector4 GetLocalNormal(Vector4 point) =>
             point - Vector4.Zero;
 
         public override IntersectionList LocalIntersect(Ray ray)
@@ -42,7 +42,7 @@ namespace Pixie
             this.transform.Equals(other.transform) &&
             this.inv.Equals(other.inv);
 
-        public override BoundingBox Bounds()
+        public override BoundingBox GetBounds()
         {
             var min = Vector4.CreatePosition(-1, -1, -1);
             var max = Vector4.CreatePosition(1, 1, 1);

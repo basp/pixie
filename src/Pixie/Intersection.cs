@@ -22,21 +22,16 @@ namespace Pixie
             this.T == other.T &&
             this.Object == other.Object;
 
-        public Computations Precompute(Ray r) =>
+        public Interaction Precompute(Ray r) =>
             Precompute(r, IntersectionList.Create(this));
 
-        /// <summary>
-        /// We'll need this set of values quite a lot in our calculations
-        /// so it makes sense to compute them in advance and just pass the
-        /// results around.
-        /// </summary>
-        public Computations Precompute(Ray r, IntersectionList xs)
+        public Interaction Precompute(Ray r, IntersectionList xs)
         {
             var t = this.T;
             var obj = this.Object;
             var point = r.Position(t);
             var eyev = -r.Direction;
-            var normalv = obj.NormalAt(point);
+            var normalv = obj.GetNormal(point);
             var inside = false;
 
             if (normalv.Dot(eyev) < 0)
@@ -49,9 +44,9 @@ namespace Pixie
             var underPoint = point - normalv * Epsilon;
 
             var reflectv = r.Direction.Reflect(normalv);
-            CalculateRefraction(xs, out var n1, out var n2);
+            this.CalculateRefraction(xs, out var n1, out var n2);
 
-            return new Computations
+            return new Interaction
             {
                 T = t,
                 Object = obj,

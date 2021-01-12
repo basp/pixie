@@ -19,12 +19,12 @@ namespace Pixie
 
         public bool IsReadOnly => false;
 
-        public override BoundingBox Bounds()
+        public override BoundingBox GetBounds()
         {
             var box = BoundingBox.Empty;
             foreach (var child in this.children)
             {
-                box += child.ParentSpaceBounds();
+                box += child.GetParentSpaceBounds();
             }
 
             return box;
@@ -32,7 +32,7 @@ namespace Pixie
 
         public override IntersectionList LocalIntersect(Ray ray)
         {
-            var bounds = this.Bounds();
+            var bounds = this.GetBounds();
             if (!bounds.Intersect(ray))
             {
                 return IntersectionList.Empty();
@@ -42,7 +42,7 @@ namespace Pixie
             return IntersectionList.Create(xs.ToArray());
         }
 
-        public override Vector4 LocalNormalAt(Vector4 point)
+        public override Vector4 GetLocalNormal(Vector4 point)
         {
             throw new NotImplementedException();
         }
@@ -67,11 +67,11 @@ namespace Pixie
             left = new List<Shape>();
             right = new List<Shape>();
 
-            this.Bounds().Split(out var leftBox, out var rightBox);
+            this.GetBounds().Split(out var leftBox, out var rightBox);
             var ss = this.children.ToArray();
             foreach (var s in ss)
             {
-                var sBounds = s.ParentSpaceBounds();
+                var sBounds = s.GetParentSpaceBounds();
 
                 if (leftBox.Contains(sBounds))
                 {

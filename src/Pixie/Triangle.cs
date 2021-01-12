@@ -59,10 +59,10 @@ namespace Pixie
                 new Intersection(t, this));
         }
 
-        public override Vector4 LocalNormalAt(Vector4 point) =>
+        public override Vector4 GetLocalNormal(Vector4 point) =>
             this.Normal;
 
-        public override BoundingBox Bounds()
+        public override BoundingBox GetBounds()
         {
             var box = BoundingBox.Empty;
             box += this.P1;

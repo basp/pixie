@@ -90,7 +90,7 @@ namespace Pixie.Tests
         public void TestNormalOnSphereAtPointOnXAxis()
         {
             var s = new Sphere();
-            var n = s.NormalAt(Vector4.CreatePosition(1, 0, 0));
+            var n = s.GetNormal(Vector4.CreatePosition(1, 0, 0));
             var expected = Vector4.CreateDirection(1, 0, 0);
             Assert.Equal(expected, n);
         }
@@ -99,7 +99,7 @@ namespace Pixie.Tests
         public void TestNormalOnSphereAtPointOnYAxis()
         {
             var s = new Sphere();
-            var n = s.NormalAt(Vector4.CreatePosition(0, 1, 0));
+            var n = s.GetNormal(Vector4.CreatePosition(0, 1, 0));
             var expected = Vector4.CreateDirection(0, 1, 0);
             Assert.Equal(expected, n);
         }
@@ -108,7 +108,7 @@ namespace Pixie.Tests
         public void TestNormalOnSphereAtPointOnZAxis()
         {
             var s = new Sphere();
-            var n = s.NormalAt(Vector4.CreatePosition(0, 0, 1));
+            var n = s.GetNormal(Vector4.CreatePosition(0, 0, 1));
             var expected = Vector4.CreateDirection(0, 0, 1);
             Assert.Equal(expected, n);
         }
@@ -119,7 +119,7 @@ namespace Pixie.Tests
             var sqrt3over3 = Math.Sqrt(3) / 3;
             var s = new Sphere();
             var p = Vector4.CreatePosition(sqrt3over3, sqrt3over3, sqrt3over3);
-            var n = s.NormalAt(p);
+            var n = s.GetNormal(p);
             var expected = Vector4.CreateDirection(sqrt3over3, sqrt3over3, sqrt3over3);
             const double eps = 0.0000001;
             var comparer = Vector4.GetEqualityComparer(eps);
@@ -134,7 +134,7 @@ namespace Pixie.Tests
                 Math.Sqrt(3) / 3,
                 Math.Sqrt(3) / 3,
                 Math.Sqrt(3) / 3);
-            var n = s.NormalAt(p);
+            var n = s.GetNormal(p);
             const double eps = 0.0000001;
             var comparer = Vector4.GetEqualityComparer(eps);
             Assert.Equal(n.Normalize(), n, comparer);
@@ -175,7 +175,7 @@ namespace Pixie.Tests
         public void SphereHasBoundingBox()
         {
             var s = new Sphere();
-            var box = s.Bounds();
+            var box = s.GetBounds();
             Assert.Equal(Vector4.CreatePosition(-1, -1, -1), box.Min);
             Assert.Equal(Vector4.CreatePosition(1, 1, 1), box.Max);
         }

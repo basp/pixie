@@ -15,10 +15,11 @@ namespace Pixie
         public FocalBlurSampler(
             World world,
             Camera camera,
-            // You probably want to set focal distance to norm(at-from).
+            // you probably want to set focal distance to norm(at-from).
             double focalDistance = 1.0,
-            // Aperture size works best at smaller values such as 0.1
+            // aperture size works best at smaller values such as 0.1
             double aperture = 1.0,
+            // number of subsamples to take
             int n = 8)
         {
             this.world = world;
@@ -50,10 +51,6 @@ namespace Pixie
             return new Ray(origin, direction);
         }
 
-        // It was definitely not a good idea to have this static
-        // and multiple threads trying to mess around with the
-        // random number generator. So now every thread gets its 
-        // own sampler and every sampler gets its own rng.
         private Vector4 RandomInUnitDisk()
         {
             Vector4 v;
@@ -86,11 +83,11 @@ namespace Pixie
                 var direction = (focalPoint - origin).Normalize();
                 var secondaryRay = new Ray(origin, direction);
 
-                // We probably should count these "secondary" rays
-                // as primary rays for stats purposes; this is consistent
-                // with RandomSuperSampler behavior.
+                // We count these "secondary" rays primary rays for 
+                // stats purposes; this is consistent with 
+                // RandomSuperSampler behavior.
                 Interlocked.Increment(ref Stats.PrimaryRays);
-                col += this.world.ColorAt(secondaryRay);
+                col += this.world.Trace(secondaryRay);
             }
 
             return (1.0 / this.n) * col;

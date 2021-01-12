@@ -31,7 +31,7 @@ namespace Pixie.Tests
             var w = new DefaultWorld();
             var light = w.Lights[0];
             var pt = Vector4.CreatePosition(px, py, pz);
-            var intensity = light.IntensityAt(pt, w);
+            var intensity = light.GetIntensity(pt, w);
             Assert.Equal(result, intensity);
         }
 
@@ -82,7 +82,7 @@ namespace Pixie.Tests
                 2,
                 Color.White);
 
-            var pt = light.PointOnLight(u, v);
+            var pt = light.GetPoint(u, v);
             var expected = Vector4.CreatePosition(rx, ry, rz);
             Assert.Equal(expected, pt);
         }
@@ -112,7 +112,7 @@ namespace Pixie.Tests
                 Color.White);
 
             var pt = Vector4.CreatePosition(px, py, pz);
-            var intensity = light.IntensityAt(pt, w);
+            var intensity = light.GetIntensity(pt, w);
             Assert.Equal(result, intensity);
         }
 
@@ -143,7 +143,7 @@ namespace Pixie.Tests
                 Jitter = new Sequence(0.3, 0.7),
             };
 
-            var pt = light.PointOnLight(u, v);
+            var pt = light.GetPoint(u, v);
             var expected = Vector4.CreatePosition(rx, ry, rz);
             Assert.Equal(expected, pt);
         }
@@ -176,7 +176,7 @@ namespace Pixie.Tests
             };
 
             var pt = Vector4.CreatePosition(px, py, pz);
-            var intensity = light.IntensityAt(pt, w);
+            var intensity = light.GetIntensity(pt, w);
             Assert.Equal(result, intensity);
         }
     }

@@ -9,9 +9,9 @@ namespace Pixie
 
         int Samples { get; }   
 
-        double IntensityAt(Vector4 point, World w);
+        double GetIntensity(Vector4 point, World w);
 
-        Vector4 PointOnLight(double u, double v);   
+        Vector4 GetPoint(double u, double v);   
 
         IEnumerable<Vector4> Sample();      
     }

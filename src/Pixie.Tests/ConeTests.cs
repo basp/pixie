@@ -94,7 +94,7 @@ namespace Pixie.Tests
 
             foreach (var c in cases)
             {
-                var n = shape.LocalNormalAt(c.point);
+                var n = shape.GetLocalNormal(c.point);
                 Assert.Equal(c.normal, n);
             }
         }
@@ -103,7 +103,7 @@ namespace Pixie.Tests
         public void UnboundedConeHasBoundingBox()
         {
             var shape = new Cone();
-            var box = shape.Bounds();
+            var box = shape.GetBounds();
 
             Assert.True(double.IsNegativeInfinity(box.Min.X));
             Assert.True(double.IsNegativeInfinity(box.Min.Y));
@@ -123,7 +123,7 @@ namespace Pixie.Tests
                 Maximum = 3,
             };
 
-            var box = shape.Bounds();
+            var box = shape.GetBounds();
             Assert.Equal(
                 Vector4.CreatePosition(-5, -5, -5),
                 box.Min);

@@ -1,9 +1,11 @@
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Pixie.Tests")]
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Pixie.Tests")]
 namespace Pixie
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     /// <summary>
     /// 4x4 matrix of <c>double</c> values.

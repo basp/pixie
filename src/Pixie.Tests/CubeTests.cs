@@ -75,7 +75,7 @@ namespace Pixie.Tests
             var c = new Cube();
             var p = Vector4.CreatePosition(ox, oy, oz);
             var expected = Vector4.CreateDirection(dx, dy, dz);
-            var n = c.LocalNormalAt(p);
+            var n = c.GetLocalNormal(p);
             Assert.Equal(expected, n);
         }
 
@@ -83,7 +83,7 @@ namespace Pixie.Tests
         public void CubeHasBoundingBox()
         {
             var shape = new Cube();
-            var box = shape.Bounds();
+            var box = shape.GetBounds();
 
             Assert.Equal(
                 Vector4.CreatePosition(-1, -1, -1),

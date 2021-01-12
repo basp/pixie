@@ -208,7 +208,7 @@ namespace Pixie.Tests
                 new Intersection(Math.Sqrt(2)/2, shape));
             
             var comps = xs[1].Precompute(r, xs);
-            var reflectance = comps.Schlick();
+            var reflectance = comps.SchlicksApproximation();
             Assert.Equal(1.0, reflectance);
         }
 
@@ -222,7 +222,7 @@ namespace Pixie.Tests
                 new Intersection(1, shape));
 
             var comps = xs[1].Precompute(r, xs);
-            var reflectance = comps.Schlick();
+            var reflectance = comps.SchlicksApproximation();
             const int prec = 8;
             Assert.Equal(0.04, reflectance, prec);
         }
@@ -235,7 +235,7 @@ namespace Pixie.Tests
             var xs = IntersectionList.Create(
                 new Intersection(1.8589, shape));
             var comps = xs[0].Precompute(r, xs);
-            var reflectance = comps.Schlick();
+            var reflectance = comps.SchlicksApproximation();
             const int prec = 5;
             Assert.Equal(0.48873, reflectance, prec);
         }

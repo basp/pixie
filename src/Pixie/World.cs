@@ -1,100 +1,84 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
+
+[assembly: InternalsVisibleTo("Pixie.Tests")]
 namespace Pixie
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-
     public class World
     {
         public IList<ILight> Lights { get; set; } = new List<ILight>();
 
         public IList<Shape> Objects { get; set; } = new List<Shape>();
 
+        /// <summary>
+        /// Intersect a ray with all objects in the world.
+        /// </summary>
         public IntersectionList Intersect(Ray ray) =>
             this.Intersect(ray, obj => true);
 
+        /// <summary>
+        /// Intersect with a predicate to select a subset 
+        /// of shapes from the world.
+        /// </summary>
         public IntersectionList Intersect(Ray ray, Func<Shape, bool> predicate)
         {
             Interlocked.Increment(ref Stats.Tests);
             var xs = this.Objects
                 .Where(predicate)
-                .SelectMany(x => x.Intersect(ray));
-            return IntersectionList.Create(xs.ToArray());
+                .SelectMany(x => x.Intersect(ray))
+                .ToArray();
+
+            return IntersectionList.Create(xs);
         }
 
-        public Color ReflectedColor(Computations comps, int remaining)
-        {
-            if (remaining <= 0)
-            {
-                return Color.Black;
-            }
+        // https://graphicscompendium.com/raytracing/11-fresnel-beer
+        // 
+        // r  // reflection vector
+        // pt // intersection point
 
-            if (comps.Object.Material.Reflective == 0)
-            {
-                return Color.Black;
-            }
+        // local_color := blinn_phong(n, l, v) // or cook_torrance
+        // reflection_color := raytrace(pt + r * epsilon, r)
+        // transmission_color := raytrace(pt + t * epsilon, t)
 
-            Interlocked.Increment(ref Stats.SecondaryRays);
-            var reflectRay = new Ray(comps.OverPoint, comps.Reflectv);
-            var color = this.ColorAt(reflectRay, remaining - 1);
-            return color * comps.Object.Material.Reflective;
-        }
+        // fresnel_reflectance := schlicks_approximation(ior, n, v)
+        // local_contribution = (1 - finish.filter) * (1 - finish.reflection)
+        // reflection_contribution = (1 - finish.filter) * (finish.reflection) + (finish.filter) * (fresnel_reflectance)
+        // transmission_contribution = (finish.filter) * (1 - fresnel_reflectance)
 
-        public Color RefractedColor(Computations comps, int remaining)
-        {
-            if (remaining <= 0)
-            {
-                return Color.Black;
-            }
-
-            if (comps.Object.Material.Transparency == 0)
-            {
-                return Color.Black;
-            }
-
-            var nRatio = comps.N1 / comps.N2;
-            var cosi = comps.Eyev.Dot(comps.Normalv);
-            var sin2t = nRatio * nRatio * (1 - cosi * cosi);
-
-            if (sin2t > 1)
-            {
-                return Color.Black;
-            }
-
-            Interlocked.Increment(ref Stats.SecondaryRays);
-            var cost = Math.Sqrt(1.0 - sin2t);
-            var direction = comps.Normalv * (nRatio * cosi - cost) - comps.Eyev * nRatio;
-            var refractRay = new Ray(comps.UnderPoint, direction);
-            return this.ColorAt(refractRay, remaining - 1) *
-                comps.Object.Material.Transparency;
-        }
-
-        public Color Shade(Computations comps, int remaining)
+        // total_color :=
+        //     local_contribution * local_color +
+        //     reflection_contribution * reflection_color +
+        //     transmission_contribution * transmission_color
+        //
+        public Color Render(Interaction si, int remaining)
         {
             Color res = Color.Black;
 
             foreach (var light in this.Lights)
             {
-                var intensity = light.IntensityAt(comps.OverPoint, this);
+                var intensity = light.GetIntensity(si.OverPoint, this);
 
-                var surface = comps.Object.Material.Li(
-                    comps.Object,
+                var surface = si.Object.Material.Li(
+                    si.Object,
                     light,
-                    comps.OverPoint,
-                    comps.Eyev,
-                    comps.Normalv,
+                    si.OverPoint,
+                    si.Eyev,
+                    si.Normalv,
                     intensity);
 
-                var reflected = this.ReflectedColor(comps, remaining);
-                var refracted = this.RefractedColor(comps, remaining);
+                var reflected = this.GetReflectedColor(si, remaining);
+                var refracted = this.GetRefractedColor(si, remaining);
 
-                var material = comps.Object.Material;
+                var material = si.Object.Material;
                 if (material.Reflective > 0 && material.Transparency > 0)
                 {
-                    var reflectance = comps.Schlick();
-                    res += surface + reflected * reflectance +
-                                        refracted * (1 - reflectance);
+                    var reflectance = si.SchlicksApproximation();
+                    res += surface +
+                        reflected * reflectance +
+                        refracted * (1 - reflectance);
                 }
                 else
                 {
@@ -105,15 +89,15 @@ namespace Pixie
             return res;
         }
 
-        const int RecursiveDepth = 5;
+        const int DefaultRecursiveDepth = 5;
 
-        public Color ColorAt(Ray ray, int remaining = RecursiveDepth)
+        public Color Trace(Ray ray, int remaining = DefaultRecursiveDepth)
         {
             var xs = this.Intersect(ray);
             if (xs.TryGetHit(out var i))
             {
                 var comps = i.Precompute(ray, xs);
-                return this.Shade(comps, remaining);
+                return this.Render(comps, remaining);
             }
 
             return Color.Black;
@@ -138,35 +122,51 @@ namespace Pixie
             return false;
         }
 
-        // public double Shadow(Vector4 point, ILightSource source)
-        // {
-        //     var lights = source.GetLights().ToList();
-        //     var n = lights.Count;
-        //     var hits = 0;
-        //     foreach (var light in source.GetLights())
-        //     {
-        //         Interlocked.Increment(ref Stats.ShadowRays);
-        //         var v = light.Position - point;
-        //         var distance = v.Magnitude();
-        //         var direction = v.Normalize();
-        //         var r = new Ray(point, direction);
-        //         var xs = this.Intersect(r);
-        //         if (xs.TryGetHit(out var i))
-        //         {
-        //             if (i.T < distance)
-        //             {
-        //                 hits += 1;
-        //             }
-        //         }
-        //     }
+        internal Color GetReflectedColor(Interaction si, int remaining)
+        {
+            if (remaining <= 0)
+            {
+                return Color.Black;
+            }
 
-        //     return (double)hits / n;
-        // }
+            if (si.Object.Material.Reflective == 0)
+            {
+                return Color.Black;
+            }
 
-        // public bool IsShadowed(Vector4 point, ILightSource light)
-        // {
-        //     var shadow = this.Shadow(point, light);
-        //     return Math.Abs(shadow) > 0.00001;
-        // }
+            Interlocked.Increment(ref Stats.SecondaryRays);
+            var reflectRay = new Ray(si.OverPoint, si.Reflectv);
+            var color = this.Trace(reflectRay, remaining - 1);
+            return color * si.Object.Material.Reflective;
+        }
+
+        internal Color GetRefractedColor(Interaction si, int remaining)
+        {
+            if (remaining <= 0)
+            {
+                return Color.Black;
+            }
+
+            if (si.Object.Material.Transparency == 0)
+            {
+                return Color.Black;
+            }
+
+            var nRatio = si.N1 / si.N2;
+            var cosi = si.Eyev.Dot(si.Normalv);
+            var sin2t = nRatio * nRatio * (1 - cosi * cosi);
+
+            if (sin2t > 1)
+            {
+                return Color.Black;
+            }
+
+            Interlocked.Increment(ref Stats.SecondaryRays);
+            var cost = Math.Sqrt(1.0 - sin2t);
+            var direction = si.Normalv * (nRatio * cosi - cost) - si.Eyev * nRatio;
+            var refractRay = new Ray(si.UnderPoint, direction);
+            return this.Trace(refractRay, remaining - 1) *
+                si.Object.Material.Transparency;
+        }
     }
 }

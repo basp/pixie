@@ -6,7 +6,7 @@ namespace Pixie
     {
         const double Epsilon = 0.00001;
 
-        public override BoundingBox Bounds()
+        public override BoundingBox GetBounds()
         {
             var min = Vector4.CreatePosition(double.NegativeInfinity, 0, double.NegativeInfinity);
             var max = Vector4.CreatePosition(double.PositiveInfinity, 0, double.PositiveInfinity);
@@ -25,7 +25,7 @@ namespace Pixie
             return IntersectionList.Create(i);
         }
 
-        public override Vector4 LocalNormalAt(Vector4 point) =>
+        public override Vector4 GetLocalNormal(Vector4 point) =>
             Vector4.CreateDirection(0, 1, 0);
     }
 }

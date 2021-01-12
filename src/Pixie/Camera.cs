@@ -1,9 +1,6 @@
 namespace Pixie
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -88,33 +85,19 @@ namespace Pixie
         /// will cast a single ray right through the center of each
         /// pixel.
         /// </summary>
-        /// <remarks>
-        /// The default shader is very fast but it causes really hard
-        /// shadows and anti-aliasing artifacts. One way to compensate
-        /// is to render at a larger-than-required resolution and use an
-        /// external image manipulation program to scale it down to the
-        /// desired resolution. An arguably better but more expensive way 
-        /// is to use either the random supersampler or focal-blur sampler
-        /// implementations.
-        /// </remarks>
         /// <param name="w">The <c>World</c> instance to be rendered.</param>
         public Canvas Render(World w) =>
-            Render(w, () => new DefaultSampler(w, this));
+            Render(() => new DefaultSampler(w, this));
 
         /// <summary>
-        /// Renders a world to a canvas. 
+        /// Renders a world to a canvas with a custom sampler.
         /// </summary>
-        /// <remarks>
-        /// Since we have multiple lines being rendered in parallel it's 
-        /// very important to make sure all the samplers can operate 
-        /// independently. This takes extra care when implementing a new
-        /// sampler.
-        /// </remarks>
         /// <param name="w">The <c>World</c> instance to be rendered.</param>
         /// <param name="samplerFactory">
-        /// A factory function to provide sampler instances.
+        /// A factory function to provide sampler instances. The sampler
+        /// instances should be thread safe.
         /// </param>
-        public Canvas Render(World w, Func<ISampler> samplerFactory)
+        public Canvas Render(Func<ISampler> samplerFactory)
         {
             Stats.Reset();
             using (var progress = this.ProgressMonitorFactory(this.vsize, this.hsize))

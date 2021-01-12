@@ -82,7 +82,7 @@ namespace Pixie
 
         public override IntersectionList LocalIntersect(Ray ray)
         {
-            var bounds = this.Bounds();
+            var bounds = this.GetBounds();
             if (!bounds.Intersect(ray))
             {
                 return IntersectionList.Empty();
@@ -95,7 +95,7 @@ namespace Pixie
                 IntersectionList.Create(xs.ToArray()));
         }
 
-        public override Vector4 LocalNormalAt(Vector4 point)
+        public override Vector4 GetLocalNormal(Vector4 point)
         {
             throw new NotImplementedException();
         }
@@ -103,11 +103,11 @@ namespace Pixie
         public override bool Includes(Shape obj) =>
             this.Left.Includes(obj) || this.Right.Includes(obj);
 
-        public override BoundingBox Bounds()
+        public override BoundingBox GetBounds()
         {
             var box = BoundingBox.Empty;
-            box += this.Left.ParentSpaceBounds();
-            box += this.Right.ParentSpaceBounds();
+            box += this.Left.GetParentSpaceBounds();
+            box += this.Right.GetParentSpaceBounds();
             return box;
         }
 

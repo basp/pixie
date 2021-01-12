@@ -1,9 +1,10 @@
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Pixie.Tests")]
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Pixie.Tests")]
 namespace Pixie
 {
-    using System;
-    using System.Collections.Generic;
-
     internal struct Matrix2x2
     {
         private readonly double[] data;

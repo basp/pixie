@@ -44,14 +44,14 @@ namespace Pixie
             throw new System.NotImplementedException();
         }
 
-        public double IntensityAt(Vector4 point, World w)
+        public double GetIntensity(Vector4 point, World w)
         {
             var total = 0.0;
             for (var v = 0; v < this.Vsteps; v++)
             {
                 for (var u = 0; u < this.Usteps; u++)
                 {
-                    var lightPos = this.PointOnLight(u, v);
+                    var lightPos = this.GetPoint(u, v);
                     if (!w.IsShadowed(lightPos, point))
                     {
                         total = total + 1.0;
@@ -68,12 +68,12 @@ namespace Pixie
             {
                 for (var u = 0; u < this.Usteps; u++)
                 {
-                    yield return this.PointOnLight(u, v);
+                    yield return this.GetPoint(u, v);
                 }
             }
         }
 
-        public Vector4 PointOnLight(double u, double v) =>
+        public Vector4 GetPoint(double u, double v) =>
             this.Corner +
                 this.Uvec * (u + this.Jitter.Next()) +
                 this.Vvec * (v + this.Jitter.Next());

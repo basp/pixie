@@ -23,18 +23,10 @@ namespace Pixie.Cmd
         {
             this.progressBar.Dispose();
         }
-
-        public void OnRowStarted()
-        {
-        }
-
-        public void OnPixelFinished()
-        {
-        }
-
+        
         public void OnRowFinished()
         {
-            this.progressBar.Tick();
+            this.progressBar.Tick();            
         }
     }
 }

@@ -46,13 +46,13 @@ namespace Pixie
             return this.Equals(other);
         }
 
-        public double IntensityAt(Vector4 point, World w)
+        public double GetIntensity(Vector4 point, World w)
         {
             var shadow = w.IsShadowed(this.Position, point);
             return shadow ? 0.0 : 1.0;
         }
 
-        public Vector4 PointOnLight(double u, double v) => 
+        public Vector4 GetPoint(double u, double v) => 
             this.Position;
 
         public IEnumerable<Vector4> Sample() => 

@@ -8,9 +8,9 @@ namespace Pixie.Tests
         public void NormalOfPlaneIsConstantEverywhere()
         {
             var p = new Plane();
-            var n1 = p.LocalNormalAt(Vector4.CreatePosition(0, 0, 0));
-            var n2 = p.LocalNormalAt(Vector4.CreatePosition(10, 0, -10));
-            var n3 = p.LocalNormalAt(Vector4.CreatePosition(-5, 0, 150));
+            var n1 = p.GetLocalNormal(Vector4.CreatePosition(0, 0, 0));
+            var n2 = p.GetLocalNormal(Vector4.CreatePosition(10, 0, -10));
+            var n3 = p.GetLocalNormal(Vector4.CreatePosition(-5, 0, 150));
             var expected = Vector4.CreateDirection(0, 1, 0);
             Assert.Equal(expected, n1);
             Assert.Equal(expected, n2);
@@ -61,7 +61,7 @@ namespace Pixie.Tests
         public void PlaneHasBoundingBox()
         {
             var s = new Plane();
-            var box = s.Bounds();
+            var box = s.GetBounds();
 
             Assert.True(double.IsNegativeInfinity(box.Min.X));
             Assert.Equal(0, box.Min.Y);

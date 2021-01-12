@@ -65,7 +65,7 @@ namespace Pixie.Tests
             var cyl = new Cylinder();
             var p = Vector4.CreatePosition(px, py, pz);
             var expected = Vector4.CreateDirection(nx, ny, nz);
-            var n = cyl.LocalNormalAt(p);
+            var n = cyl.GetLocalNormal(p);
             Assert.Equal(expected, n);
         }
 
@@ -158,7 +158,7 @@ namespace Pixie.Tests
             };
 
             var p = Vector4.CreatePosition(px, py, pz);
-            var n = cyl.LocalNormalAt(p);
+            var n = cyl.GetLocalNormal(p);
             var expected = Vector4.CreateDirection(nx, ny, nz);
             Assert.Equal(expected, n);
         }
@@ -167,7 +167,7 @@ namespace Pixie.Tests
         public void UnboundedCylinderHasBoundingBox()
         {
             var shape = new Cylinder();
-            var box = shape.Bounds();
+            var box = shape.GetBounds();
 
             Assert.Equal(-1, box.Min.X);
             Assert.True(double.IsNegativeInfinity(box.Min.Y));
@@ -185,7 +185,7 @@ namespace Pixie.Tests
             shape.Minimum = -5;
             shape.Maximum = 3;
 
-            var box = shape.Bounds();
+            var box = shape.GetBounds();
             Assert.Equal(
                 Vector4.CreatePosition(-1, -5, -1),
                 box.Min);

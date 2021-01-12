@@ -24,9 +24,7 @@
             // var t = Test03.Create(args.Width, args.Height);
             // var t = Test04.Create(args.Width, args.Height);
             var t = Cover.Create(args.Width, args.Height);
-
-            var world = t.Item1;
-            var camera = t.Item2;
+            var scene = new Scene(t.Item1, t.Item2);
 
             // Func<ISampler> samplerFactory = () =>
             //     new RandomSuperSampler(world, camera, args.N);
@@ -35,30 +33,31 @@
             //     new FocalBlurSampler(t.Item1, t.Item2, 10.96, 0.11, args.N);
 
             Func<ISampler> samplerFactory = () =>
-                new DefaultSampler(world, camera);
+                new DefaultSampler(scene);
 
             t.Item2.ProgressMonitorFactory = (rows, _) => 
                 new ProgressBarProgressMonitor(rows);
 
             var sw = new Stopwatch();
             sw.Start();
-            var img = t.Item2.Render(t.Item1, samplerFactory);
+            var img = t.Item2.Render(samplerFactory);
 
             img.SavePpm(args.Out);
             sw.Stop();
 
-            Console.WriteLine($"{sw.Elapsed}");
-            Console.WriteLine($"{(double)pixels / sw.ElapsedMilliseconds}px/ms");
-            Console.WriteLine($"Intersection tests: {Stats.Tests}");
-            Console.WriteLine($"Primary rays:       {Stats.PrimaryRays}");
-            Console.WriteLine($"Secondary rays:     {Stats.SecondaryRays}");
-            Console.WriteLine($"Shadow rays:        {Stats.ShadowRays}");
-            Console.WriteLine($"Super sampling:     {args.N}x");
-            Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
+            // Console.WriteLine($"{sw.Elapsed}");
+            // Console.WriteLine($"{(double)pixels / sw.ElapsedMilliseconds}px/ms");
+            // Console.WriteLine($"Intersection tests: {Stats.Tests}");
+            // Console.WriteLine($"Primary rays:       {Stats.PrimaryRays}");
+            // Console.WriteLine($"Secondary rays:     {Stats.SecondaryRays}");
+            // Console.WriteLine($"Shadow rays:        {Stats.ShadowRays}");
+            // Console.WriteLine($"Super sampling:     {args.N}x");
+            // Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
         }
 
         static void Main(string[] args)
         {
+            Console.WriteLine(@"Pixie v1.0");
             Args.InvokeAction<Program>(args);
         }
     }

@@ -26,9 +26,9 @@ namespace Pixie.Tests
             var p2 = Vector4.CreatePosition(-1, 0, 0);
             var p3 = Vector4.CreatePosition(1, 0, 0);
             var t = new Triangle(p1, p2, p3);
-            var n1 = t.LocalNormalAt(Vector4.CreatePosition(0, 0.5, 0));
-            var n2 = t.LocalNormalAt(Vector4.CreatePosition(-0.5, 0.75, 0));
-            var n3 = t.LocalNormalAt(Vector4.CreatePosition(0.5, 0.25, 0));
+            var n1 = t.GetLocalNormal(Vector4.CreatePosition(0, 0.5, 0));
+            var n2 = t.GetLocalNormal(Vector4.CreatePosition(-0.5, 0.75, 0));
+            var n3 = t.GetLocalNormal(Vector4.CreatePosition(0.5, 0.25, 0));
             Assert.Equal(t.Normal, n1);
             Assert.Equal(t.Normal, n2);
             Assert.Equal(t.Normal, n3);
@@ -122,7 +122,7 @@ namespace Pixie.Tests
             var p2 = Vector4.CreatePosition(6, 2, -4);
             var p3 = Vector4.CreatePosition(2, -1, -1);
             var shape = new Triangle(p1, p2, p3);
-            var box = shape.Bounds();
+            var box = shape.GetBounds();
             Assert.Equal(
                 Vector4.CreatePosition(-3, -1, -4),
                 box.Min);

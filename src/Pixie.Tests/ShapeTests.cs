@@ -80,7 +80,7 @@ namespace Pixie.Tests
                 Transform = Transform.Translate(0, 1, 0),
             };
 
-            var n = s.NormalAt(Vector4.CreatePosition(0, 1.70711, -0.70711));
+            var n = s.GetNormal(Vector4.CreatePosition(0, 1.70711, -0.70711));
             var expected = Vector4.CreateDirection(0, 0.70711, -0.70711);
             const double eps = 0.00001;
             var comparer = Vector4.GetEqualityComparer(eps);
@@ -97,7 +97,7 @@ namespace Pixie.Tests
                     Transform.RotateZ(Math.PI / 5),
             };
 
-            var n = s.NormalAt(Vector4.CreatePosition(0, Math.Sqrt(2) / 2, -Math.Sqrt(2) / 2));
+            var n = s.GetNormal(Vector4.CreatePosition(0, Math.Sqrt(2) / 2, -Math.Sqrt(2) / 2));
             var expected = Vector4.CreateDirection(0, 0.97014, -0.24254);
             const double eps = 0.00001;
             var comparer = Vector4.GetEqualityComparer(eps);
@@ -115,7 +115,7 @@ namespace Pixie.Tests
         public void TestShapeHasArbitraryBounds()
         {
             var s = new TestShape();
-            var box = s.Bounds();
+            var box = s.GetBounds();
             Assert.Equal(
                 Vector4.CreatePosition(-1, -1, -1),
                 box.Min);
@@ -132,7 +132,7 @@ namespace Pixie.Tests
                 Transform.Translate(1,-3,5) *
                 Transform.Scale(0.5, 2, 4);
             
-            var box = shape.ParentSpaceBounds();
+            var box = shape.GetParentSpaceBounds();
             Assert.Equal(
                 Vector4.CreatePosition(0.5,-5,1),
                 box.Min);
