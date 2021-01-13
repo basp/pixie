@@ -6,7 +6,8 @@
     /// <summary>
     /// Vector of 4 <c>double</c> values.
     /// </summary>
-    public struct Vector4 : IEquatable<Vector4>
+    public struct Vector4
+        : IEquatable<Vector4>
     {
         public static Vector4 Zero => new Vector4(0, 0, 0, 0);
         public readonly double X;
@@ -117,9 +118,8 @@
         /// <summary>
         /// Performs a cross product on two `Vector4` instances
         /// disregarding the `W` component. Essentially treating
-        /// them as 3d vectors instead. The resulting 3d vector
-        /// is wrapped as a 4d direction vector (with `W` = 1) 
-        /// before it is returned.
+        /// `a` and `b` as 3d vectors. The resulting 3d vector
+        /// is wrapped as a 4d direction vector (`w` = 1).
         /// </summary>
         public static Vector4 Cross3(Vector4 a, Vector4 b) =>
             Vector4.CreateDirection(
@@ -138,7 +138,8 @@
 
         public Vector4 Reflect(Vector4 n) => Vector4.Reflect(this, n);
 
-        public static IEqualityComparer<Vector4> GetEqualityComparer(double epsilon = 0.0) =>
+        public static IEqualityComparer<Vector4> GetEqualityComparer(
+            double epsilon = 0.0) =>
             new ApproxVector4EqualityComparer(epsilon);
 
         public override string ToString() =>
@@ -151,7 +152,8 @@
             this.W == other.W;
     }
 
-    internal class ApproxVector4EqualityComparer : ApproxEqualityComparer<Vector4>
+    internal class ApproxVector4EqualityComparer 
+        : ApproxEqualityComparer<Vector4>
     {
         public ApproxVector4EqualityComparer(double epsilon = 0.0)
             : base(epsilon)

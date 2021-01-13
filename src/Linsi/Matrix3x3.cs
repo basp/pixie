@@ -3,10 +3,9 @@ namespace Linsi
 {
     using System;
     using System.Collections.Generic;
-
     using System.Linq;
 
-    public struct Matrix3x3
+    internal struct Matrix3x3
     {
         private readonly double[] data;
 
@@ -66,13 +65,13 @@ namespace Linsi
             return m;
         }
 
-        public static double Minor(this Matrix3x3 a, int row, int col) =>
+        internal static double Minor(this Matrix3x3 a, int row, int col) =>
             a.Submatrix(row, col).Determinant();
 
-        public static double Cofactor(this Matrix3x3 a, int row, int col) =>
+        internal static double Cofactor(this Matrix3x3 a, int row, int col) =>
             (row + col) % 2 == 0 ? a.Minor(row, col) : -a.Minor(row, col);
 
-        public static double Determinant(this Matrix3x3 a) =>
+        internal static double Determinant(this Matrix3x3 a) =>
             a[0, 0] * a.Cofactor(0, 0) +
             a[0, 1] * a.Cofactor(0, 1) +
             a[0, 2] * a.Cofactor(0, 2);

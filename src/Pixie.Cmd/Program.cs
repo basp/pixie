@@ -21,8 +21,10 @@
             World world = null;
             Camera camera = null;
 
-            // TODO: new scene parser or build function
-            throw new NotImplementedException();
+            if (world == null || camera == null)
+            {
+                return;
+            }
 
             var scene = new Scene(world, camera)
             {

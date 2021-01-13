@@ -6,7 +6,8 @@ namespace Linsi
     /// <summary>
     /// Vector of 2 <c>double</c> values.
     /// </summary>
-    public struct Vector2 : IEquatable<Vector2>
+    public struct Vector2
+        : IEquatable<Vector2>
     {
         public static Vector2 Zero => new Vector2(0, 0);
         public readonly double X;
@@ -78,7 +79,8 @@ namespace Linsi
 
         public Vector2 Reflect(Vector2 n) => Vector2.Reflect(this, n);
 
-        public static IEqualityComparer<Vector2> GetEqualityComparer(double epsilon = 0.0) =>
+        public static IEqualityComparer<Vector2> GetEqualityComparer(
+            double epsilon = 0.0) =>
             new ApproxVector2EqualityComparer(epsilon);
 
         public override string ToString() =>
@@ -89,7 +91,8 @@ namespace Linsi
             this.Y == other.Y;
     }
 
-    internal class ApproxVector2EqualityComparer : ApproxEqualityComparer<Vector2>
+    internal class ApproxVector2EqualityComparer 
+        : ApproxEqualityComparer<Vector2>
     {
         public ApproxVector2EqualityComparer(double epsilon = 0.0)
             : base(epsilon)

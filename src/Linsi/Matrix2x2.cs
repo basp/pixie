@@ -3,7 +3,7 @@ namespace Linsi
     using System;
     using System.Collections.Generic;
 
-    public struct Matrix2x2
+    internal struct Matrix2x2
     {
         private readonly double[] data;
 
@@ -41,7 +41,7 @@ namespace Linsi
 
     public static class Matrix2x2Extensions
     {
-        public static double Determinant(this Matrix2x2 m) =>
+        internal static double Determinant(this Matrix2x2 m) =>
             m[0, 0] * m[1, 1] - m[0, 1] * m[1, 0];
     }
 

@@ -6,7 +6,8 @@ namespace Linsi
     /// <summary>
     /// Vector of 3 <c>double</c> values.
     /// </summary>
-    public struct Vector3 : IEquatable<Vector3>
+    public struct Vector3
+        : IEquatable<Vector3>
     {
         public static Vector3 Zero => new Vector3(0, 0, 0);
         public readonly double X;
@@ -105,7 +106,8 @@ namespace Linsi
             this.Z == other.Z;
     }
 
-    internal class ApproxVector3EqualityComparer : ApproxEqualityComparer<Vector3>
+    internal class ApproxVector3EqualityComparer 
+        : ApproxEqualityComparer<Vector3>
     {
         public ApproxVector3EqualityComparer(double epsilon = 0.0)
             : base(epsilon)
