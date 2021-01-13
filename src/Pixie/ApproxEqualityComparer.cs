@@ -6,12 +6,6 @@ namespace Pixie
     /// <summary>
     /// Base class for approximate equality comparers.
     /// </summary>
-    /// <remarks>
-    /// You don't really need to deal with approximate equality often
-    /// except in test cases. Types that need this support a 
-    /// static <c>GetEqualityComparer</c> method to make it 
-    /// easier to get an approximate comparer for a particur type.
-    /// </remarks>
     internal abstract class ApproxEqualityComparer<T> : IEqualityComparer<T>
     {
         private readonly double epsilon;

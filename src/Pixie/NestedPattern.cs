@@ -17,13 +17,13 @@ namespace Pixie
 
         public Pattern B { get; set; }
 
-        public override Color PatternAt(Vector4 point)
+        public override Color GetColor(Vector4 point)
         {
-            var ta = this.Op.PatternAt(point);
+            var ta = this.Op.GetColor(point);
             var tb = Color.White - ta;
 
-            var ca = ta * this.A.PatternAt(this.A.Inverse * point);
-            var cb = tb * this.B.PatternAt(this.B.Inverse * point);
+            var ca = ta * this.A.GetColor(this.A.Inverse * point);
+            var cb = tb * this.B.GetColor(this.B.Inverse * point);
 
             return ta * ca + tb * cb;
         }

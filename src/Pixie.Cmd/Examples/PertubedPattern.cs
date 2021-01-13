@@ -12,7 +12,7 @@ namespace Pixie.Cmd.Examples
 
         public Pattern B { get; set; }
 
-        public override Color PatternAt(Vector4 point)
+        public override Color GetColor(Vector4 point)
         {
             // var n = NoiseGenerator.GradientCoherentNoise3D(
             //     point.X,
@@ -24,8 +24,8 @@ namespace Pixie.Cmd.Examples
             var ta = n;
             var tb = 1.0 - n;
 
-            var ca = ta * this.A.PatternAt(point);
-            var cb = tb * this.B.PatternAt(point);
+            var ca = ta * this.A.GetColor(point);
+            var cb = tb * this.B.GetColor(point);
 
             return ca + cb;
         }

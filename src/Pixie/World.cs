@@ -34,6 +34,39 @@ namespace Pixie
             return IntersectionList.Create(xs);
         }
 
+        const int DefaultRecursiveDepth = 5;
+
+        public Color Trace(Ray ray, int remaining = DefaultRecursiveDepth)
+        {
+            var xs = this.Intersect(ray);
+            if (xs.TryGetHit(out var i))
+            {
+                var si = i.Precompute(ray, xs);
+                return this.Render(si, remaining);
+            }
+
+            return Color.Black;
+        }
+        
+        public bool IsShadowed(Vector4 lightPosition, Vector4 point)
+        {
+            Interlocked.Increment(ref Stats.ShadowRays);
+            var v = lightPosition - point;
+            var distance = v.Magnitude();
+            var direction = v.Normalize();
+            var r = new Ray(point, direction);
+            var xs = this.Intersect(r, obj => obj.Shadow);
+            if (xs.TryGetHit(out var i))
+            {
+                if (i.T < distance)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         // https://graphicscompendium.com/raytracing/11-fresnel-beer
         // 
         // r  // reflection vector
@@ -53,7 +86,7 @@ namespace Pixie
         //     reflection_contribution * reflection_color +
         //     transmission_contribution * transmission_color
         //
-        public Color Render(Interaction si, int remaining)
+        internal Color Render(Interaction si, int remaining)
         {
             Color res = Color.Black;
 
@@ -87,39 +120,6 @@ namespace Pixie
             }
 
             return res;
-        }
-
-        const int DefaultRecursiveDepth = 5;
-
-        public Color Trace(Ray ray, int remaining = DefaultRecursiveDepth)
-        {
-            var xs = this.Intersect(ray);
-            if (xs.TryGetHit(out var i))
-            {
-                var comps = i.Precompute(ray, xs);
-                return this.Render(comps, remaining);
-            }
-
-            return Color.Black;
-        }
-
-        public bool IsShadowed(Vector4 lightPosition, Vector4 point)
-        {
-            Interlocked.Increment(ref Stats.ShadowRays);
-            var v = lightPosition - point;
-            var distance = v.Magnitude();
-            var direction = v.Normalize();
-            var r = new Ray(point, direction);
-            var xs = this.Intersect(r, obj => obj.Shadow);
-            if (xs.TryGetHit(out var i))
-            {
-                if (i.T < distance)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         internal Color GetReflectedColor(Interaction si, int remaining)

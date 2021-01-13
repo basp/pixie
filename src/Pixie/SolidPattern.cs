@@ -11,7 +11,7 @@ namespace Pixie
 
         public Color Color { get; set; }
 
-        public override Color PatternAt(Vector4 point) => 
+        public override Color GetColor(Vector4 point) => 
             this.Color;
     }
 }

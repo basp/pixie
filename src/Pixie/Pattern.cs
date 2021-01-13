@@ -20,13 +20,13 @@ namespace Pixie
 
         public Matrix4x4 Inverse => this.inv;
 
-        public virtual Color PatternAt(Shape obj, Vector4 point)
+        public virtual Color GetColor(Shape obj, Vector4 point)
         {
             point = obj.WorldToObject(point);
             point = this.Inverse * point;
-            return this.PatternAt(point);
+            return this.GetColor(point);
         }
 
-        public abstract Color PatternAt(Vector4 point);
+        public abstract Color GetColor(Vector4 point);
     }
 }

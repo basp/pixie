@@ -6,7 +6,7 @@ namespace Pixie.Cmd.Examples
     {
         const double eps = 0.0001;
 
-        public override Color PatternAt(Vector4 point)
+        public override Color GetColor(Vector4 point)
         {
             var ix = Math.Floor(point.X);
             var f = Math.Abs(point.X - ix);

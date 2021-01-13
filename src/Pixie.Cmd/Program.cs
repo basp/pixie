@@ -4,7 +4,6 @@
     using System.Diagnostics;
     using System.IO;
     using PowerArgs;
-    using Examples;
 
     [ArgExceptionBehavior(ArgExceptionPolicy.StandardExceptionHandling)]
     class Program
@@ -17,16 +16,19 @@
         [ArgActionMethod]
         public static void Render(RenderArgs args)
         {
-            var pixels = args.Width * args.Height;
+            var numberOfPixels = args.Width * args.Height;
+            var config = Examples.Cover.Create(args.Width, args.Height);
 
-            // var t = Cover.Create(args.Width, args.Height);
-            World world = null;
-            Camera camera = null;
+            World world = config.Item1;
+            Camera camera = config.Item2;
 
             var scene = new Scene(world, camera)
             {
                 ProgressMonitorFactory =
                     (rows, _cols) => new ProgressBarProgressMonitor(rows),
+
+                SamplerFactory =
+                    () => new RandomSuperSampler(world, camera, n: 16),
             };
 
             var sw = new Stopwatch();
@@ -35,20 +37,36 @@
             img.SavePpm(args.Out);
             sw.Stop();
 
-            Console.WriteLine($"{sw.Elapsed}");
-            Console.WriteLine($"{(double)pixels / sw.ElapsedMilliseconds}px/ms");
-            Console.WriteLine($"Intersection tests: {Stats.Tests}");
+            var rate = Math.Round(
+                (double)numberOfPixels / sw.ElapsedMilliseconds,
+                digits: 2);
+
+            Console.WriteLine($"Speed:              {rate} px/ms");
+            Console.WriteLine($"---");
+            Console.WriteLine($"Super sampling:     {args.N}x");
+            Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
+            Console.WriteLine($"---");
             Console.WriteLine($"Primary rays:       {Stats.PrimaryRays}");
             Console.WriteLine($"Secondary rays:     {Stats.SecondaryRays}");
             Console.WriteLine($"Shadow rays:        {Stats.ShadowRays}");
-            Console.WriteLine($"Super sampling:     {args.N}x");
-            Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
+            Console.WriteLine($"---");
+            Console.WriteLine($"Intersection tests: {Stats.Tests}");
+            Console.WriteLine();
         }
 
         static void Main(string[] args)
         {
-            Console.WriteLine(@"Pixie v1.0");
+            Console.WriteLine(BANNER);
             Args.InvokeAction<Program>(args);
         }
+
+        private const string BANNER = @"
+        .__       .__        
+______ |__|__  __|__| ____  
+\____ \|  \  \/  /  |/ __ \ 
+|  |_> >  |>    <|  \  ___/ 
+|   __/|__/__/\_ \__|\___  >
+|__|            \/       \/ 0.8
+        ";
     }
 }

@@ -13,7 +13,7 @@ namespace Pixie.Cmd
             {
                 ForegroundColor = ConsoleColor.Yellow,
                 BackgroundColor = ConsoleColor.DarkYellow,
-                ProgressCharacter = '─'
+                ProgressCharacter = '─',
             };
 
             this.progressBar = new ProgressBar(rows, "rendering", options);
@@ -21,12 +21,13 @@ namespace Pixie.Cmd
 
         public void Dispose()
         {
+            this.progressBar.Message = "done";
             this.progressBar.Dispose();
         }
-        
+
         public void OnRowFinished()
         {
-            this.progressBar.Tick();            
+            this.progressBar.Tick();
         }
     }
 }
