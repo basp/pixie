@@ -1,5 +1,7 @@
 namespace Pixie
 {
+    using Linsi;
+
     public class Gradient
     {
         public Gradient(Color a, Color b)

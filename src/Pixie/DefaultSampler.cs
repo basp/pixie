@@ -1,6 +1,7 @@
 namespace Pixie
 {
     using System.Threading;
+    using Linsi;
 
     public class DefaultSampler : ISampler
     {

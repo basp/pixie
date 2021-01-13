@@ -2,6 +2,7 @@ namespace Pixie
 {
     using System;
     using System.Threading;
+    using Linsi;
 
     public class FocalBlurSampler : ISampler
     {
@@ -68,7 +69,7 @@ namespace Pixie
         public Color Sample(int x, int y)
         {
             var primaryRay = this.RayForPixel(x, y);
-            var focalPoint = primaryRay.Position(focalDistance);
+            var focalPoint = primaryRay.GetPosition(focalDistance);
             var col = Color.Black;
             for (var i = 0; i < this.n; i++)
             {

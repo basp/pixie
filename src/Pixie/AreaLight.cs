@@ -1,6 +1,7 @@
 namespace Pixie
 {
     using System.Collections.Generic;
+    using Linsi;
 
     public class AreaLight : ILight
     {

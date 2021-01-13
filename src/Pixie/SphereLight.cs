@@ -1,7 +1,8 @@
-using System.Collections.Generic;
-
 namespace Pixie
 {
+    using System.Collections.Generic;
+    using Linsi;
+
     public class SphereLight : ILight
     {
         public Color Intensity => throw new System.NotImplementedException();

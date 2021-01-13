@@ -1,6 +1,7 @@
 namespace Pixie.Tests
 {
     using Xunit;
+    using Linsi;
 
     public class PatternTests
     {

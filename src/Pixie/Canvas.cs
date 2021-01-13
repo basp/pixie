@@ -2,6 +2,7 @@ namespace Pixie
 {
     using System;
     using System.IO;
+    using Linsi;
 
     /// <summary>
     /// A canvas is used by the camera to store the image.

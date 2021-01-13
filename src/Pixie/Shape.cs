@@ -1,5 +1,7 @@
 namespace Pixie
 {
+    using Linsi;
+
     public abstract class Shape
     {
         protected Matrix4x4 transform = Matrix4x4.Identity;

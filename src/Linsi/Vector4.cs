@@ -112,6 +112,8 @@
         public static double Dot(Vector4 a, Vector4 b) =>
             a.X * b.X + a.Y * b.Y + a.Z * b.Z + a.W * b.W;
 
+        public Vector4 Cross3(Vector4 b) => Cross3(this, b);
+
         /// <summary>
         /// Performs a cross product on two `Vector4` instances
         /// disregarding the `W` component. Essentially treating

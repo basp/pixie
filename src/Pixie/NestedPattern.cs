@@ -1,6 +1,6 @@
 namespace Pixie
 {
-    using System;
+    using Linsi;
 
     public class NestedPattern : Pattern
     {

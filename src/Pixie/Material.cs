@@ -1,6 +1,7 @@
 namespace Pixie
 {
     using System;
+    using Linsi;
 
     /// <summary>
     /// Represents a Phong shaded material.

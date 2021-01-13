@@ -1,6 +1,7 @@
 namespace Pixie
 {
     using System;
+    using Linsi;
 
     /// <summary>
     /// Blends two patterns together using a blender function.

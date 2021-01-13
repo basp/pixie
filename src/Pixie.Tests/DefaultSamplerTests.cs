@@ -2,6 +2,7 @@ namespace Pixie.Tests
 {
     using System;
     using Xunit;
+    using Linsi;
 
     public class DefaultSamplerTests
     {

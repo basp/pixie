@@ -2,6 +2,7 @@ namespace Pixie
 {
     using System;
     using System.Threading.Tasks;
+    using Linsi;
 
     /// <summary>
     /// Instances of the <c>Camera</c> class are used to take pictures

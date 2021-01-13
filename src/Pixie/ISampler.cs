@@ -1,5 +1,7 @@
 namespace Pixie
 {
+    using Linsi;
+
     /// <summary>
     /// Returns a color value for the given pixel coordinate.
     /// </summary>

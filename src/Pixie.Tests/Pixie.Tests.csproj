@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Pixie\Pixie.csproj" />
+    <ProjectReference Include="..\Linsi\Linsi.csproj" />
   </ItemGroup>
 
 </Project>

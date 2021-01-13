@@ -1,6 +1,7 @@
 namespace Pixie
 {
     using System;
+    using Linsi;
 
     public class CheckersPattern : Pattern
     {

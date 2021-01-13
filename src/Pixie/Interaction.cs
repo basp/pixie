@@ -1,6 +1,7 @@
 namespace Pixie
 {
     using System;
+    using Linsi;
 
     /// <summary>
     /// The results of an interaction between a ray and object.

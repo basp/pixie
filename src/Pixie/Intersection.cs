@@ -3,6 +3,7 @@ namespace Pixie
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Linsi;
 
     public struct Intersection : IEquatable<Intersection>
     {
@@ -29,7 +30,7 @@ namespace Pixie
         {
             var t = this.T;
             var obj = this.Object;
-            var point = r.Position(t);
+            var point = r.GetPosition(t);
             var eyev = -r.Direction;
             var normalv = obj.GetNormal(point);
             var inside = false;

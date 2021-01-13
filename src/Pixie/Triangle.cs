@@ -1,6 +1,7 @@
 namespace Pixie
 {
     using System;
+    using Linsi;
 
     public class Triangle : Shape
     {
@@ -13,7 +14,7 @@ namespace Pixie
             this.P3 = p3;
             this.E1 = p2 - p1;
             this.E2 = p3 - p1;
-            this.Normal = this.E2.Cross(this.E1).Normalize();
+            this.Normal = this.E2.Cross3(this.E1).Normalize();
         }
 
         public Vector4 P1 { get; }
@@ -30,7 +31,7 @@ namespace Pixie
 
         public override IntersectionList LocalIntersect(Ray ray)
         {
-            var dirCrossE2 = ray.Direction.Cross(this.E2);
+            var dirCrossE2 = ray.Direction.Cross3(this.E2);
             var det = this.E1.Dot(dirCrossE2);
 
             if (Math.Abs(det) < Epsilon)
@@ -46,7 +47,7 @@ namespace Pixie
                 return IntersectionList.Empty();
             }
 
-            var originCrossE1 = p1ToOrigin.Cross(this.E1);
+            var originCrossE1 = p1ToOrigin.Cross3(this.E1);
             var v = f * ray.Direction.Dot(originCrossE1);
 
             if (v < 0 || (u + v) > 1)

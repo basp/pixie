@@ -17,10 +17,11 @@
         public static void Render(RenderArgs args)
         {
             var numberOfPixels = args.Width * args.Height;
-            var config = Examples.Cover.Create(args.Width, args.Height);
 
-            World world = config.Item1;
-            Camera camera = config.Item2;
+            World world = null;
+            Camera camera = null;
+
+            throw new NotImplementedException():
 
             var scene = new Scene(world, camera)
             {

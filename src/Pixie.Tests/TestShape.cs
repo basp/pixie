@@ -1,6 +1,7 @@
 namespace Pixie.Tests
 {
     using System;
+    using Linsi;
 
     class TestShape : Shape
     {

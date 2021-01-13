@@ -4,6 +4,7 @@ namespace Pixie
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using Linsi;
 
     public class RandomSuperSampler : ISampler
     {

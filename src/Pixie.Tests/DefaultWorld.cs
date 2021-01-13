@@ -1,5 +1,7 @@
 namespace Pixie.Tests
 {
+    using Linsi;
+
     public class DefaultWorld : World
     {
         public DefaultWorld()
