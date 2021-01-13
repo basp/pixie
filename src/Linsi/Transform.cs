@@ -49,8 +49,8 @@ namespace Linsi
         public static Matrix4x4 View(Vector4 from, Vector4 to, Vector4 up)
         {
             var fwd = (to - from).Normalize();
-            var left = Vector4.Cross(fwd, up.Normalize());
-            var trueUp = Vector4.Cross(left, fwd);   
+            var left = Vector4.Cross3(fwd, up.Normalize());
+            var trueUp = Vector4.Cross3(left, fwd);   
             var orientation =         
                 new Matrix4x4(
                     left.X, left.Y, left.Z, 0,

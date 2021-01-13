@@ -112,7 +112,14 @@
         public static double Dot(Vector4 a, Vector4 b) =>
             a.X * b.X + a.Y * b.Y + a.Z * b.Z + a.W * b.W;
 
-        public static Vector4 Cross(Vector4 a, Vector4 b) =>
+        /// <summary>
+        /// Performs a cross product on two `Vector4` instances
+        /// disregarding the `W` component. Essentially treating
+        /// them as 3d vectors instead. The resulting 3d vector
+        /// is wrapped as a 4d direction vector (with `W` = 1) 
+        /// before it is returned.
+        /// </summary>
+        public static Vector4 Cross3(Vector4 a, Vector4 b) =>
             Vector4.CreateDirection(
                 a.Y * b.Z - a.Z * b.Y,
                 a.Z * b.X - a.X * b.Z,
@@ -126,8 +133,6 @@
         public Vector4 Normalize() => Vector4.Normalize(this);
 
         public double Dot(Vector4 v) => Vector4.Dot(this, v);
-
-        public Vector4 Cross(Vector4 v) => Vector4.Cross(this, v);
 
         public Vector4 Reflect(Vector4 n) => Vector4.Reflect(this, n);
 

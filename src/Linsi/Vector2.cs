@@ -4,7 +4,7 @@ namespace Linsi
     using System.Collections.Generic;
 
     /// <summary>
-    /// Vector of 3 <c>double</c> values.
+    /// Vector of 2 <c>double</c> values.
     /// </summary>
     public struct Vector2 : IEquatable<Vector2>
     {
@@ -53,14 +53,15 @@ namespace Linsi
             a.X * a.X + a.Y * a.Y;
 
         public static double Magnitude(Vector2 a) =>
-            (double)Math.Sqrt(Vector2.MagnitudeSquared(a));
+            Math.Sqrt(Vector2.MagnitudeSquared(a));
 
         public static Vector2 Normalize(Vector2 a)
         {
             var mag = Vector2.Magnitude(a);
+            var oneOverMag = 1 / mag;
             return new Vector2(
-                a.X / mag,
-                a.Y / mag);
+                a.X * oneOverMag,
+                a.Y * oneOverMag);
         }
 
         public static double Dot(Vector2 a, Vector2 b) =>

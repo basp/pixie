@@ -145,14 +145,14 @@ namespace Linsi.Tests
             Assert.Equal(20, a.Dot(b));
         }
 
-        [Fact]
-        public void TestCrossProductOfTwoVectors()
-        {
-            var a = Vector4.CreateDirection(1, 2, 3);
-            var b = Vector4.CreateDirection(2, 3, 4);
-            Assert.Equal(Vector4.CreateDirection(-1, 2, -1), a.Cross(b));
-            Assert.Equal(Vector4.CreateDirection(1, -2, 1), b.Cross(a));
-        }
+        // [Fact]
+        // public void TestCrossProductOfTwoVectors()
+        // {
+        //     var a = Vector4.CreateDirection(1, 2, 3);
+        //     var b = Vector4.CreateDirection(2, 3, 4);
+        //     Assert.Equal(Vector4.CreateDirection(-1, 2, -1), a.Cross(b));
+        //     Assert.Equal(Vector4.CreateDirection(1, -2, 1), b.Cross(a));
+        // }
 
         [Fact]
         public void TestReflectVectorApproachingAt45Degrees()
