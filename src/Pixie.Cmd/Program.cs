@@ -17,14 +17,23 @@
         public static void Render(RenderArgs args)
         {
             var numberOfPixels = args.Width * args.Height;
-            var (world, camera) = Cover.Create(args.Width, args.Height);
+            // var (world, camera) = Cover.Create(args.Width, args.Height);
+            var (world, camera) = Test02.Create(args.Width, args.Height);
             var scene = new Scene(world, camera)
             {
                 ProgressMonitorFactory =
                     (rows, _cols) => new ProgressBarProgressMonitor(rows),
 
+                // SamplerFactory =
+                //     () => new RandomSuperSampler(world, camera, n: args.N),
+
                 SamplerFactory =
-                    () => new RandomSuperSampler(world, camera, n: args.N),
+                    () => new FocalBlurSampler(
+                        world,
+                        camera,
+                        n: args.N,
+                        focalDistance: 5.0,
+                        aperture: 0.1),
             };
 
             var sw = new Stopwatch();
