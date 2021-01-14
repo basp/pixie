@@ -1,8 +1,11 @@
 ﻿namespace Pixie.Cmd
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
+    using System.Reflection;
     using PowerArgs;
 
     [ArgExceptionBehavior(ArgExceptionPolicy.StandardExceptionHandling)]
@@ -13,28 +16,52 @@
         [ArgDescription("Shows this help")]
         public static bool Help { get; set; }
 
+        private static void Main(string[] args)
+        {
+            Console.WriteLine(banner);
+            Args.InvokeAction<Program>(args);
+        }
+
         [ArgActionMethod]
         public static void Render(RenderArgs args)
         {
-            var numberOfPixels = args.Width * args.Height;
-            // var (world, camera) = Cover.Create(args.Width, args.Height);
-            var (world, camera) = Test02.Create(args.Width, args.Height);
-            var scene = new Scene(world, camera)
+            if (!TryLoadAssembly(args.Asm, out var asm))
             {
-                ProgressMonitorFactory =
-                    (rows, _cols) => new ProgressBarProgressMonitor(rows),
+                Console.WriteLine($"Cannot load assembly {args.Asm}.");
+                return;
+            }
 
-                // SamplerFactory =
-                //     () => new RandomSuperSampler(world, camera, n: args.N),
+            if (!TryLoadScene(asm, args, out var scene))
+            {
+                Console.WriteLine(
+                    $"Cannot find scene builder {args.Scene} in " +
+                    $"assembly {args.Asm}.");
 
-                SamplerFactory =
-                    () => new FocalBlurSampler(
-                        world,
-                        camera,
-                        n: args.N,
-                        focalDistance: 5.0,
-                        aperture: 0.1),
-            };
+                var candidates = GetSceneBuilders(asm);
+                Console.WriteLine("Possible candidates:");
+                foreach (var c in candidates)
+                {
+                    Console.WriteLine($"- {c.FullName}");
+                }
+
+                return;
+            }
+
+            scene.ProgressMonitorFactory =
+                (rows, _) => new ConsoleProgressMonitor(
+                    rows,
+                    $"rendering {args.Scene} from {Path.GetFileName(args.Asm)}");
+
+            scene.SamplerFactory =
+                () => new FocalBlurSampler(
+                            scene.World,
+                            scene.Camera,
+                            n: args.N,
+                            focalDistance: 8.75,
+                            aperture: 0.1);
+
+            Console.WriteLine($"Super sampling:     {args.N}x");
+            Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
 
             var sw = new Stopwatch();
             sw.Start();
@@ -42,14 +69,12 @@
             img.SavePpm(args.Out);
             sw.Stop();
 
-            var rate = Math.Round(
-                (double)numberOfPixels / sw.ElapsedMilliseconds,
+            var numberOfPixels = args.Width * args.Height;
+            var pixelsPerSecond = Math.Round(
+                (double)numberOfPixels / sw.Elapsed.TotalSeconds,
                 digits: 2);
 
-            Console.WriteLine($"Speed:              {rate} px/ms");
-            Console.WriteLine($"---");
-            Console.WriteLine($"Super sampling:     {args.N}x");
-            Console.WriteLine($"Output:             {Path.GetFullPath(args.Out)}");
+            Console.WriteLine($"Speed:              {pixelsPerSecond} px/s");
             Console.WriteLine($"---");
             Console.WriteLine($"Primary rays:       {Stats.PrimaryRays}");
             Console.WriteLine($"Secondary rays:     {Stats.SecondaryRays}");
@@ -59,19 +84,50 @@
             Console.WriteLine();
         }
 
-        static void Main(string[] args)
+        private static IEnumerable<Type> GetSceneBuilders(
+            Assembly asm) => asm
+                .GetExportedTypes()
+                .Where(x => typeof(ISceneBuilder).IsAssignableFrom(x));
+
+        private static bool TryLoadAssembly(string path, out Assembly asm)
         {
-            Console.WriteLine(BANNER);
-            Args.InvokeAction<Program>(args);
+            try
+            {
+                asm = Assembly.LoadFile(path);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                asm = null;
+                return false;
+            }
         }
 
-        private const string BANNER = @"
-        .__       .__        
-______ |__|__  __|__| ____  
-\____ \|  \  \/  /  |/ __ \ 
-|  |_> >  |>    <|  \  ___/ 
+        private static bool TryLoadScene(
+            Assembly asm,
+            RenderArgs args,
+            out Scene scene)
+        {
+            var builderType = asm.GetType(args.Scene);
+            if (builderType == null)
+            {
+                scene = null;
+                return false;
+            }
+
+            var builder = (ISceneBuilder)Activator.CreateInstance(builderType);
+            scene = builder.Build(args.Width, args.Height);
+            return true;
+        }
+
+        private const string banner = @"
+        .__       .__
+______ |__|__  __|__| ____
+\____ \|  \  \/  /  |/ __ \
+|  |_> >  |>    <|  \  ___/
 |   __/|__/__/\_ \__|\___  >
 |__|            \/       \/ 0.8
-        ";
+";
     }
 }

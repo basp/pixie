@@ -1,3 +1,5 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Pixie
 {
     using System;
@@ -9,8 +11,16 @@ namespace Pixie
 
         public override BoundingBox GetBounds()
         {
-            var min = Vector4.CreatePosition(double.NegativeInfinity, 0, double.NegativeInfinity);
-            var max = Vector4.CreatePosition(double.PositiveInfinity, 0, double.PositiveInfinity);
+            var min = Vector4.CreatePosition(
+                double.NegativeInfinity,
+                0,
+                double.NegativeInfinity);
+
+            var max = Vector4.CreatePosition(
+                double.PositiveInfinity,
+                0,
+                double.PositiveInfinity);
+
             return new BoundingBox(min, max);
         }
 

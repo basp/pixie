@@ -1,3 +1,5 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Pixie
 {
     using System;
@@ -9,7 +11,7 @@ namespace Pixie
     /// of the world.
     /// </summary>
     /// <remarks>
-    /// Since there are many ways in how to capture a color, any advanced 
+    /// Since there are many ways in how to capture a color, any advanced
     /// camera will rely on an sampler to do the actual colorization.
     /// </remarks>
     public class Camera

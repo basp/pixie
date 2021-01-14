@@ -1,6 +1,7 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Pixie
 {
-    using System;
     using System.Collections.Generic;
     using Linsi;
 
@@ -53,10 +54,10 @@ namespace Pixie
             return shadow ? 0.0 : 1.0;
         }
 
-        public Vector4 GetPoint(double u, double v) => 
+        public Vector4 GetPoint(double u, double v) =>
             this.Position;
 
-        public IEnumerable<Vector4> Sample() => 
+        public IEnumerable<Vector4> Sample() =>
             new[] { this.Position };
     }
 }

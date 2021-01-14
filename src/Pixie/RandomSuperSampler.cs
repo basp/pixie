@@ -1,3 +1,5 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Pixie
 {
     using System;
@@ -9,9 +11,13 @@ namespace Pixie
     public class RandomSuperSampler : ISampler
     {
         private readonly Random rng = new Random();
+
         private readonly World world;
+
         private readonly Camera camera;
+
         private readonly int n;
+
         private readonly double oneOverN;
 
         public RandomSuperSampler(World world, Camera camera, int n = 4)
@@ -47,14 +53,14 @@ namespace Pixie
 
             for (var i = 0; i < this.n; i++)
             {
-                var xOffset = (px + 0.5);
-                var yOffset = (py + 0.5);
+                var xOffset = px + 0.5;
+                var yOffset = py + 0.5;
 
-                var rx = rng.NextDouble();
-                var ry = rng.NextDouble();
+                var rx = this.rng.NextDouble();
+                var ry = this.rng.NextDouble();
 
-                xOffset += (0.5 - rx);
-                yOffset += (0.5 - ry);
+                xOffset += 0.5 - rx;
+                yOffset += 0.5 - ry;
 
                 xOffset *= pixelSize;
                 yOffset *= pixelSize;

@@ -3,11 +3,11 @@ namespace Pixie.Cmd
     using System;
     using ShellProgressBar;
 
-    public class ProgressBarProgressMonitor : IProgressMonitor
+    public class ConsoleProgressMonitor : IProgressMonitor
     {
         private readonly ProgressBar progressBar;
 
-        public ProgressBarProgressMonitor(int rows)
+        public ConsoleProgressMonitor(int rows, string msg = "rendering")
         {
             var options = new ProgressBarOptions
             {
@@ -16,7 +16,7 @@ namespace Pixie.Cmd
                 ProgressCharacter = '─',
             };
 
-            this.progressBar = new ProgressBar(rows, "rendering", options);
+            this.progressBar = new ProgressBar(rows, msg, options);
         }
 
         public void Dispose()

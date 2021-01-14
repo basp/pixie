@@ -1,3 +1,5 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Pixie
 {
     using System;
@@ -12,10 +14,10 @@ namespace Pixie
         }
 
         public Color A { get; set; }
-        
+
         public Color B { get; set; }
 
         public override Color GetColor(Vector4 point) =>
-            Math.Floor(point.X) % 2 == 0 ? A : B;
+            Math.Floor(point.X) % 2 == 0 ? this.A : this.B;
     }
 }

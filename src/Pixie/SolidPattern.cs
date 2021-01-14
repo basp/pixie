@@ -1,3 +1,5 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Pixie
 {
     using Linsi;
@@ -11,7 +13,7 @@ namespace Pixie
 
         public Color Color { get; set; }
 
-        public override Color GetColor(Vector4 point) => 
+        public override Color GetColor(Vector4 point) =>
             this.Color;
     }
 }

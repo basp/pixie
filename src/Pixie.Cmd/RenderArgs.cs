@@ -1,9 +1,15 @@
 namespace Pixie.Cmd
 {
     using PowerArgs;
-    
+
     class RenderArgs
     {
+        [ArgRequired, ArgPosition(1)]
+        public string Asm { get; set; }
+
+        [ArgRequired, ArgPosition(2)]
+        public string Scene { get; set; }
+
         [ArgDefaultValue(200)]
         public int Width { get; set; }
 

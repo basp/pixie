@@ -1,13 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using Linsi;
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
 
-[assembly: InternalsVisibleTo("Pixie.Tests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Pixie.Tests")]
 namespace Pixie
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using Linsi;
+
     public class World
     {
         public IList<ILight> Lights { get; set; } = new List<ILight>();
@@ -21,7 +22,7 @@ namespace Pixie
             this.Intersect(ray, obj => true);
 
         /// <summary>
-        /// Intersect with a predicate to select a subset 
+        /// Intersect with a predicate to select a subset
         /// of shapes from the world.
         /// </summary>
         public IntersectionList Intersect(Ray ray, Func<Shape, bool> predicate)
@@ -48,7 +49,7 @@ namespace Pixie
 
             return Color.Black;
         }
-        
+
         public bool IsShadowed(Vector4 lightPosition, Vector4 point)
         {
             Interlocked.Increment(ref Stats.ShadowRays);
@@ -69,24 +70,23 @@ namespace Pixie
         }
 
         // https://graphicscompendium.com/raytracing/11-fresnel-beer
-        // 
+        //
         // r  // reflection vector
         // pt // intersection point
-
+        //
         // local_color := blinn_phong(n, l, v) // or cook_torrance
         // reflection_color := raytrace(pt + r * epsilon, r)
         // transmission_color := raytrace(pt + t * epsilon, t)
-
+        //
         // fresnel_reflectance := schlicks_approximation(ior, n, v)
         // local_contribution = (1 - finish.filter) * (1 - finish.reflection)
         // reflection_contribution = (1 - finish.filter) * (finish.reflection) + (finish.filter) * (fresnel_reflectance)
         // transmission_contribution = (finish.filter) * (1 - fresnel_reflectance)
-
+        //
         // total_color :=
         //     local_contribution * local_color +
         //     reflection_contribution * reflection_color +
         //     transmission_contribution * transmission_color
-        //
         internal Color Render(Interaction si, int remaining)
         {
             Color res = Color.Black;

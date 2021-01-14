@@ -1,3 +1,5 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Pixie
 {
     using System;
@@ -9,12 +11,14 @@ namespace Pixie
             this.World = world;
             this.Camera = camera;
             this.SamplerFactory = () => new DefaultSampler(world, camera);
-            this.ProgressMonitorFactory = (rows, cols) => new ProgressMonitor();
+            this.ProgressMonitorFactory = camera.ProgressMonitorFactory;
         }
 
         public Camera Camera { get; }
 
         public World World { get; }
+
+        public bool IsSuperSampling { get; } = false;
 
         public Func<ISampler> SamplerFactory
         {

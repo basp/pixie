@@ -1,3 +1,5 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Pixie
 {
     using System;
@@ -16,7 +18,7 @@ namespace Pixie
             var b = 2 * Vector4.Dot(ray.Direction, sphereToRay);
             var c = Vector4.Dot(sphereToRay, sphereToRay) - 1;
 
-            var discriminant = b * b - 4 * a * c;
+            var discriminant = (b * b) - (4 * a * c);
 
             // If the discriminant is negative, the ray misses
             // and there are no intersections.

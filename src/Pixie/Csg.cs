@@ -1,8 +1,9 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Pixie
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Linsi;
 
     public enum Operation

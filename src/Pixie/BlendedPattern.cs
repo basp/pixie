@@ -1,3 +1,5 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Pixie
 {
     using System;
@@ -8,10 +10,10 @@ namespace Pixie
     /// </summary>
     public class BlendedPattern : Pattern
     {
-        private static Func<Color,Color,Color> DefaultBlender =
+        private static Func<Color, Color, Color> DefaultBlender =
             (c1, c2) => (c1 + c2) * 0.5;
 
-        private readonly Func<Color,Color,Color> blender =
+        private readonly Func<Color, Color, Color> blender =
             DefaultBlender;
 
         public BlendedPattern(Pattern a, Pattern b)
@@ -21,9 +23,9 @@ namespace Pixie
         }
 
         public BlendedPattern(
-            Pattern a, 
+            Pattern a,
             Pattern b,
-            Func<Color,Color,Color> blender)
+            Func<Color, Color, Color> blender)
         {
             this.A = a;
             this.B = b;
