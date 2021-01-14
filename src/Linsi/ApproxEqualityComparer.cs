@@ -1,4 +1,6 @@
-namespace  Linsi
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
+namespace Linsi
 {
     using System;
     using System.Collections.Generic;

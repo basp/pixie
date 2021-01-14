@@ -1,4 +1,6 @@
-﻿namespace Linsi
+﻿// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
+namespace Linsi
 {
     using System;
     using System.Diagnostics;
@@ -63,20 +65,6 @@
         public double PreciseValue => this.vp;
 #else
         public double PreciseValue =>
-            throw new NotImplementedException();
-#endif
-
-        public float GetAbsoluteError() =>
-            Utils.NextFloatUp(
-                Math.Max(
-                    Math.Abs(this.high - this.v),
-                    Math.Abs(v - this.low)));
-
-#if DEBUG
-        public float GetRelativeError() =>
-            (float)Math.Abs((this.vp - this.v) / this.vp);
-#else
-        public float GetRelativeError() =>
             throw new NotImplementedException();
 #endif
 
@@ -195,6 +183,38 @@
 #endif
         }
 
+        public static EFloat operator +(EFloat a, int b) => a + new EFloat(b);
+
+        public static EFloat operator -(EFloat a, int b) => a - new EFloat(b);
+
+        public static EFloat operator *(EFloat a, int b) => a * new EFloat(b);
+
+        public static EFloat operator /(EFloat a, int b) => a / new EFloat(b);
+
+        public static EFloat operator +(int a, EFloat b) => new EFloat(a) + b;
+
+        public static EFloat operator -(int a, EFloat b) => new EFloat(a) - b;
+
+        public static EFloat operator *(int a, EFloat b) => new EFloat(a) * b;
+
+        public static EFloat operator /(int a, EFloat b) => new EFloat(a) / b;
+
+        public static EFloat operator +(EFloat a, float b) => a + new EFloat(b);
+
+        public static EFloat operator -(EFloat a, float b) => a - new EFloat(b);
+
+        public static EFloat operator *(EFloat a, float b) => a * new EFloat(b);
+
+        public static EFloat operator /(EFloat a, float b) => a / new EFloat(b);
+
+        public static EFloat operator +(float a, EFloat b) => new EFloat(a) + b;
+
+        public static EFloat operator -(float a, EFloat b) => new EFloat(a) - b;
+
+        public static EFloat operator *(float a, EFloat b) => new EFloat(a) * b;
+
+        public static EFloat operator /(float a, EFloat b) => new EFloat(a) / b;
+
         // Negative values of `f` are not supported
         public static EFloat Sqrt(EFloat f)
         {
@@ -209,6 +229,20 @@
             return new Efloat(v, low, high);
 #endif
         }
+
+        public float GetAbsoluteError() =>
+            Utils.NextFloatUp(
+                Math.Max(
+                    Math.Abs(this.high - this.v),
+                    Math.Abs(this.v - this.low)));
+
+#if DEBUG
+        public float GetRelativeError() =>
+            (float)Math.Abs((this.vp - this.v) / this.vp);
+#else
+        public float GetRelativeError() =>
+            throw new NotImplementedException();
+#endif
 
         private static void Validate(float v, double vp, float low, float high)
         {
@@ -236,37 +270,5 @@
             throw new NotImplementedException();
 #endif
         }
-
-        public static EFloat operator+(EFloat a, int b) => a + new EFloat(b);
-        
-        public static EFloat operator-(EFloat a, int b) => a - new EFloat(b);
-
-        public static EFloat operator*(EFloat a, int b) => a * new EFloat(b);
-
-        public static EFloat operator/(EFloat a, int b) => a / new EFloat(b);
-
-        public static EFloat operator+(int a, EFloat b) => new EFloat(a) + b;
-
-        public static EFloat operator-(int a, EFloat b) => new EFloat(a) - b;
-
-        public static EFloat operator*(int a, EFloat b) => new EFloat(a) * b;
-
-        public static EFloat operator/(int a, EFloat b) => new EFloat(a) / b;
-
-        public static EFloat operator+(EFloat a, float b) => a + new EFloat(b);
-        
-        public static EFloat operator-(EFloat a, float b) => a - new EFloat(b);
-
-        public static EFloat operator*(EFloat a, float b) => a * new EFloat(b);
-
-        public static EFloat operator/(EFloat a, float b) => a / new EFloat(b);
-
-        public static EFloat operator+(float a, EFloat b) => new EFloat(a) + b;
-        
-        public static EFloat operator-(float a, EFloat b) => new EFloat(a) - b;
-
-        public static EFloat operator*(float a, EFloat b) => new EFloat(a) * b;
-
-        public static EFloat operator/(float a, EFloat b) => new EFloat(a) / b;
     }
 }

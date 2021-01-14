@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Linsi</name>
+    </assembly>
+    <members>
+        <member name="T:Linsi.ApproxEqualityComparer`1">
+            <summary>
+            Base class for approximate equality comparers.
+            </summary>
+        </member>
+        <member name="T:Linsi.Color">
+            <summary>
+            A RGB color triple.
+            </summary>
+        </member>
+        <member name="T:Linsi.Matrix4x4">
+            <summary>
+            4x4 matrix of <c>double</c> values.
+            </summary>
+        </member>
+        <member name="M:Linsi.Matrix4x4Extensions.Determinant(Linsi.Matrix4x4)">
+            <summary>
+            Calculates the determinant of given matrix `a` using Laplace
+            expansion.
+            </summary>
+        </member>
+        <member name="M:Linsi.Matrix4x4Extensions.Inverse(Linsi.Matrix4x4)">
+            <summary>
+            Returns the inverse of the given matrix. Note that it is up to the
+            client to make sure the matrix specified by argument `a` is
+            invertible at all. The `IsInvertible` method is provided for this
+            purpose.
+            </summary>
+        </member>
+        <member name="P:Linsi.Ray.Item(System.Double)">
+            <summary>
+            Return a position along this ray at distance t.
+            </summary>
+        </member>
+        <member name="T:Linsi.Vector2">
+            <summary>
+            Vector of 2 <c>double</c> values.
+            </summary>
+        </member>
+        <member name="T:Linsi.Vector3">
+            <summary>
+            Vector of 3 <c>double</c> values.
+            </summary>
+        </member>
+        <member name="T:Linsi.Vector4">
+            <summary>
+            Vector of 4 <c>double</c> values.
+            </summary>
+        </member>
+        <member name="M:Linsi.Vector4.Cross3(Linsi.Vector4,Linsi.Vector4)">
+            <summary>
+            Performs a cross product on two `Vector4` instances
+            disregarding the `W` component. Essentially treating
+            `a` and `b` as 3d vectors. The resulting 3d vector
+            is wrapped as a 4d direction vector (`w` = 1).
+            </summary>
+        </member>
+        <member name="M:Linsi.Vector4.CreatePosition(System.Double,System.Double,System.Double)">
+            <summary>
+            Constructs a point vector.
+            </summary>
+            <remarks>
+            Note that point "vectors have their `w` component set to
+            zero and are thus unaffected by translations.
+            </remarks>
+            <param name="x">Value for the <c>X</c> component.</param>
+            <param name="y">Value for the <c>Y</c> component.</param>
+            <param name="z">Value for the <c>Z</c> component.</param>
+        </member>
+        <member name="M:Linsi.Vector4.CreateDirection(System.Double,System.Double,System.Double)">
+            <summary>
+            Constructs a direction vector.
+            </summary>
+            <remarks>
+            Note that direction vectors have their `w` component set to
+            zero and are thus unaffected by translations.
+            </remarks>
+            <param name="x">Value for the <c>X</c> component.</param>
+            <param name="y">Value for the <c>Y</c> component.</param>
+            <param name="z">Value for the <c>Z</c> component.</param>
+        </member>
+    </members>
+</doc>

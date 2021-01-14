@@ -1,3 +1,5 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Linsi
 {
     using System;
@@ -9,9 +11,10 @@ namespace Linsi
     public struct Vector3
         : IEquatable<Vector3>
     {
-        public static Vector3 Zero => new Vector3(0, 0, 0);
         public readonly double X;
+
         public readonly double Y;
+
         public readonly double Z;
 
         public Vector3(double v)
@@ -27,6 +30,8 @@ namespace Linsi
             this.Y = y;
             this.Z = z;
         }
+
+        public static Vector3 Zero => new Vector3(0, 0, 0);
 
         public static Vector3 operator +(Vector3 a, Vector3 b) =>
             new Vector3(
@@ -58,7 +63,7 @@ namespace Linsi
                 a.Z / s);
 
         public static double MagnitudeSquared(Vector3 a) =>
-            a.X * a.X + a.Y * a.Y + a.Z * a.Z;
+            (a.X * a.X) + (a.Y * a.Y) + (a.Z * a.Z);
 
         public static double Magnitude(Vector3 a) =>
             (double)Math.Sqrt(Vector3.MagnitudeSquared(a));
@@ -73,16 +78,21 @@ namespace Linsi
         }
 
         public static double Dot(Vector3 a, Vector3 b) =>
-            a.X * b.X + a.Y * b.Y + a.Z * b.Z;
+            (a.X * b.X) +
+            (a.Y * b.Y) +
+            (a.Z * b.Z);
 
         public static Vector3 Cross(Vector3 a, Vector3 b) =>
             new Vector3(
-                a.Y * b.Z - a.Z * b.Y,
-                a.Z * b.X - a.X * b.Z,
-                a.X * b.Y - a.Y * b.X);
+                (a.Y * b.Z) - (a.Z * b.Y),
+                (a.Z * b.X) - (a.X * b.Z),
+                (a.X * b.Y) - (a.Y * b.X));
 
         public static Vector3 Reflect(Vector3 a, Vector3 n) =>
-            a - n * 2 * Dot(a, n);
+            a - (n * 2 * Dot(a, n));
+
+        public static IEqualityComparer<Vector3> GetEqualityComparer(double epsilon = 0.0) =>
+            new ApproxVector3EqualityComparer(epsilon);
 
         public double Magnitude() => Vector3.Magnitude(this);
 
@@ -94,9 +104,6 @@ namespace Linsi
 
         public Vector3 Reflect(Vector3 n) => Vector3.Reflect(this, n);
 
-        public static IEqualityComparer<Vector3> GetEqualityComparer(double epsilon = 0.0) =>
-            new ApproxVector3EqualityComparer(epsilon);
-
         public override string ToString() =>
             $"({this.X}, {this.Y}, {this.Z})";
 
@@ -104,22 +111,5 @@ namespace Linsi
             this.X == other.X &&
             this.Y == other.Y &&
             this.Z == other.Z;
-    }
-
-    internal class ApproxVector3EqualityComparer 
-        : ApproxEqualityComparer<Vector3>
-    {
-        public ApproxVector3EqualityComparer(double epsilon = 0.0)
-            : base(epsilon)
-        {
-        }
-
-        public override bool Equals(Vector3 a, Vector3 b) =>
-            ApproxEqual(a.X, b.X) &&
-            ApproxEqual(a.Y, b.Y) &&
-            ApproxEqual(a.Z, b.Z);
-
-        public override int GetHashCode(Vector3 obj) =>
-            HashCode.Combine(obj.X, obj.Y, obj.Z);
     }
 }

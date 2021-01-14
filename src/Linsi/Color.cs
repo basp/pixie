@@ -1,3 +1,5 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Linsi
 {
     using System;
@@ -8,18 +10,9 @@ namespace Linsi
     /// </summary>
     public struct Color
     {
-        public static Color White =>
-            new Color(1, 1, 1);
-
-        public static Color Black =>
-            new Color(0, 0, 0);
-
         public readonly double R;
         public readonly double G;
         public readonly double B;
-
-        public static Color FromByteValues(byte r, byte g, byte b) =>
-            new Color(r / 255.0, g / 255.0, b / 255.0);
 
         public Color(double r, double g, double b)
         {
@@ -27,6 +20,12 @@ namespace Linsi
             this.G = g;
             this.B = b;
         }
+
+        public static Color White =>
+            new Color(1, 1, 1);
+
+        public static Color Black =>
+            new Color(0, 0, 0);
 
         public static Color operator +(Color a, Color b) =>
             new Color(
@@ -53,6 +52,9 @@ namespace Linsi
                 c1.R * c2.R,
                 c1.G * c2.G,
                 c1.B * c2.B);
+
+        public static Color FromByteValues(byte r, byte g, byte b) =>
+            new Color(r / 255.0, g / 255.0, b / 255.0);
 
         public static IEqualityComparer<Color> GetEqualityComparer(double epsilon = 0.0) =>
             new ApproxColorEqualityComparer(epsilon);

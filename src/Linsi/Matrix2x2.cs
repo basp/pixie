@@ -1,6 +1,7 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Linsi
 {
-    using System;
     using System.Collections.Generic;
 
     internal struct Matrix2x2
@@ -16,8 +17,10 @@ namespace Linsi
             };
         }
 
-        public Matrix2x2(double m00, double m01,
-                        double m10, double m11)
+#pragma warning disable SA1117 // ParametersMustBeOnSameLineOrSeparateLines
+        public Matrix2x2(
+            double m00, double m01,
+            double m10, double m11)
         {
             this.data = new[]
             {
@@ -25,52 +28,24 @@ namespace Linsi
                 m10, m11,
             };
         }
+#pragma warning restore SA1117 // ParametersMustBeOnSameLineOrSeparateLines
 
         public double this[int row, int col]
         {
-            get => this.data[row * 2 + col];
-            set => this.data[row * 2 + col] = value;
+            get => this.data[(row * 2) + col];
+            set => this.data[(row * 2) + col] = value;
         }
 
         public static IEqualityComparer<Matrix2x2> GetEqualityComparer(double epsilon = 0.0) =>
             new ApproxMatrix2x2EqualityComparer(epsilon);
 
         public override string ToString() =>
-            $"({string.Join(", ", data)})";
+            $"({string.Join(", ", this.data)})";
     }
 
     public static class Matrix2x2Extensions
     {
         internal static double Determinant(this Matrix2x2 m) =>
-            m[0, 0] * m[1, 1] - m[0, 1] * m[1, 0];
-    }
-
-    internal class ApproxMatrix2x2EqualityComparer : ApproxEqualityComparer<Matrix2x2>
-    {
-        public ApproxMatrix2x2EqualityComparer(double epsilon = 0.0)
-            : base(epsilon)
-        {
-        }
-
-        public override bool Equals(Matrix2x2 x, Matrix2x2 y)
-        {
-            for (var j = 0; j < 2; j++)
-            {
-                for (var i = 0; i < 2; i++)
-                {
-                    if (!ApproxEqual(x[i, j], y[i, j]))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        public override int GetHashCode(Matrix2x2 obj) =>
-            HashCode.Combine(
-                obj[0, 0], obj[0, 1],
-                obj[1, 0], obj[1, 1]);
+            (m[0, 0] * m[1, 1]) - (m[0, 1] * m[1, 0]);
     }
 }

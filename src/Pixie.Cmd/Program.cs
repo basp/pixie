@@ -17,22 +17,14 @@
         public static void Render(RenderArgs args)
         {
             var numberOfPixels = args.Width * args.Height;
-
-            World world = null;
-            Camera camera = null;
-
-            if (world == null || camera == null)
-            {
-                return;
-            }
-
+            var (world, camera) = Cover.Create(args.Width, args.Height);
             var scene = new Scene(world, camera)
             {
                 ProgressMonitorFactory =
                     (rows, _cols) => new ProgressBarProgressMonitor(rows),
 
                 SamplerFactory =
-                    () => new RandomSuperSampler(world, camera, n: 16),
+                    () => new RandomSuperSampler(world, camera, n: args.N),
             };
 
             var sw = new Stopwatch();

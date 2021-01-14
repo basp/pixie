@@ -1,3 +1,5 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Linsi
 {
     public struct Ray
@@ -16,7 +18,7 @@ namespace Linsi
         /// </summary>
         public Vector4 this[double t]
         {
-            get => this.Origin + t * this.Direction;
+            get => this.Origin + (t * this.Direction);
         }
 
         public Vector4 GetPosition(double t) => this[t];

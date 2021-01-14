@@ -1,3 +1,5 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Linsi
 {
     using System;
@@ -9,8 +11,8 @@ namespace Linsi
     public struct Vector2
         : IEquatable<Vector2>
     {
-        public static Vector2 Zero => new Vector2(0, 0);
         public readonly double X;
+
         public readonly double Y;
 
         public Vector2(double v)
@@ -24,6 +26,8 @@ namespace Linsi
             this.X = x;
             this.Y = y;
         }
+
+        public static Vector2 Zero => new Vector2(0, 0);
 
         public static Vector2 operator +(Vector2 a, Vector2 b) =>
             new Vector2(
@@ -51,7 +55,8 @@ namespace Linsi
                 a.Y / s);
 
         public static double MagnitudeSquared(Vector2 a) =>
-            a.X * a.X + a.Y * a.Y;
+            (a.X * a.X) +
+            (a.Y * a.Y);
 
         public static double Magnitude(Vector2 a) =>
             Math.Sqrt(Vector2.MagnitudeSquared(a));
@@ -66,10 +71,15 @@ namespace Linsi
         }
 
         public static double Dot(Vector2 a, Vector2 b) =>
-            a.X * b.X + a.Y * b.Y;
+            (a.X * b.X) +
+            (a.Y * b.Y);
 
         public static Vector2 Reflect(Vector2 a, Vector2 n) =>
-            a - n * 2 * Dot(a, n);
+            a - (n * 2 * Dot(a, n));
+
+        public static IEqualityComparer<Vector2> GetEqualityComparer(
+            double epsilon = 0.0) =>
+            new ApproxVector2EqualityComparer(epsilon);
 
         public double Magnitude() => Vector2.Magnitude(this);
 
@@ -79,31 +89,11 @@ namespace Linsi
 
         public Vector2 Reflect(Vector2 n) => Vector2.Reflect(this, n);
 
-        public static IEqualityComparer<Vector2> GetEqualityComparer(
-            double epsilon = 0.0) =>
-            new ApproxVector2EqualityComparer(epsilon);
-
         public override string ToString() =>
             $"({this.X}, {this.Y})";
 
         public bool Equals(Vector2 other) =>
             this.X == other.X &&
             this.Y == other.Y;
-    }
-
-    internal class ApproxVector2EqualityComparer 
-        : ApproxEqualityComparer<Vector2>
-    {
-        public ApproxVector2EqualityComparer(double epsilon = 0.0)
-            : base(epsilon)
-        {
-        }
-
-        public override bool Equals(Vector2 a, Vector2 b) =>
-            ApproxEqual(a.X, b.X) &&
-            ApproxEqual(a.Y, b.Y);
-
-        public override int GetHashCode(Vector2 obj) =>
-            HashCode.Combine(obj.X, obj.Y);
     }
 }

@@ -1,7 +1,8 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Linsi.Tests")]
 namespace Linsi
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -19,9 +20,11 @@ namespace Linsi
             };
         }
 
-        public Matrix3x3(double m00, double m01, double m02,
-                        double m10, double m11, double m12,
-                        double m20, double m21, double m22)
+#pragma warning disable SA1117 // ParametersMustBeOnSameLineOrSeparateLines
+        public Matrix3x3(
+            double m00, double m01, double m02,
+            double m10, double m11, double m12,
+            double m20, double m21, double m22)
         {
             this.data = new[]
             {
@@ -30,11 +33,12 @@ namespace Linsi
                 m20, m21, m22,
             };
         }
+#pragma warning restore SA1117 // ParametersMustBeOnSameLineOrSeparateLines
 
         public double this[int row, int col]
         {
-            get => this.data[row * 3 + col];
-            set => this.data[row * 3 + col] = value;
+            get => this.data[(row * 3) + col];
+            set => this.data[(row * 3) + col] = value;
         }
 
         public static IEqualityComparer<Matrix3x3> GetEqualityComparer(double epsilon = 0.0) =>
@@ -72,40 +76,8 @@ namespace Linsi
             (row + col) % 2 == 0 ? a.Minor(row, col) : -a.Minor(row, col);
 
         internal static double Determinant(this Matrix3x3 a) =>
-            a[0, 0] * a.Cofactor(0, 0) +
-            a[0, 1] * a.Cofactor(0, 1) +
-            a[0, 2] * a.Cofactor(0, 2);
-    }
-
-    internal class ApproxMatrix3x3EqualityComparer : ApproxEqualityComparer<Matrix3x3>
-    {
-        public ApproxMatrix3x3EqualityComparer(double epsilon = 0.0)
-            : base(epsilon)
-        {
-        }
-
-        public override bool Equals(Matrix3x3 x, Matrix3x3 y)
-        {
-            for (var j = 0; j < 3; j++)
-            {
-                for (var i = 0; i < 3; i++)
-                {
-                    if (!ApproxEqual(x[i, j], y[i, j]))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        public override int GetHashCode(Matrix3x3 obj) =>
-            HashCode.Combine(
-                HashCode.Combine(
-                    obj[0, 0], obj[0, 1], obj[0, 2],
-                    obj[1, 0], obj[1, 1], obj[1, 2]),
-                HashCode.Combine(
-                    obj[2, 0], obj[2, 1], obj[2, 2]));
+            (a[0, 0] * a.Cofactor(0, 0)) +
+            (a[0, 1] * a.Cofactor(0, 1)) +
+            (a[0, 2] * a.Cofactor(0, 2));
     }
 }

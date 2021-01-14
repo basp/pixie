@@ -1,9 +1,12 @@
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
+
 namespace Linsi
 {
     using System;
 
     public static class Transform
     {
+#pragma warning disable SA1117 // ParametersMustBeOnSameLineOrSeparateLines
         public static Matrix4x4 Translate(double x, double y, double z) =>
             new Matrix4x4(
                 1, 0, 0, x,
@@ -50,8 +53,8 @@ namespace Linsi
         {
             var fwd = (to - from).Normalize();
             var left = Vector4.Cross3(fwd, up.Normalize());
-            var trueUp = Vector4.Cross3(left, fwd);   
-            var orientation =         
+            var trueUp = Vector4.Cross3(left, fwd);
+            var orientation =
                 new Matrix4x4(
                     left.X, left.Y, left.Z, 0,
                     trueUp.X, trueUp.Y, trueUp.Z, 0,
@@ -60,17 +63,18 @@ namespace Linsi
 
             return orientation * Translate(-from.X, -from.Y, -from.Z);
         }
+#pragma warning restore SA1117 // ParametersMustBeOnSameLineOrSeparateLines
 
         public static Matrix4x4 Translate(
-            this Matrix4x4 m, 
-            double x, 
-            double y, 
+            this Matrix4x4 m,
+            double x,
+            double y,
             double z) => Transform.Translate(x, y, z) * m;
 
         public static Matrix4x4 Scale(
-            this Matrix4x4 m, 
-            double x, 
-            double y, 
+            this Matrix4x4 m,
+            double x,
+            double y,
             double z) => Transform.Scale(x, y, z) * m;
 
         public static Matrix4x4 RotateX(this Matrix4x4 m, double r) =>
