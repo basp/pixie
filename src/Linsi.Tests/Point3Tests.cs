@@ -70,5 +70,14 @@ namespace Linsi.Tests
             Assert.Equal(4, b.Y);
             Assert.Equal(6, b.Z);
         }
+
+        [Fact]
+        public void TestComparer()
+        {
+            var a = new Point3(1, 2, 3);
+            var b = new Point3(1.0101, 2.0101, 3.005);
+            var cmp = Point3.GetEqualityComparer(epsilon: 0.011);
+            Assert.True(cmp.Equals(a, b));
+        }
     }
 }

@@ -73,12 +73,38 @@ namespace Linsi
             return m;
         }
 
-        public static Vector4 operator *(Matrix4x4 a, Vector4 b) =>
-            new Vector4(
-                (a[0, 0] * b.X) + (a[0, 1] * b.Y) + (a[0, 2] * b.Z) + (a[0, 3] * b.W),
-                (a[1, 0] * b.X) + (a[1, 1] * b.Y) + (a[1, 2] * b.Z) + (a[1, 3] * b.W),
-                (a[2, 0] * b.X) + (a[2, 1] * b.Y) + (a[2, 2] * b.Z) + (a[2, 3] * b.W),
-                (a[3, 0] * b.X) + (a[3, 1] * b.Y) + (a[3, 2] * b.Z) + (a[3, 3] * b.W));
+        public static Vector4 operator *(Matrix4x4 m, Vector4 u)
+        {
+            var x = (m[0, 0] * u.X) + (m[0, 1] * u.Y) + (m[0, 2] * u.Z) + (m[0, 3] * u.W);
+            var y = (m[1, 0] * u.X) + (m[1, 1] * u.Y) + (m[1, 2] * u.Z) + (m[1, 3] * u.W);
+            var z = (m[2, 0] * u.X) + (m[2, 1] * u.Y) + (m[2, 2] * u.Z) + (m[2, 3] * u.W);
+            var w = (m[3, 0] * u.X) + (m[3, 1] * u.Y) + (m[3, 2] * u.Z) + (m[3, 3] * u.W);
+            return new Vector4(x, y, z, w);
+        }
+
+        public static Vector3 operator *(Matrix4x4 m, Vector3 u)
+        {
+            var x = (m[0, 0] * u.X) + (m[0, 1] * u.Y) + (m[0, 2] * u.Z);
+            var y = (m[1, 0] * u.X) + (m[1, 1] * u.Y) + (m[1, 2] * u.Z);
+            var z = (m[2, 0] * u.X) + (m[2, 1] * u.Y) + (m[2, 2] * u.Z);
+            return new Vector3(x, y, z);
+        }
+
+        public static Normal3 operator *(Matrix4x4 m, Normal3 n)
+        {
+            var x = (m[0, 0] * n.X) + (m[1, 0] * n.Y) + (m[2, 0] * n.Z);
+            var y = (m[0, 1] * n.X) + (m[1, 1] * n.Y) + (m[2, 1] * n.Z);
+            var z = (m[0, 2] * n.X) + (m[1, 2] * n.Y) + (m[2, 2] * n.Z);
+            return new Normal3(x, y, z);
+        }
+
+        public static Point3 operator *(Matrix4x4 m, Point3 a)
+        {
+            var x = (m[0, 0] * a.X) + (m[0, 1] * a.Y) + (m[0, 2] * a.Z) + m[0, 3];
+            var y = (m[1, 0] * a.X) + (m[1, 1] * a.Y) + (m[1, 2] * a.Z) + m[1, 3];
+            var z = (m[2, 0] * a.X) + (m[2, 1] * a.Y) + (m[2, 2] * a.Z) + m[2, 3];
+            return new Point3(x, y, z);
+        }
 
         public static Ray operator *(Matrix4x4 a, Ray r) =>
             new Ray(a * r.Origin, a * r.Direction);
