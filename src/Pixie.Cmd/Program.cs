@@ -52,12 +52,15 @@
                     rows,
                     $"rendering {args.Scene} from {Path.GetFileName(args.Asm)}");
 
+            // scene.SamplerFactory =
+            //     () => new RandomSuperSampler(scene.World, scene.Camera, args.N);
+
             scene.SamplerFactory =
                 () => new FocalBlurSampler(
                             scene.World,
                             scene.Camera,
                             n: args.N,
-                            focalDistance: 8.75,
+                            focalDistance: 4.5,
                             aperture: 0.1);
 
             Console.WriteLine($"Super sampling:     {args.N}x");
@@ -84,10 +87,9 @@
             Console.WriteLine();
         }
 
-        private static IEnumerable<Type> GetSceneBuilders(
-            Assembly asm) => asm
-                .GetExportedTypes()
-                .Where(x => typeof(ISceneBuilder).IsAssignableFrom(x));
+        private static IEnumerable<Type> GetSceneBuilders(Assembly asm) => asm
+            .GetExportedTypes()
+            .Where(x => typeof(ISceneBuilder).IsAssignableFrom(x));
 
         private static bool TryLoadAssembly(string path, out Assembly asm)
         {

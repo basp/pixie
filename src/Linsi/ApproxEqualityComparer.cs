@@ -12,7 +12,7 @@ namespace Linsi
     {
         private readonly double epsilon;
 
-        protected ApproxEqualityComparer(double epsilon = 0.000001)
+        protected ApproxEqualityComparer(double epsilon = 0)
         {
             this.epsilon = epsilon;
         }

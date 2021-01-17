@@ -1,10 +1,9 @@
-using System;
 using Linsi;
 using Pixie;
 
-public static class Test02
+public class Test02 : ISceneBuilder
 {
-    public static Tuple<World, Camera> Create(int width, int height)
+    public Scene Build(int width, int height)
     {
         var camera = new Camera(width, height, 1.152)
         {
@@ -236,8 +235,8 @@ public static class Test02
             greenGlassSphere,
         };
 
-        world.Lights = new [] { light };
+        world.Lights = new[] { light };
 
-        return Tuple.Create(world, camera);
+        return new Scene(world, camera);
     }
 }

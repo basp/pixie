@@ -126,7 +126,8 @@ public class Test04 : ISceneBuilder
             glass1,
         };
 
-        var rng = new Random(12345);
+        const int seed = 12345;
+        var rng = new Random(seed);
         var g = new Group();
         for (var i = 0; i < 100; i++)
         {

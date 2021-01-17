@@ -8,27 +8,19 @@ namespace Linsi
     /// <summary>
     /// Vector of 3 <c>double</c> values.
     /// </summary>
-    public struct Vector3
-        : IEquatable<Vector3>
+    public struct Vector3 : IEquatable<Vector3>
     {
-        public readonly double X;
-
-        public readonly double Y;
-
-        public readonly double Z;
-
-        public Vector3(double v)
-        {
-            this.X = v;
-            this.Y = v;
-            this.Z = v;
-        }
+        public readonly double X, Y, Z;
 
         public Vector3(double x, double y, double z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
+        }
+
+        public Vector3(double a) : this(a, a, a)
+        {
         }
 
         public static Vector3 Zero => new Vector3(0, 0, 0);
@@ -45,9 +37,6 @@ namespace Linsi
                 a.Y - b.Y,
                 a.Z - b.Z);
 
-        public static Vector3 operator -(Vector3 a) =>
-            new Vector3(-a.X, -a.Y, -a.Z);
-
         public static Vector3 operator *(Vector3 a, double s) =>
             new Vector3(
                 a.X * s,
@@ -56,26 +45,20 @@ namespace Linsi
 
         public static Vector3 operator *(double s, Vector3 a) => a * s;
 
-        public static Vector3 operator /(Vector3 a, double s) =>
-            new Vector3(
-                a.X / s,
-                a.Y / s,
-                a.Z / s);
+        public static Vector3 operator /(Vector3 a, double s) => a * (1 / s);
+
+        public static Vector3 operator -(Vector3 a) =>
+            new Vector3(-a.X, -a.Y, -a.Z);
 
         public static double MagnitudeSquared(Vector3 a) =>
-            (a.X * a.X) + (a.Y * a.Y) + (a.Z * a.Z);
+            (a.X * a.X) +
+            (a.Y * a.Y) +
+            (a.Z * a.Z);
 
         public static double Magnitude(Vector3 a) =>
-            (double)Math.Sqrt(Vector3.MagnitudeSquared(a));
+            Math.Sqrt(Vector3.MagnitudeSquared(a));
 
-        public static Vector3 Normalize(Vector3 a)
-        {
-            var mag = Vector3.Magnitude(a);
-            return new Vector3(
-                a.X / mag,
-                a.Y / mag,
-                a.Z / mag);
-        }
+        public static Vector3 Normalize(Vector3 a) => a * a.Magnitude();
 
         public static double Dot(Vector3 a, Vector3 b) =>
             (a.X * b.X) +
@@ -91,8 +74,8 @@ namespace Linsi
         public static Vector3 Reflect(Vector3 a, Vector3 n) =>
             a - (n * 2 * Dot(a, n));
 
-        public static IEqualityComparer<Vector3> GetEqualityComparer(double epsilon = 0.0) =>
-            new ApproxVector3EqualityComparer(epsilon);
+        public static IEqualityComparer<Vector3> GetEqualityComparer(double epsilon = 0) =>
+            new Vector3EqualityComparer(epsilon);
 
         public double Magnitude() => Vector3.Magnitude(this);
 

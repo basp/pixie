@@ -8,24 +8,9 @@ namespace Linsi
     /// <summary>
     /// Vector of 4 <c>double</c> values.
     /// </summary>
-    public struct Vector4
-        : IEquatable<Vector4>
+    public struct Vector4 : IEquatable<Vector4>
     {
-        public readonly double X;
-
-        public readonly double Y;
-
-        public readonly double Z;
-
-        public readonly double W;
-
-        public Vector4(double v)
-        {
-            this.X = v;
-            this.Y = v;
-            this.Z = v;
-            this.W = v;
-        }
+        public readonly double X, Y, Z, W;
 
         public Vector4(double x, double y, double z, double w)
         {
@@ -33,6 +18,10 @@ namespace Linsi
             this.Y = y;
             this.Z = z;
             this.W = w;
+        }
+
+        public Vector4(double a) : this(a, a, a, a)
+        {
         }
 
         public static Vector4 Zero => new Vector4(0, 0, 0, 0);
@@ -81,17 +70,9 @@ namespace Linsi
             (a.W * a.W);
 
         public static double Magnitude(Vector4 a) =>
-            (double)Math.Sqrt(Vector4.MagnitudeSquared(a));
+            Math.Sqrt(Vector4.MagnitudeSquared(a));
 
-        public static Vector4 Normalize(Vector4 a)
-        {
-            var mag = Vector4.Magnitude(a);
-            return new Vector4(
-                a.X / mag,
-                a.Y / mag,
-                a.Z / mag,
-                a.W / mag);
-        }
+        public static Vector4 Normalize(Vector4 a) => a / a.Magnitude();
 
         public static double Dot(Vector4 a, Vector4 b) =>
             (a.X * b.X) +
@@ -140,9 +121,8 @@ namespace Linsi
         public static Vector4 CreateDirection(double x, double y, double z) =>
             new Vector4(x, y, z, 0);
 
-        public static IEqualityComparer<Vector4> GetEqualityComparer(
-            double epsilon = 0.0) =>
-            new ApproxVector4EqualityComparer(epsilon);
+        public static IEqualityComparer<Vector4> GetEqualityComparer(double epsilon = 0.0) =>
+            new Vector4EqualityComparer(epsilon);
 
         public Vector4 Cross3(Vector4 b) => Cross3(this, b);
 

@@ -10,9 +10,11 @@ namespace Linsi
     /// </summary>
     public struct Color
     {
-        public readonly double R;
-        public readonly double G;
-        public readonly double B;
+        public static Color White => new Color(1, 1, 1);
+
+        public static Color Black => new Color(0, 0, 0);
+
+        public readonly double R, G, B;
 
         public Color(double r, double g, double b)
         {
@@ -21,11 +23,9 @@ namespace Linsi
             this.B = b;
         }
 
-        public static Color White =>
-            new Color(1, 1, 1);
-
-        public static Color Black =>
-            new Color(0, 0, 0);
+        public Color(double a) : this(a, a, a)
+        {
+        }
 
         public static Color operator +(Color a, Color b) =>
             new Color(
@@ -47,6 +47,9 @@ namespace Linsi
 
         public static Color operator *(double s, Color a) => a * s;
 
+        /// <summary>
+        /// Hadamard (entrywise) product of two color vectors.
+        /// </summary>
         public static Color operator *(Color c1, Color c2) =>
             new Color(
                 c1.R * c2.R,

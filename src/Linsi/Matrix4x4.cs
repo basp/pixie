@@ -10,7 +10,7 @@ namespace Linsi
     /// <summary>
     /// 4x4 matrix of <c>double</c> values.
     /// </summary>
-    public struct Matrix4x4 : IEquatable<Matrix4x4>
+    public class Matrix4x4 : IEquatable<Matrix4x4>
     {
         private readonly double[] data;
 
@@ -98,7 +98,7 @@ namespace Linsi
         }
 
         public static IEqualityComparer<Matrix4x4> GetEqualityComparer(double epsilon = 0.0) =>
-            new ApproxMatrix4x4EqualityComparer(epsilon);
+            new Matrix4x4EqualityComparer(epsilon);
 
         public Matrix4x4 Transpose() => Matrix4x4.Transpose(this);
 

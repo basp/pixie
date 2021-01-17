@@ -8,18 +8,9 @@ namespace Linsi
     /// <summary>
     /// Vector of 2 <c>double</c> values.
     /// </summary>
-    public struct Vector2
-        : IEquatable<Vector2>
+    public struct Vector2 : IEquatable<Vector2>
     {
-        public readonly double X;
-
-        public readonly double Y;
-
-        public Vector2(double v)
-        {
-            this.X = v;
-            this.Y = v;
-        }
+        public readonly double X, Y;
 
         public Vector2(double x, double y)
         {
@@ -27,32 +18,29 @@ namespace Linsi
             this.Y = y;
         }
 
+        public Vector2(double a) : this(a, a)
+        {
+        }
+
         public static Vector2 Zero => new Vector2(0, 0);
 
-        public static Vector2 operator +(Vector2 a, Vector2 b) =>
-            new Vector2(
-                a.X + b.X,
-                a.Y + b.Y);
+        public static Vector2 operator +(Vector2 u, Vector2 v) =>
+            new Vector2(u.X + v.X, u.Y + v.Y);
 
-        public static Vector2 operator -(Vector2 a, Vector2 b) =>
-            new Vector2(
-                a.X - b.X,
-                a.Y - b.Y);
+        public static Vector2 operator -(Vector2 u, Vector2 v) =>
+            new Vector2(u.X - v.X, u.Y - v.Y);
 
-        public static Vector2 operator -(Vector2 a) =>
-            new Vector2(-a.X, -a.Y);
+        public static Vector2 operator *(double a, Vector2 u) => u * a;
 
-        public static Vector2 operator *(Vector2 a, double s) =>
-            new Vector2(
-                a.X * s,
-                a.Y * s);
+        public static Vector2 operator *(Vector2 u, double a) =>
+            new Vector2(u.X * a, u.Y * a);
 
-        public static Vector2 operator *(double s, Vector2 a) => a * s;
+        public static Vector2 operator /(Vector2 u, double a) => u * (1 / a);
 
-        public static Vector2 operator /(Vector2 a, double s) =>
-            new Vector2(
-                a.X / s,
-                a.Y / s);
+        public static Vector2 operator -(Vector2 a) => new Vector2(-a.X, -a.Y);
+
+        public static explicit operator Point2(Vector2 u) =>
+            new Point2(u.X, u.Y);
 
         public static double MagnitudeSquared(Vector2 a) =>
             (a.X * a.X) +
@@ -61,14 +49,7 @@ namespace Linsi
         public static double Magnitude(Vector2 a) =>
             Math.Sqrt(Vector2.MagnitudeSquared(a));
 
-        public static Vector2 Normalize(Vector2 a)
-        {
-            var mag = Vector2.Magnitude(a);
-            var oneOverMag = 1 / mag;
-            return new Vector2(
-                a.X * oneOverMag,
-                a.Y * oneOverMag);
-        }
+        public static Vector2 Normalize(Vector2 a) => a / a.Magnitude();
 
         public static double Dot(Vector2 a, Vector2 b) =>
             (a.X * b.X) +
@@ -79,7 +60,7 @@ namespace Linsi
 
         public static IEqualityComparer<Vector2> GetEqualityComparer(
             double epsilon = 0.0) =>
-            new ApproxVector2EqualityComparer(epsilon);
+            new Vector2EqualityComparer(epsilon);
 
         public double Magnitude() => Vector2.Magnitude(this);
 
@@ -89,8 +70,7 @@ namespace Linsi
 
         public Vector2 Reflect(Vector2 n) => Vector2.Reflect(this, n);
 
-        public override string ToString() =>
-            $"({this.X}, {this.Y})";
+        public override string ToString() => $"({this.X}, {this.Y})";
 
         public bool Equals(Vector2 other) =>
             this.X == other.X &&

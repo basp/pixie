@@ -4,18 +4,18 @@ namespace Linsi
 {
     using System;
 
-    internal class ApproxMatrix2x2EqualityComparer : ApproxEqualityComparer<Matrix2x2>
+    internal class Matrix3x3EqualityComparer : ApproxEqualityComparer<Matrix3x3>
     {
-        public ApproxMatrix2x2EqualityComparer(double epsilon = 0.0)
+        public Matrix3x3EqualityComparer(double epsilon = 0)
             : base(epsilon)
         {
         }
 
-        public override bool Equals(Matrix2x2 x, Matrix2x2 y)
+        public override bool Equals(Matrix3x3 x, Matrix3x3 y)
         {
-            for (var j = 0; j < 2; j++)
+            for (var j = 0; j < 3; j++)
             {
-                for (var i = 0; i < 2; i++)
+                for (var i = 0; i < 3; i++)
                 {
                     if (!this.ApproxEqual(x[i, j], y[i, j]))
                     {
@@ -28,10 +28,13 @@ namespace Linsi
         }
 
 #pragma warning disable SA1117 // ParametersMustBeOnSameLineOrSeparateLines
-        public override int GetHashCode(Matrix2x2 obj) =>
+        public override int GetHashCode(Matrix3x3 obj) =>
             HashCode.Combine(
-                obj[0, 0], obj[0, 1],
-                obj[1, 0], obj[1, 1]);
+                HashCode.Combine(
+                    obj[0, 0], obj[0, 1], obj[0, 2],
+                    obj[1, 0], obj[1, 1], obj[1, 2]),
+                HashCode.Combine(
+                    obj[2, 0], obj[2, 1], obj[2, 2]));
 #pragma warning restore SA1117 // ParametersMustBeOnSameLineOrSeparateLines
     }
 }

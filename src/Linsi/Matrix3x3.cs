@@ -6,7 +6,7 @@ namespace Linsi
     using System.Collections.Generic;
     using System.Linq;
 
-    internal struct Matrix3x3
+    internal class Matrix3x3
     {
         private readonly double[] data;
 
@@ -42,7 +42,7 @@ namespace Linsi
         }
 
         public static IEqualityComparer<Matrix3x3> GetEqualityComparer(double epsilon = 0.0) =>
-            new ApproxMatrix3x3EqualityComparer(epsilon);
+            new Matrix3x3EqualityComparer(epsilon);
     }
 
     public static class Matrix3x3Extensions

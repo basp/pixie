@@ -4,7 +4,7 @@ namespace Linsi
 {
     using System.Collections.Generic;
 
-    internal struct Matrix2x2
+    internal class Matrix2x2
     {
         private readonly double[] data;
 
@@ -37,7 +37,7 @@ namespace Linsi
         }
 
         public static IEqualityComparer<Matrix2x2> GetEqualityComparer(double epsilon = 0.0) =>
-            new ApproxMatrix2x2EqualityComparer(epsilon);
+            new Matrix2x2EqualityComparer(epsilon);
 
         public override string ToString() =>
             $"({string.Join(", ", this.data)})";

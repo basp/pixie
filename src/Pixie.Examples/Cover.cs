@@ -2,9 +2,9 @@ using System;
 using Linsi;
 using Pixie;
 
-public class Cover
+public class Cover : ISceneBuilder
 {
-    public static Tuple<World, Camera> Create(int width, int height)
+    public Scene Build(int width, int height)
     {
         var camera = new Camera(width, height, 0.785)
         {
@@ -236,6 +236,6 @@ public class Cover
         world.Lights.Add(light1);
         world.Lights.Add(light2);
 
-        return Tuple.Create(world, camera);
+        return new Scene(world, camera);
     }
 }
