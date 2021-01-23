@@ -3,7 +3,7 @@
 namespace Pixie
 {
     using System.Collections.Generic;
-    using Linsi;
+    using Linie;
 
     public class PointLight : ILight
     {

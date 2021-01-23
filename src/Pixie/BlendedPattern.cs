@@ -3,7 +3,7 @@
 namespace Pixie
 {
     using System;
-    using Linsi;
+    using Linie;
 
     /// <summary>
     /// Blends two patterns together using a blender function.

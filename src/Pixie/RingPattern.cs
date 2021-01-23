@@ -3,7 +3,7 @@
 namespace Pixie
 {
     using System;
-    using Linsi;
+    using Linie;
 
     public class RingPattern : Pattern
     {

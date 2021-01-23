@@ -2,7 +2,7 @@ namespace Pixie.Tests
 {
     using System;
     using Xunit;
-    using Linsi;
+    using Linie;
 
     public class ConeTests
     {
@@ -10,7 +10,7 @@ namespace Pixie.Tests
         [InlineData(0, 0, -5, 0, 0, 1, 5, 5)]
         [InlineData(0, 0, -5, 1, 1, 1, 8.66025, 8.66025)]
         [InlineData(1, 1, -5, -0.5, -1, 1, 4.55006, 49.44994)]
-        public void IntersectConeWithRay(
+        public void IntersectConeWithRay4(
             double ox,
             double oy,
             double oz,
@@ -23,7 +23,7 @@ namespace Pixie.Tests
             var shape = new Cone();
             var origin = Vector4.CreatePosition(ox, oy, oz);
             var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
-            var r = new Ray(origin, direction);
+            var r = new Ray4(origin, direction);
             var xs = shape.LocalIntersect(r);
             const int prec = 5;
             Assert.Equal(2, xs.Count);
@@ -32,11 +32,11 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void IntersectConeWithRayParallelToOneOfItsHalves()
+        public void IntersectConeWithRay4ParallelToOneOfItsHalves()
         {
             var shape = new Cone();
             var direction = Vector4.CreateDirection(0, 1, 1).Normalize();
-            var r = new Ray(Vector4.CreatePosition(0, 0, -1), direction);
+            var r = new Ray4(Vector4.CreatePosition(0, 0, -1), direction);
             var xs = shape.LocalIntersect(r);
             const int prec = 5;
             Assert.Single(xs);
@@ -65,7 +65,7 @@ namespace Pixie.Tests
 
             var origin = Vector4.CreatePosition(ox, oy, oz);
             var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
-            var r = new Ray(origin, direction);
+            var r = new Ray4(origin, direction);
             var xs = shape.LocalIntersect(r);
             Assert.Equal(count, xs.Count);
         }

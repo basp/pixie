@@ -1,4 +1,4 @@
-﻿namespace Pixie.Cmd
+﻿namespace Pixie
 {
     using System;
     using System.Collections.Generic;
@@ -79,9 +79,9 @@
 
             Console.WriteLine($"Speed:              {pixelsPerSecond} px/s");
             Console.WriteLine($"---");
-            Console.WriteLine($"Primary rays:       {Stats.PrimaryRays}");
-            Console.WriteLine($"Secondary rays:     {Stats.SecondaryRays}");
-            Console.WriteLine($"Shadow rays:        {Stats.ShadowRays}");
+            Console.WriteLine($"Primary rays:       {Stats.PrimaryRay4s}");
+            Console.WriteLine($"Secondary rays:     {Stats.SecondaryRay4s}");
+            Console.WriteLine($"Shadow rays:        {Stats.ShadowRay4s}");
             Console.WriteLine($"---");
             Console.WriteLine($"Intersection tests: {Stats.Tests}");
             Console.WriteLine();

@@ -1,9 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
     <ItemGroup>
-        <ProjectReference Include="..\Linsi\Linsi.csproj" />
+        <PackageReference Include="Linie" Version="0.6.1" />
+        <PackageReference Include="PowerArgs" Version="3.6.0" />
+        <PackageReference Include="ShellProgressBar" Version="5.0.0" />
     </ItemGroup>
 
     <PropertyGroup>
+        <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 

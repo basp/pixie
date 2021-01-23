@@ -4,7 +4,7 @@ namespace Pixie
 {
     using System;
     using System.Collections.Generic;
-    using Linsi;
+    using Linie;
 
     public class Cylinder : Shape
     {
@@ -16,14 +16,14 @@ namespace Pixie
 
         public bool IsClosed { get; set; } = false;
 
-        private bool CheckCap(Ray ray, double t)
+        private bool CheckCap(Ray4 ray, double t)
         {
             var x = ray.Origin.X + t * ray.Direction.X;
             var z = ray.Origin.Z + t * ray.Direction.Z;
             return (x * x + z * z) <= 1;
         }
 
-        private void IntersectCaps(Ray ray, List<Intersection> xs)
+        private void IntersectCaps(Ray4 ray, List<Intersection> xs)
         {
             if (!this.IsClosed)
             {
@@ -50,7 +50,7 @@ namespace Pixie
             }
         }
 
-        public override IntersectionList LocalIntersect(Ray ray)
+        public override IntersectionList LocalIntersect(Ray4 ray)
         {
             var a = Math.Pow(ray.Direction.X, 2) + Math.Pow(ray.Direction.Z, 2);
 

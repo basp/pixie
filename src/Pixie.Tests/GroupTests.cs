@@ -2,7 +2,7 @@ namespace Pixie.Tests
 {
     using System;
     using Xunit;
-    using Linsi;
+    using Linie;
 
     public class GroupTests
     {
@@ -26,16 +26,16 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void IntersectRayWithEmptyGroup()
+        public void IntersectRay4WithEmptyGroup()
         {
             var g = new Group();
-            var r = new Ray(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
             var xs = g.LocalIntersect(r);
             Assert.Empty(xs);
         }
 
         [Fact]
-        public void IntersectRayWithNonEmptyGroup()
+        public void IntersectRay4WithNonEmptyGroup()
         {
             var g = new Group();
 
@@ -57,7 +57,7 @@ namespace Pixie.Tests
             g.Add(s2);
             g.Add(s3);
 
-            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var xs = g.LocalIntersect(r);
             Assert.Equal(4, xs.Count);
             Assert.Equal(s2, xs[0].Object);
@@ -74,7 +74,7 @@ namespace Pixie.Tests
             var sphere = new Sphere();
             sphere.Transform = Transform.Translate(5, 0, 0);
             g.Add(sphere);
-            var r = new Ray(Vector4.CreatePosition(10, 0, -10), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(10, 0, -10), Vector4.CreateDirection(0, 0, 1));
             var xs = g.Intersect(r);
             Assert.Equal(2, xs.Count);
         }
@@ -224,11 +224,11 @@ namespace Pixie.Tests
             var child = new TestShape();
             var shape = new Group();
             shape.Add(child);
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, 0, -5),
                 Vector4.CreateDirection(0, 1, 0));
             var xs = shape.Intersect(r);
-            Assert.Null(child.SavedRay);
+            Assert.Null(child.SavedRay4);
         }
 
         [Fact]
@@ -237,11 +237,11 @@ namespace Pixie.Tests
             var child = new TestShape();
             var shape = new Group();
             shape.Add(child);
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, 0, -5),
                 Vector4.CreateDirection(0, 0, 1));
             var xs = shape.Intersect(r);
-            Assert.NotNull(child.SavedRay);
+            Assert.NotNull(child.SavedRay4);
         }
 
         [Fact]

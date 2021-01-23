@@ -1,7 +1,7 @@
 namespace Pixie.Tests
 {
     using Xunit;
-    using Linsi;
+    using Linie;
 
     public class CubeTests
     {
@@ -13,7 +13,7 @@ namespace Pixie.Tests
         [InlineData(0.5, 0, 5, 0, 0, -1, 4, 6)]
         [InlineData(0.5, 0, -5, 0, 0, 1, 4, 6)]
         [InlineData(0, 0.5, 0, 0, 0, 1, -1, 1)]
-        public void RayIntersectsCube(
+        public void Ray4IntersectsCube(
             double ox,
             double oy,
             double oz,
@@ -26,7 +26,7 @@ namespace Pixie.Tests
             var c = new Cube();
             var origin = Vector4.CreatePosition(ox, oy, oz);
             var direction = Vector4.CreateDirection(dx, dy, dz);
-            var r = new Ray(origin, direction);
+            var r = new Ray4(origin, direction);
             var xs = c.LocalIntersect(r);
             Assert.Equal(2, xs.Count);
             Assert.Equal(t1, xs[0].T);
@@ -40,7 +40,7 @@ namespace Pixie.Tests
         [InlineData(2, 0, 2, 0, 0, -1)]
         [InlineData(0, 2, 2, 0, -1, 0)]
         [InlineData(2, 2, 0, -1, 0, 0)]
-        public void RayMissesCube(
+        public void Ray4MissesCube(
             double ox,
             double oy,
             double oz,
@@ -51,7 +51,7 @@ namespace Pixie.Tests
             var c = new Cube();
             var origin = Vector4.CreatePosition(ox, oy, oz);
             var direction = Vector4.CreateDirection(dx, dy, dz);
-            var r = new Ray(origin, direction);
+            var r = new Ray4(origin, direction);
             var xs = c.LocalIntersect(r);
             Assert.Empty(xs);
         }

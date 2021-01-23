@@ -4,7 +4,7 @@ namespace Pixie
 {
     using System;
     using System.Collections.Generic;
-    using Linsi;
+    using Linie;
 
     public interface ILight : IEquatable<ILight>
     {

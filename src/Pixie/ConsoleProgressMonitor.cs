@@ -1,4 +1,4 @@
-namespace Pixie.Cmd
+namespace Pixie
 {
     using System;
     using ShellProgressBar;

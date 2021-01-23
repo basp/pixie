@@ -1,7 +1,7 @@
 namespace Pixie.Tests
 {
     using Xunit;
-    using Linsi;
+    using Linie;
 
     public class PlaneTests
     {
@@ -19,28 +19,28 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void IntersectWithRayParallelToPlane()
+        public void IntersectWithRay4ParallelToPlane()
         {
             var p = new Plane();
-            var r = new Ray(Vector4.CreatePosition(0, 10, 0), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 10, 0), Vector4.CreateDirection(0, 0, 1));
             var xs = p.LocalIntersect(r);
             Assert.Empty(xs);
         }
 
         [Fact]
-        public void IntersectWithCoplanarRay()
+        public void IntersectWithCoplanarRay4()
         {
             var p = new Plane();
-            var r = new Ray(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
             var xs = p.LocalIntersect(r);
             Assert.Empty(xs);
         }
 
         [Fact]
-        public void RayItersectingPlaneFromAbove()
+        public void Ray4ItersectingPlaneFromAbove()
         {
             var p = new Plane();
-            var r = new Ray(Vector4.CreatePosition(0, 1, 0), Vector4.CreateDirection(0, -1, 0));
+            var r = new Ray4(Vector4.CreatePosition(0, 1, 0), Vector4.CreateDirection(0, -1, 0));
             var xs = p.LocalIntersect(r);
             Assert.Single(xs);
             Assert.Equal(1, xs[0].T);
@@ -48,10 +48,10 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void RayIntersectingPlaneFromBelow()
+        public void Ray4IntersectingPlaneFromBelow()
         {
             var p = new Plane();
-            var r = new Ray(Vector4.CreatePosition(0, -1, 0), Vector4.CreateDirection(0, 1, 0));
+            var r = new Ray4(Vector4.CreatePosition(0, -1, 0), Vector4.CreateDirection(0, 1, 0));
             var xs = p.LocalIntersect(r);
             Assert.Single(xs);
             Assert.Equal(1, xs[0].T);

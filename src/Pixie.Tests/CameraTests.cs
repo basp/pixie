@@ -2,7 +2,7 @@ namespace Pixie.Tests
 {
     using System;
     using Xunit;
-    using Linsi;
+    using Linie;
 
     public class CameraTests
     {

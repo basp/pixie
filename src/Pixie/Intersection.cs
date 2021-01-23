@@ -5,7 +5,7 @@ namespace Pixie
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Linsi;
+    using Linie;
 
     public struct Intersection : IEquatable<Intersection>
     {
@@ -25,10 +25,10 @@ namespace Pixie
             this.T == other.T &&
             this.Object == other.Object;
 
-        public Interaction Precompute(Ray r) =>
+        public Interaction Precompute(Ray4 r) =>
             Precompute(r, IntersectionList.Create(this));
 
-        public Interaction Precompute(Ray r, IntersectionList xs)
+        public Interaction Precompute(Ray4 r, IntersectionList xs)
         {
             var t = this.T;
             var obj = this.Object;

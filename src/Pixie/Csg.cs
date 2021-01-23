@@ -4,7 +4,7 @@ namespace Pixie
 {
     using System;
     using System.Collections.Generic;
-    using Linsi;
+    using Linie;
 
     public enum Operation
     {
@@ -82,7 +82,7 @@ namespace Pixie
             return IntersectionList.Create(result.ToArray());
         }
 
-        public override IntersectionList LocalIntersect(Ray ray)
+        public override IntersectionList LocalIntersect(Ray4 ray)
         {
             var bounds = this.GetBounds();
             if (!bounds.Intersect(ray))

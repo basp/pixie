@@ -6,7 +6,7 @@ namespace Pixie
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using Linsi;
+    using Linie;
 
     public class Group : Shape, IList<Shape>
     {
@@ -33,7 +33,7 @@ namespace Pixie
             return box;
         }
 
-        public override IntersectionList LocalIntersect(Ray ray)
+        public override IntersectionList LocalIntersect(Ray4 ray)
         {
             var bounds = this.GetBounds();
             if (!bounds.Intersect(ray))

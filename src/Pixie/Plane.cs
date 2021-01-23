@@ -3,7 +3,7 @@
 namespace Pixie
 {
     using System;
-    using Linsi;
+    using Linie;
 
     public class Plane : Shape
     {
@@ -24,7 +24,7 @@ namespace Pixie
             return new BoundingBox(min, max);
         }
 
-        public override IntersectionList LocalIntersect(Ray ray)
+        public override IntersectionList LocalIntersect(Ray4 ray)
         {
             if (Math.Abs(ray.Direction.Y) < Epsilon)
             {

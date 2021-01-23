@@ -1,7 +1,7 @@
 namespace Pixie.Tests
 {
     using Xunit;
-    using Linsi;
+    using Linie;
 
     public class TriangleTests
     {
@@ -36,14 +36,14 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void IntersectRayParallelToTriangle()
+        public void IntersectRay4ParallelToTriangle()
         {
             var t = new Triangle(
                 Vector4.CreatePosition(0, 1, 0),
                 Vector4.CreatePosition(-1, 0, 0),
                 Vector4.CreatePosition(1, 0, 0));
 
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, -1, -2),
                 Vector4.CreateDirection(0, 1, 0));
 
@@ -52,14 +52,14 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void RayMissesP1P3Edge()
+        public void Ray4MissesP1P3Edge()
         {
             var t = new Triangle(
                 Vector4.CreatePosition(0, 1, 0),
                 Vector4.CreatePosition(-1, 0, 0),
                 Vector4.CreatePosition(1, 0, 0));
 
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(1, 1, -2),
                 Vector4.CreateDirection(0, 0, 1));
 
@@ -68,14 +68,14 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void RayMissedP1P2Edge()
+        public void Ray4MissedP1P2Edge()
         {
             var t = new Triangle(
                 Vector4.CreatePosition(0, 1, 0),
                 Vector4.CreatePosition(-1, 0, 0),
                 Vector4.CreatePosition(1, 0, 0));
 
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(-1, 1, -2),
                 Vector4.CreateDirection(0, 0, 1));
 
@@ -84,14 +84,14 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void RayMissedP2P3Edge()
+        public void Ray4MissedP2P3Edge()
         {
             var t = new Triangle(
                 Vector4.CreatePosition(0, 1, 0),
                 Vector4.CreatePosition(-1, 0, 0),
                 Vector4.CreatePosition(1, 0, 0));
 
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, -1, -2),
                 Vector4.CreateDirection(0, 0, 1));
 
@@ -100,14 +100,14 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void RayStrikesTriangle()
+        public void Ray4StrikesTriangle()
         {
             var t = new Triangle(
                 Vector4.CreatePosition(0, 1, 0),
                 Vector4.CreatePosition(-1, 0, 0),
                 Vector4.CreatePosition(1, 0, 0));
 
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, 0.5, -2),
                 Vector4.CreateDirection(0, 0, 1));
 

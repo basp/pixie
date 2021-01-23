@@ -2,7 +2,7 @@
 
 namespace Pixie
 {
-    using Linsi;
+    using Linie;
 
     public abstract class Pattern
     {

@@ -7,7 +7,7 @@ namespace Pixie
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using Linsi;
+    using Linie;
 
     public class World
     {
@@ -18,14 +18,14 @@ namespace Pixie
         /// <summary>
         /// Intersect a ray with all objects in the world.
         /// </summary>
-        public IntersectionList Intersect(Ray ray) =>
+        public IntersectionList Intersect(Ray4 ray) =>
             this.Intersect(ray, obj => true);
 
         /// <summary>
         /// Intersect with a predicate to select a subset
         /// of shapes from the world.
         /// </summary>
-        public IntersectionList Intersect(Ray ray, Func<Shape, bool> predicate)
+        public IntersectionList Intersect(Ray4 ray, Func<Shape, bool> predicate)
         {
             Interlocked.Increment(ref Stats.Tests);
             var xs = this.Objects
@@ -38,7 +38,7 @@ namespace Pixie
 
         const int DefaultRecursiveDepth = 5;
 
-        public Color Trace(Ray ray, int remaining = DefaultRecursiveDepth)
+        public Color Trace(Ray4 ray, int remaining = DefaultRecursiveDepth)
         {
             var xs = this.Intersect(ray);
             if (xs.TryGetHit(out var i))
@@ -52,11 +52,11 @@ namespace Pixie
 
         public bool IsShadowed(Vector4 lightPosition, Vector4 point)
         {
-            Interlocked.Increment(ref Stats.ShadowRays);
+            Interlocked.Increment(ref Stats.ShadowRay4s);
             var v = lightPosition - point;
             var distance = v.Magnitude();
             var direction = v.Normalize();
-            var r = new Ray(point, direction);
+            var r = new Ray4(point, direction);
             var xs = this.Intersect(r, obj => obj.Shadow);
             if (xs.TryGetHit(out var i))
             {
@@ -135,9 +135,9 @@ namespace Pixie
                 return Color.Black;
             }
 
-            Interlocked.Increment(ref Stats.SecondaryRays);
-            var reflectRay = new Ray(si.OverPoint, si.Reflectv);
-            var color = this.Trace(reflectRay, remaining - 1);
+            Interlocked.Increment(ref Stats.SecondaryRay4s);
+            var reflectRay4 = new Ray4(si.OverPoint, si.Reflectv);
+            var color = this.Trace(reflectRay4, remaining - 1);
             return color * si.Object.Material.Reflective;
         }
 
@@ -162,11 +162,11 @@ namespace Pixie
                 return Color.Black;
             }
 
-            Interlocked.Increment(ref Stats.SecondaryRays);
+            Interlocked.Increment(ref Stats.SecondaryRay4s);
             var cost = Math.Sqrt(1.0 - sin2t);
             var direction = si.Normalv * (nRatio * cosi - cost) - si.Eyev * nRatio;
-            var refractRay = new Ray(si.UnderPoint, direction);
-            return this.Trace(refractRay, remaining - 1) *
+            var refractRay4 = new Ray4(si.UnderPoint, direction);
+            return this.Trace(refractRay4, remaining - 1) *
                 si.Object.Material.Transparency;
         }
     }

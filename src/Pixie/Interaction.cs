@@ -3,10 +3,10 @@
 namespace Pixie
 {
     using System;
-    using Linsi;
+    using Linie;
 
     /// <summary>
-    /// The results of an interaction between a ray and object.
+    /// The results of an interaction between a Ray4 and object.
     /// </summary>
     public struct Interaction
     {

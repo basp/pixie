@@ -3,7 +3,7 @@
 namespace Pixie
 {
     using System;
-    using Linsi;
+    using Linie;
 
     public class Cube : Shape
     {
@@ -39,7 +39,7 @@ namespace Pixie
             }
         }
 
-        public override IntersectionList LocalIntersect(Ray ray)
+        public override IntersectionList LocalIntersect(Ray4 ray)
         {
             CheckAxis(ray.Origin.X, ray.Direction.X, out var xtmin, out var xtmax);
             CheckAxis(ray.Origin.Y, ray.Direction.Y, out var ytmin, out var ytmax);

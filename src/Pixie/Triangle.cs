@@ -3,7 +3,7 @@
 namespace Pixie
 {
     using System;
-    using Linsi;
+    using Linie;
 
     public class Triangle : Shape
     {
@@ -31,7 +31,7 @@ namespace Pixie
 
         public Vector4 Normal { get; }
 
-        public override IntersectionList LocalIntersect(Ray ray)
+        public override IntersectionList LocalIntersect(Ray4 ray)
         {
             var dirCrossE2 = ray.Direction.Cross3(this.E2);
             var det = this.E1.Dot(dirCrossE2);

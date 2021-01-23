@@ -3,7 +3,7 @@
 namespace Pixie
 {
     using System.Threading;
-    using Linsi;
+    using Linie;
 
     public class DefaultSampler : ISampler
     {
@@ -16,7 +16,7 @@ namespace Pixie
             this.camera = camera;        
         }
 
-        public Ray RayForPixel(int px, int py)
+        public Ray4 Ray4ForPixel(int px, int py)
         {
             var pixelSize = this.camera.PixelSize;
             
@@ -35,13 +35,13 @@ namespace Pixie
             var origin = inv * Vector4.CreatePosition(0, 0, 0);
             var direction = (pixel - origin).Normalize();
 
-            return new Ray(origin, direction);
+            return new Ray4(origin, direction);
         }
 
         public Color Sample(int x, int y)
         {
-            Interlocked.Increment(ref Stats.PrimaryRays);
-            var ray = this.RayForPixel(x, y);
+            Interlocked.Increment(ref Stats.PrimaryRay4s);
+            var ray = this.Ray4ForPixel(x, y);
             return world.Trace(ray);
         }
     }

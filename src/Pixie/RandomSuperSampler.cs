@@ -6,7 +6,7 @@ namespace Pixie
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using Linsi;
+    using Linie;
 
     public class RandomSuperSampler : ISampler
     {
@@ -34,7 +34,7 @@ namespace Pixie
             var rays = this.Supersample(x, y).ToList();
             foreach (var ray in rays)
             {
-                Interlocked.Increment(ref Stats.PrimaryRays);
+                Interlocked.Increment(ref Stats.PrimaryRay4s);
                 color += this.world.Trace(ray, 5);
             }
 
@@ -42,7 +42,7 @@ namespace Pixie
             return color;
         }
 
-        private IEnumerable<Ray> Supersample(int px, int py)
+        private IEnumerable<Ray4> Supersample(int px, int py)
         {
             var inv = this.camera.TransformInv;
             var origin = inv * Vector4.CreatePosition(0, 0, 0);
@@ -71,7 +71,7 @@ namespace Pixie
                 var pixel = inv * Vector4.CreatePosition(worldX, worldY, -1);
                 var direction = (pixel - origin).Normalize();
 
-                yield return new Ray(origin, direction);
+                yield return new Ray4(origin, direction);
             }
         }
     }

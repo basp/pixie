@@ -3,20 +3,20 @@
 namespace Pixie
 {
     using System;
-    using Linsi;
+    using Linie;
 
     public class Sphere : Shape, IEquatable<Sphere>
     {
         public override Vector4 GetLocalNormal(Vector4 point) =>
             point - Vector4.Zero;
 
-        public override IntersectionList LocalIntersect(Ray ray)
+        public override IntersectionList LocalIntersect(Ray4 ray)
         {
-            var sphereToRay = ray.Origin - Vector4.CreatePosition(0, 0, 0);
+            var sphereToRay4 = ray.Origin - Vector4.CreatePosition(0, 0, 0);
 
             var a = Vector4.Dot(ray.Direction, ray.Direction);
-            var b = 2 * Vector4.Dot(ray.Direction, sphereToRay);
-            var c = Vector4.Dot(sphereToRay, sphereToRay) - 1;
+            var b = 2 * Vector4.Dot(ray.Direction, sphereToRay4);
+            var c = Vector4.Dot(sphereToRay4, sphereToRay4) - 1;
 
             var discriminant = (b * b) - (4 * a * c);
 

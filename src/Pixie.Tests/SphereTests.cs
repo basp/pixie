@@ -2,14 +2,14 @@ namespace Pixie.Tests
 {
     using System;
     using Xunit;
-    using Linsi;
+    using Linie;
 
     public class SphereTests
     {
         [Fact]
-        public void TestRayIntersectsSphereAtTwoPoints()
+        public void TestRay4IntersectsSphereAtTwoPoints()
         {
-            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Equal(2, xs.Count);
@@ -18,9 +18,9 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestRayIntersectsSphereAtTangent()
+        public void TestRay4IntersectsSphereAtTangent()
         {
-            var r = new Ray(Vector4.CreatePosition(0, 1, -5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 1, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Equal(2, xs.Count);
@@ -29,18 +29,18 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestRayMissesSphere()
+        public void TestRay4MissesSphere()
         {
-            var r = new Ray(Vector4.CreatePosition(0, 2, -5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 2, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Empty(xs);
         }
 
         [Fact]
-        public void TestRayOriginatesInsideSphere()
+        public void TestRay4OriginatesInsideSphere()
         {
-            var r = new Ray(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Equal(2, xs.Count);
@@ -49,9 +49,9 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestSphereIsBehindRay()
+        public void TestSphereIsBehindRay4()
         {
-            var r = new Ray(Vector4.CreatePosition(0, 0, 5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, 5), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere();
             var xs = s.Intersect(r);
             Assert.Equal(2, xs.Count);
@@ -62,7 +62,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestIntersectScaledSphere()
         {
-            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere()
             {
                 Transform = Transform.Scale(2, 2, 2),
@@ -77,7 +77,7 @@ namespace Pixie.Tests
         [Fact]
         public void TestIntersectTranslatedSphere()
         {
-            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new Sphere()
             {
                 Transform = Transform.Translate(5, 0, 0),

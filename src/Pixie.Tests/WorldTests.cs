@@ -2,7 +2,7 @@ namespace Pixie.Tests
 {
     using System;
     using Xunit;
-    using Linsi;
+    using Linie;
 
     public class WorldTests
     {
@@ -35,10 +35,10 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestIntersectWorldWithRay()
+        public void TestIntersectWorldWithRay4()
         {
             var w = new DefaultWorld();
-            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var xs = w.Intersect(r);
             Assert.Equal(4, xs.Count);
             Assert.Equal(4, xs[0].T);
@@ -51,7 +51,7 @@ namespace Pixie.Tests
         public void TestShadingAnIntersection()
         {
             var w = new DefaultWorld();
-            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var shape = w.Objects[0];
             var i = new Intersection(4, shape);
             var comps = i.Precompute(r);
@@ -68,7 +68,7 @@ namespace Pixie.Tests
             var w = new DefaultWorld();
             w.Lights.Clear();
             w.Lights.Add(new PointLight(Vector4.CreatePosition(0, 0.25, 0), Color.White));
-            var r = new Ray(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
             var shape = w.Objects[1];
             var i = new Intersection(0.5, shape);
             var comps = i.Precompute(r);
@@ -80,19 +80,19 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestColorWhenRayMisses()
+        public void TestColorWhenRay4Misses()
         {
             var w = new DefaultWorld();
-            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 1, 0));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 1, 0));
             var c = w.Trace(r, 5);
             Assert.Equal(Color.Black, c);
         }
 
         [Fact]
-        public void TestColorWhenRayHits()
+        public void TestColorWhenRay4Hits()
         {
             var w = new DefaultWorld();
-            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var c = w.Trace(r, 5);
             var expected = new Color(0.38066, 0.47583, 0.2855);
             const double eps = 0.00001;
@@ -101,14 +101,14 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void TestColorWithIntersectionBehindRay()
+        public void TestColorWithIntersectionBehindRay4()
         {
             var w = new DefaultWorld();
             var outer = w.Objects[0];
             outer.Material.Ambient = 1;
             var inner = w.Objects[1];
             inner.Material.Ambient = 1;
-            var r = new Ray(Vector4.CreatePosition(0, 0, 0.75), Vector4.CreateDirection(0, 0, -1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, 0.75), Vector4.CreateDirection(0, 0, -1));
             var c = w.Trace(r, 5);
             const double eps = 0.00001;
             var comparer = Color.GetEqualityComparer(eps);
@@ -133,7 +133,7 @@ namespace Pixie.Tests
             w.Objects.Add(s1);
             w.Objects.Add(s2);
 
-            var r = new Ray(Vector4.CreatePosition(0, 0, 5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, 5), Vector4.CreateDirection(0, 0, 1));
             var i = new Intersection(4, s2);
             var comps = i.Precompute(r);
             var c = w.Render(comps, 5);
@@ -145,7 +145,7 @@ namespace Pixie.Tests
         public void ReflectedColorForNonReflectiveMaterial()
         {
             var w = new DefaultWorld();
-            var r = new Ray(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
             var shape = w.Objects[1];
             shape.Material.Ambient = 1;
             var i = new Intersection(1, shape);
@@ -162,7 +162,7 @@ namespace Pixie.Tests
             plane.Material.Reflective = 0.5;
             plane.Transform = Transform.Translate(0, -1, 0);
             w.Objects.Add(plane);
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, 0, -3),
                 Vector4.CreateDirection(0, -Math.Sqrt(2) / 2, Math.Sqrt(2) / 2));
             var i = new Intersection(Math.Sqrt(2), plane);
@@ -182,7 +182,7 @@ namespace Pixie.Tests
             plane.Material.Reflective = 0.5;
             plane.Transform = Transform.Translate(0, -1, 0);
             w.Objects.Add(plane);
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, 0, -3),
                 Vector4.CreateDirection(0, -Math.Sqrt(2) / 2, Math.Sqrt(2) / 2));
             var i = new Intersection(Math.Sqrt(2), plane);
@@ -208,7 +208,7 @@ namespace Pixie.Tests
             upper.Material.Reflective = 1;
             upper.Transform = Transform.Translate(0, 1, 0);
             w.Objects.Add(upper);
-            var r = new Ray(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 1, 0));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 1, 0));
             var c = w.Trace(r, 5);
             Assert.True(true);
         }
@@ -221,7 +221,7 @@ namespace Pixie.Tests
             plane.Material.Reflective = 0.5;
             plane.Transform = Transform.Translate(0, -1, 0);
             w.Objects.Add(plane);
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, 0, -3),
                 Vector4.CreateDirection(0, -Math.Sqrt(2) / 2, Math.Sqrt(2) / 2));
             var i = new Intersection(Math.Sqrt(2), plane);
@@ -235,7 +235,7 @@ namespace Pixie.Tests
         {
             var w = new DefaultWorld();
             var shape = w.Objects[0];
-            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var xs = IntersectionList.Create(
                 new Intersection(4, shape),
                 new Intersection(6, shape));
@@ -253,7 +253,7 @@ namespace Pixie.Tests
             shape.Material.Transparency = 1.0;
             shape.Material.RefractiveIndex = 1.5;
 
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, 0, -5),
                 Vector4.CreateDirection(0, 0, 1));
 
@@ -275,7 +275,7 @@ namespace Pixie.Tests
             shape.Material.Transparency = 1.0;
             shape.Material.RefractiveIndex = 1.5;
 
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, 0, Math.Sqrt(2) / 2),
                 Vector4.CreateDirection(0, 1, 0));
 
@@ -289,7 +289,7 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void RefractedColorWithRefractedRay()
+        public void RefractedColorWithRefractedRay4()
         {
             var w = new DefaultWorld();
 
@@ -301,7 +301,7 @@ namespace Pixie.Tests
             b.Material.Transparency = 1.0;
             b.Material.RefractiveIndex = 1.5;
 
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, 0, 0.1),
                 Vector4.CreateDirection(0, 1, 0));
 
@@ -337,7 +337,7 @@ namespace Pixie.Tests
             w.Objects.Add(floor);
             w.Objects.Add(ball);
 
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, 0, -3),
                 Vector4.CreateDirection(0, -Math.Sqrt(2) / 2, Math.Sqrt(2) / 2));
 
@@ -357,7 +357,7 @@ namespace Pixie.Tests
         public void ShadeWithReflectiveTransparentMaterial()
         {
             var w = new DefaultWorld();
-            var r = new Ray(
+            var r = new Ray4(
                 Vector4.CreatePosition(0, 0, -3),
                 Vector4.CreateDirection(0, -Math.Sqrt(2) / 2, Math.Sqrt(2) / 2));
 

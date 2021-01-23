@@ -2,7 +2,7 @@
 
 namespace Pixie
 {
-    using Linsi;
+    using Linie;
 
     /// <summary>
     /// Returns a color value for the given pixel coordinate.

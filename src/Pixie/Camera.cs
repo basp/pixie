@@ -4,7 +4,7 @@ namespace Pixie
 {
     using System;
     using System.Threading.Tasks;
-    using Linsi;
+    using Linie;
 
     /// <summary>
     /// Instances of the <c>Camera</c> class are used to take pictures
@@ -85,7 +85,7 @@ namespace Pixie
 
         /// <summary>
         /// Renders a world using the default shader. This shader
-        /// will cast a single ray right through the center of each
+        /// will cast a single Ray4 right through the center of each
         /// pixel.
         /// </summary>
         /// <param name="w">The <c>World</c> instance to be rendered.</param>

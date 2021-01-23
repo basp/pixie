@@ -4,7 +4,7 @@ namespace Pixie
 {
     using System;
     using System.Collections.Generic;
-    using Linsi;
+    using Linie;
 
     public struct BoundingBox
     {
@@ -148,7 +148,7 @@ namespace Pixie
             }
         }
 
-        public bool Intersect(Ray ray)
+        public bool Intersect(Ray4 ray)
         {
             CheckAxis(ray.Origin.X, ray.Direction.X, this.Min.X, this.Max.X, out var xtmin, out var xtmax);
             CheckAxis(ray.Origin.Y, ray.Direction.Y, this.Min.Y, this.Max.Y, out var ytmin, out var ytmax);

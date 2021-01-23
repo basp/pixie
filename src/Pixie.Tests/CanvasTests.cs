@@ -1,7 +1,7 @@
 namespace Pixie.Tests
 {
     using Xunit;
-    using Linsi;
+    using Linie;
 
     public class CanvasTests
     {

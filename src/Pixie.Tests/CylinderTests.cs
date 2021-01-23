@@ -1,7 +1,7 @@
 namespace Pixie.Tests
 {
     using Xunit;
-    using Linsi;
+    using Linie;
 
     public class CylinderTests
     {
@@ -9,7 +9,7 @@ namespace Pixie.Tests
         [InlineData(1, 0, 0, 0, 1, 0)]
         [InlineData(0, 0, 0, 0, 1, 0)]
         [InlineData(0, 0, -5, 1, 1, 1)]
-        public void RayMissesCylinder(
+        public void Ray4MissesCylinder(
             double ox,
             double oy,
             double oz,
@@ -20,7 +20,7 @@ namespace Pixie.Tests
             var cyl = new Cylinder();
             var origin = Vector4.CreatePosition(ox, oy, oz);
             var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
-            var r = new Ray(origin, direction);
+            var r = new Ray4(origin, direction);
             var xs = cyl.LocalIntersect(r);
             Assert.Empty(xs);
         }
@@ -29,7 +29,7 @@ namespace Pixie.Tests
         [InlineData(1, 0, -5, 0, 0, 1, 5, 5)]
         [InlineData(0, 0, -5, 0, 0, 1, 4, 6)]
         [InlineData(0.5, 0, -5, 0.1, 1, 1, 6.80798, 7.08872)]
-        public void RayStrikesCylinder(
+        public void Ray4StrikesCylinder(
             double ox,
             double oy,
             double oz,
@@ -42,7 +42,7 @@ namespace Pixie.Tests
             var origin = Vector4.CreatePosition(ox, oy, oz);
             var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
             var cyl = new Cylinder();
-            var r = new Ray(origin, direction);
+            var r = new Ray4(origin, direction);
             var xs = cyl.LocalIntersect(r);
             Assert.Equal(2, xs.Count);
             const int prec = 5;
@@ -102,7 +102,7 @@ namespace Pixie.Tests
 
             var point = Vector4.CreatePosition(px, py, pz);
             var direciton = Vector4.CreateDirection(dx, dy, dz).Normalize();
-            var r = new Ray(point, direciton);
+            var r = new Ray4(point, direciton);
             var xs = cyl.LocalIntersect(r);
             Assert.Equal(count, xs.Count);
         }
@@ -131,7 +131,7 @@ namespace Pixie.Tests
             cyl.IsClosed = true;
             var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
             var point = Vector4.CreatePosition(ox, oy, oz);
-            var r = new Ray(point, direction);
+            var r = new Ray4(point, direction);
             var xs = cyl.LocalIntersect(r);
             Assert.Equal(count, xs.Count);
         }

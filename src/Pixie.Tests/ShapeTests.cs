@@ -2,7 +2,7 @@ namespace Pixie.Tests
 {
     using System;
     using Xunit;
-    using Linsi;
+    using Linie;
 
     public class ShapeTests
     {
@@ -50,27 +50,27 @@ namespace Pixie.Tests
         }
 
         [Fact]
-        public void IntersectScaledShapeWithRay()
+        public void IntersectScaledShapeWithRay4()
         {
-            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new TestShape();
             s.Transform = Transform.Scale(2, 2, 2);
             var xs = s.Intersect(r);
-            var savedRay = s.SavedRay.Value;
-            Assert.Equal(Vector4.CreatePosition(0, 0, -2.5), savedRay.Origin);
-            Assert.Equal(Vector4.CreateDirection(0, 0, 0.5), savedRay.Direction);
+            var savedRay4 = s.SavedRay4.Value;
+            Assert.Equal(Vector4.CreatePosition(0, 0, -2.5), savedRay4.Origin);
+            Assert.Equal(Vector4.CreateDirection(0, 0, 0.5), savedRay4.Direction);
         }
 
         [Fact]
-        public void IntersectTranslatedShapeWithRay()
+        public void IntersectTranslatedShapeWithRay4()
         {
-            var r = new Ray(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
+            var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var s = new TestShape();
             s.Transform = Transform.Translate(5, 0, 0);
             var xs = s.Intersect(r);
-            var savedRay = s.SavedRay.Value;
-            Assert.Equal(Vector4.CreatePosition(-5, 0, -5), savedRay.Origin);
-            Assert.Equal(Vector4.CreateDirection(0, 0, 1), savedRay.Direction);
+            var savedRay4 = s.SavedRay4.Value;
+            Assert.Equal(Vector4.CreatePosition(-5, 0, -5), savedRay4.Origin);
+            Assert.Equal(Vector4.CreateDirection(0, 0, 1), savedRay4.Direction);
         }
 
         [Fact]

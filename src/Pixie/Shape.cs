@@ -2,7 +2,7 @@
 
 namespace Pixie
 {
-    using Linsi;
+    using Linie;
 
     public abstract class Shape
     {
@@ -38,7 +38,7 @@ namespace Pixie
 
         public Matrix4x4 Inverse => this.inv;
 
-        public virtual IntersectionList Intersect(Ray ray)
+        public virtual IntersectionList Intersect(Ray4 ray)
         {
             ray = this.inv * ray;
             return this.LocalIntersect(ray);
@@ -51,7 +51,7 @@ namespace Pixie
             return this.NormalToWorld(localNormal);
         }
 
-        public abstract IntersectionList LocalIntersect(Ray ray);
+        public abstract IntersectionList LocalIntersect(Ray4 ray);
 
         public abstract Vector4 GetLocalNormal(Vector4 point);
 

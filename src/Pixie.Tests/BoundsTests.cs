@@ -2,7 +2,7 @@ namespace Pixie.Tests
 {
     using System;
     using Xunit;
-    using Linsi;
+    using Linie;
 
     public class BoundsTests
     {
@@ -168,7 +168,7 @@ namespace Pixie.Tests
         [InlineData(0, 2, 2, 0, -1, 0, false)]
         [InlineData(2, 2, 0, -1, 0, 0, false)]
 
-        public void IntersectingRayWithBoundingBox(
+        public void IntersectingRay4WithBoundingBox(
             double ox,
             double oy,
             double oz,
@@ -183,7 +183,7 @@ namespace Pixie.Tests
 
             var origin = Vector4.CreatePosition(ox, oy, oz);
             var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
-            var r = new Ray(origin, direction);
+            var r = new Ray4(origin, direction);
             var result = box.Intersect(r);
             Assert.Equal(expected, result);
         }
@@ -202,7 +202,7 @@ namespace Pixie.Tests
         [InlineData(4, 0, 9, 0, 0, -1, false)]
         [InlineData(8, 6, -1, 0, -1, 0, false)]
         [InlineData(12, 5, 4, -1, 0, 0, false)]
-        public void IntersectingRayWithNonCubicBoundingBox(
+        public void IntersectingRay4WithNonCubicBoundingBox(
             double ox,
             double oy,
             double oz,
@@ -216,7 +216,7 @@ namespace Pixie.Tests
                 Vector4.CreatePosition(11, 4, 7));
             var origin = Vector4.CreatePosition(ox, oy, oz);
             var direction = Vector4.CreateDirection(dx, dy, dz).Normalize();
-            var r = new Ray(origin, direction);
+            var r = new Ray4(origin, direction);
             var result = box.Intersect(r);
             Assert.Equal(expected, result);
         }

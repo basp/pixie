@@ -4,7 +4,7 @@ namespace Pixie
 {
     using System;
     using System.Threading;
-    using Linsi;
+    using Linie;
 
     public class FocalBlurSampler : ISampler
     {
@@ -42,8 +42,8 @@ namespace Pixie
 
         public Color Sample(int x, int y)
         {
-            var primaryRay = this.GetRayForPixel(x, y);
-            var focalPoint = primaryRay.GetPosition(focalDistance);
+            var primaryRay4 = this.GetRay4ForPixel(x, y);
+            var focalPoint = primaryRay4.GetPosition(focalDistance);
             var col = Color.Black;
             for (var i = 0; i < this.n; i++)
             {
@@ -54,21 +54,21 @@ namespace Pixie
 
                 // Create a new ray offset from the original ray
                 // and pointing at the focal point.
-                var origin = primaryRay.Origin + offset;
+                var origin = primaryRay4.Origin + offset;
                 var direction = (focalPoint - origin).Normalize();
-                var secondaryRay = new Ray(origin, direction);
+                var secondaryRay4 = new Ray4(origin, direction);
 
                 // Count "secondary" rays as primary rays for
                 // stats purposes; this is consistent with
                 // RandomSuperSampler behavior.
-                Interlocked.Increment(ref Stats.PrimaryRays);
-                col += this.world.Trace(secondaryRay);
+                Interlocked.Increment(ref Stats.PrimaryRay4s);
+                col += this.world.Trace(secondaryRay4);
             }
 
             return this.oneOverN * col;
         }
 
-        private Ray GetRayForPixel(int px, int py)
+        private Ray4 GetRay4ForPixel(int px, int py)
         {
             var pixelSize = this.camera.PixelSize;
 
@@ -87,7 +87,7 @@ namespace Pixie
             var origin = inv * Vector4.CreatePosition(0, 0, 0);
             var direction = (pixel - origin).Normalize();
 
-            return new Ray(origin, direction);
+            return new Ray4(origin, direction);
         }
 
         private Vector4 RandomInUnitDisk()

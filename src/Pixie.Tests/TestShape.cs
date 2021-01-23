@@ -1,15 +1,15 @@
 namespace Pixie.Tests
 {
     using System;
-    using Linsi;
+    using Linie;
 
     class TestShape : Shape
     {
-        public Nullable<Ray> SavedRay { get; set; }
+        public Nullable<Ray4> SavedRay4 { get; set; }
 
-        public override IntersectionList LocalIntersect(Ray ray)
+        public override IntersectionList LocalIntersect(Ray4 ray)
         {
-            this.SavedRay = ray;
+            this.SavedRay4 = ray;
             return IntersectionList.Empty();
         }
 
