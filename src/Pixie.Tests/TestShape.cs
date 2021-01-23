@@ -10,7 +10,7 @@ namespace Pixie.Tests
         public override IntersectionList LocalIntersect(Ray4 ray)
         {
             this.SavedRay4 = ray;
-            return IntersectionList.Empty();
+            return IntersectionList.Empty;
         }
 
         public override BoundingBox GetBounds() =>

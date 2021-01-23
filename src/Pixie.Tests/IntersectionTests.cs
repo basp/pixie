@@ -82,7 +82,7 @@ namespace Pixie.Tests
             var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var shape = new Sphere();
             var i = new Intersection(4, shape);
-            var comps = i.Precompute(r);
+            var comps = i.Resolve(r);
             Assert.Equal(i.T, comps.T);
             Assert.Equal(Vector4.CreatePosition(0, 0, -1), comps.Point);
             Assert.Equal(Vector4.CreateDirection(0, 0, -1), comps.Eyev);
@@ -95,7 +95,7 @@ namespace Pixie.Tests
             var r = new Ray4(Vector4.CreatePosition(0, 0, -5), Vector4.CreateDirection(0, 0, 1));
             var shape = new Sphere();
             var i = new Intersection(4, shape);
-            var comps = i.Precompute(r);
+            var comps = i.Resolve(r);
             Assert.False(comps.Inside);
         }
 
@@ -105,7 +105,7 @@ namespace Pixie.Tests
             var r = new Ray4(Vector4.CreatePosition(0, 0, 0), Vector4.CreateDirection(0, 0, 1));
             var shape = new Sphere();
             var i = new Intersection(1, shape);
-            var comps = i.Precompute(r);
+            var comps = i.Resolve(r);
             Assert.Equal(Vector4.CreatePosition(0, 0, 1), comps.Point);
             Assert.Equal(Vector4.CreateDirection(0, 0, -1), comps.Eyev);
             Assert.Equal(Vector4.CreateDirection(0, 0, -1), comps.Normalv);
@@ -122,7 +122,7 @@ namespace Pixie.Tests
             };
 
             var i = new Intersection(5, shape);
-            var comps = i.Precompute(r);
+            var comps = i.Resolve(r);
             Assert.True(comps.OverPoint.Z < (-Intersection.Epsilon / 2));
             Assert.True(comps.Point.Z > comps.OverPoint.Z);
         }
@@ -133,7 +133,7 @@ namespace Pixie.Tests
             var shape = new Plane();
             var r = new Ray4(Vector4.CreatePosition(0, 1, -1), Vector4.CreateDirection(0, -Math.Sqrt(2) / 2, Math.Sqrt(2) / 2));
             var i = new Intersection(Math.Sqrt(2), shape);
-            var comps = i.Precompute(r);
+            var comps = i.Resolve(r);
             var expected = Vector4.CreateDirection(0, Math.Sqrt(2) / 2, Math.Sqrt(2) / 2);
             Assert.Equal(expected, comps.Reflectv);
         }
@@ -175,7 +175,7 @@ namespace Pixie.Tests
                 new Intersection(5.25, c),
                 new Intersection(6, a));
 
-            var comps = xs[index].Precompute(r, xs);
+            var comps = xs[index].Resolve(r, xs);
             Assert.Equal(n1, comps.N1);
             Assert.Equal(n2, comps.N2);
         }
@@ -191,7 +191,7 @@ namespace Pixie.Tests
 
             var i = new Intersection(5, shape);
             var xs = IntersectionList.Create(i);
-            var comps = i.Precompute(r, xs);
+            var comps = i.Resolve(r, xs);
             Assert.True(comps.UnderPoint.Z > Intersection.Epsilon / 2);
             Assert.True(comps.Point.Z < comps.UnderPoint.Z);
         }
@@ -208,7 +208,7 @@ namespace Pixie.Tests
                 new Intersection(-Math.Sqrt(2)/2, shape),
                 new Intersection(Math.Sqrt(2)/2, shape));
             
-            var comps = xs[1].Precompute(r, xs);
+            var comps = xs[1].Resolve(r, xs);
             var reflectance = comps.SchlicksApproximation();
             Assert.Equal(1.0, reflectance);
         }
@@ -222,7 +222,7 @@ namespace Pixie.Tests
                 new Intersection(-1, shape),
                 new Intersection(1, shape));
 
-            var comps = xs[1].Precompute(r, xs);
+            var comps = xs[1].Resolve(r, xs);
             var reflectance = comps.SchlicksApproximation();
             const int prec = 8;
             Assert.Equal(0.04, reflectance, prec);
@@ -235,7 +235,7 @@ namespace Pixie.Tests
             var r = new Ray4(Vector4.CreatePosition(0, 0.99, -2), Vector4.CreateDirection(0, 0, 1));
             var xs = IntersectionList.Create(
                 new Intersection(1.8589, shape));
-            var comps = xs[0].Precompute(r, xs);
+            var comps = xs[0].Resolve(r, xs);
             var reflectance = comps.SchlicksApproximation();
             const int prec = 5;
             Assert.Equal(0.48873, reflectance, prec);

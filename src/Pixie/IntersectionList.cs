@@ -8,6 +8,9 @@ namespace Pixie
 
     public class IntersectionList : IReadOnlyList<Intersection>
     {
+        public static IntersectionList Empty =>
+            new IntersectionList(new Intersection[0]);
+
         private readonly IList<Intersection> xs;
 
         private IntersectionList(IEnumerable<Intersection> xs)
@@ -21,11 +24,6 @@ namespace Pixie
         }
 
         public int Count => this.xs.Count;
-
-        public bool IsReadOnly => true;
-
-        public static IntersectionList Empty() =>
-            new IntersectionList(new Intersection[0]);
 
         public static IntersectionList Create(params Intersection[] intersections)
         {

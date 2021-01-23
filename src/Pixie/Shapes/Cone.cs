@@ -65,7 +65,7 @@ namespace Pixie
             {
                 if (b == 0)
                 {
-                    return IntersectionList.Empty();
+                    return IntersectionList.Empty;
                 }
 
                 var t = -c / (2 * b);
@@ -81,7 +81,7 @@ namespace Pixie
             var disc = b * b - 4 * a * c;
             if (disc < 0)
             {
-                return IntersectionList.Empty();
+                return IntersectionList.Empty;
             }
 
             var t0 = (-b - Math.Sqrt(disc)) / (2 * a);

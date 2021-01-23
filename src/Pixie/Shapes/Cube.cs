@@ -50,7 +50,7 @@ namespace Pixie
 
             if (tmin > tmax)
             {
-                return IntersectionList.Empty();
+                return IntersectionList.Empty;
             }
 
             return IntersectionList.Create(

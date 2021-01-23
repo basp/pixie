@@ -15,6 +15,8 @@ namespace Pixie
 
         public IList<Shape> Objects { get; set; } = new List<Shape>();
 
+        public ITracer Tracer { get; set; } = new DefaultTracer();
+
         /// <summary>
         /// Intersect a ray with all objects in the world.
         /// </summary>
@@ -43,7 +45,7 @@ namespace Pixie
             var xs = this.Intersect(ray);
             if (xs.TryGetHit(out var i))
             {
-                var si = i.Precompute(ray, xs);
+                var si = i.Resolve(ray, xs);
                 return this.Render(si, remaining);
             }
 

@@ -87,7 +87,7 @@ namespace Pixie
             var bounds = this.GetBounds();
             if (!bounds.Intersect(ray))
             {
-                return IntersectionList.Empty();
+                return IntersectionList.Empty;
             }
 
             var xs = new List<Intersection>();

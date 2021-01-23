@@ -24,7 +24,7 @@ namespace Pixie
             // and there are no intersections.
             if (discriminant < 0)
             {
-                return IntersectionList.Empty();
+                return IntersectionList.Empty;
             }
 
             // Otherwise, we have two intersections which we can

@@ -28,7 +28,7 @@ namespace Pixie
         {
             if (Math.Abs(ray.Direction.Y) < Epsilon)
             {
-                return IntersectionList.Empty();
+                return IntersectionList.Empty;
             }
 
             var t = -ray.Origin.Y / ray.Direction.Y;

@@ -25,10 +25,10 @@ namespace Pixie
             this.T == other.T &&
             this.Object == other.Object;
 
-        public Interaction Precompute(Ray4 r) =>
-            Precompute(r, IntersectionList.Create(this));
+        public Interaction Resolve(Ray4 r) =>
+            Resolve(r, IntersectionList.Create(this));
 
-        public Interaction Precompute(Ray4 r, IntersectionList xs)
+        public Interaction Resolve(Ray4 r, IntersectionList xs)
         {
             var t = this.T;
             var obj = this.Object;
@@ -72,6 +72,7 @@ namespace Pixie
             var containers = new List<Shape>();
             foreach (var i in xs)
             {
+                // TODO: this prevents us from being static
                 if (i.Equals(this))
                 {
                     if (containers.Count == 0)

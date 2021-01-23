@@ -38,7 +38,7 @@ namespace Pixie
 
             if (Math.Abs(det) < Epsilon)
             {
-                return IntersectionList.Empty();
+                return IntersectionList.Empty;
             }
 
             var f = 1.0 / det;
@@ -46,7 +46,7 @@ namespace Pixie
             var u = f * p1ToOrigin.Dot(dirCrossE2);
             if (u < 0 || u > 1)
             {
-                return IntersectionList.Empty();
+                return IntersectionList.Empty;
             }
 
             var originCrossE1 = p1ToOrigin.Cross3(this.E1);
@@ -54,7 +54,7 @@ namespace Pixie
 
             if (v < 0 || (u + v) > 1)
             {
-                return IntersectionList.Empty();
+                return IntersectionList.Empty;
             }
 
             var t = f * this.E2.Dot(originCrossE1);

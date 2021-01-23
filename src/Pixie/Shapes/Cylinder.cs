@@ -72,7 +72,7 @@ namespace Pixie
 
             if (disc < 0)
             {
-                return IntersectionList.Empty();
+                return IntersectionList.Empty;
             }
 
             var t0 = (-b - Math.Sqrt(disc)) / (2 * a);
