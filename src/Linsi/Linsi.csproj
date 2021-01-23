@@ -5,6 +5,9 @@
         <!--
         <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>        
         -->
+        <PackageId>Linsi</PackageId>
+        <Version>0.0.8</Version>
+        <Authors>Bas Pennings</Authors>
     </PropertyGroup>
 
     <ItemGroup>

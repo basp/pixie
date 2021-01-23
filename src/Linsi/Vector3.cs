@@ -25,54 +25,54 @@ namespace Linsi
 
         public static Vector3 Zero => new Vector3(0, 0, 0);
 
-        public static Vector3 operator +(Vector3 a, Vector3 b) =>
+        public static Vector3 operator +(Vector3 u, Vector3 v) =>
             new Vector3(
-                a.X + b.X,
-                a.Y + b.Y,
-                a.Z + b.Z);
+                u.X + v.X,
+                u.Y + v.Y,
+                u.Z + v.Z);
 
-        public static Vector3 operator -(Vector3 a, Vector3 b) =>
+        public static Vector3 operator -(Vector3 u, Vector3 v) =>
             new Vector3(
-                a.X - b.X,
-                a.Y - b.Y,
-                a.Z - b.Z);
+                u.X - v.X,
+                u.Y - v.Y,
+                u.Z - v.Z);
 
-        public static Vector3 operator *(Vector3 a, double s) =>
+        public static Vector3 operator *(Vector3 u, double a) =>
             new Vector3(
-                a.X * s,
-                a.Y * s,
-                a.Z * s);
+                u.X * a,
+                u.Y * a,
+                u.Z * a);
 
-        public static Vector3 operator *(double s, Vector3 a) => a * s;
+        public static Vector3 operator *(double a, Vector3 u) => u * a;
 
-        public static Vector3 operator /(Vector3 a, double s) => a * (1 / s);
+        public static Vector3 operator /(Vector3 u, double a) => u * (1 / a);
 
-        public static Vector3 operator -(Vector3 a) =>
-            new Vector3(-a.X, -a.Y, -a.Z);
+        public static Vector3 operator -(Vector3 u) =>
+            new Vector3(-u.X, -u.Y, -u.Z);
 
-        public static double MagnitudeSquared(Vector3 a) =>
-            (a.X * a.X) +
-            (a.Y * a.Y) +
-            (a.Z * a.Z);
+        public static double MagnitudeSquared(Vector3 u) =>
+            (u.X * u.X) +
+            (u.Y * u.Y) +
+            (u.Z * u.Z);
 
-        public static double Magnitude(Vector3 a) =>
-            Math.Sqrt(Vector3.MagnitudeSquared(a));
+        public static double Magnitude(Vector3 u) =>
+            Math.Sqrt(Vector3.MagnitudeSquared(u));
 
-        public static Vector3 Normalize(Vector3 a) => a * a.Magnitude();
+        public static Vector3 Normalize(Vector3 u) => u * u.Magnitude();
 
-        public static double Dot(Vector3 a, Vector3 b) =>
-            (a.X * b.X) +
-            (a.Y * b.Y) +
-            (a.Z * b.Z);
+        public static double Dot(Vector3 u, Vector3 v) =>
+            (u.X * v.X) +
+            (u.Y * v.Y) +
+            (u.Z * v.Z);
 
-        public static Vector3 Cross(Vector3 a, Vector3 b) =>
+        public static Vector3 Cross(Vector3 u, Vector3 v) =>
             new Vector3(
-                (a.Y * b.Z) - (a.Z * b.Y),
-                (a.Z * b.X) - (a.X * b.Z),
-                (a.X * b.Y) - (a.Y * b.X));
+                (u.Y * v.Z) - (u.Z * v.Y),
+                (u.Z * v.X) - (u.X * v.Z),
+                (u.X * v.Y) - (u.Y * v.X));
 
-        public static Vector3 Reflect(Vector3 a, Vector3 n) =>
-            a - (n * 2 * Dot(a, n));
+        public static Vector3 Reflect(Vector3 u, Vector3 v) =>
+            u - (v * 2 * Dot(u, v));
 
         public static IEqualityComparer<Vector3> GetEqualityComparer(double epsilon = 0) =>
             new Vector3EqualityComparer(epsilon);
