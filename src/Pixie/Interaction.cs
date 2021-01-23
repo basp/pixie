@@ -6,31 +6,31 @@ namespace Pixie
     using Linie;
 
     /// <summary>
-    /// The results of an interaction between a Ray4 and object.
+    /// The results of an interaction between a ray and object.
     /// </summary>
-    public struct Interaction
+    public class Interaction
     {
-        public double T;
+        public double T { get; set; }
 
-        public Shape Object;
+        public Shape Object { get; set; }
 
-        public Vector4 Point;
+        public Vector4 Point {get; set; }
 
-        public Vector4 OverPoint;
+        public Vector4 OverPoint {get; set; }
 
-        public Vector4 UnderPoint;
+        public Vector4 UnderPoint {get; set; }
 
-        public Vector4 Eyev;
+        public Vector4 Eyev {get; set; }
 
-        public Vector4 Normalv;
+        public Vector4 Normalv {get; set; }
 
-        public Vector4 Reflectv;
+        public Vector4 Reflectv {get; set; }
 
-        public bool Inside;
+        public bool Inside {get; set; }
 
-        public double N1;
+        public double N1 {get; set; }
 
-        public double N2;
+        public double N2 {get; set; }
 
         public double SchlicksApproximation()
         {
