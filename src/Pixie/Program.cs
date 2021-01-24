@@ -280,10 +280,10 @@
             const double zw = -100;
             const int numberOfSamples = 5 * 5;
 
-            var rng = new Random();
             var world = Build();
             var tracer = new MultipleObjectsTracer(world);
-            var sampler = new JitteredSampler(numberOfSamples);
+            // var sampler = new JitteredSampler(numberOfSamples);
+            var sampler = new DefaultSampler(16);
             var canvas = new Canvas(hres, vres);
             var d = Vector4.CreateDirection(0, 0, 1);
             for (var r = 0; r < vres; r++)

@@ -10,7 +10,7 @@ namespace Pixie
         {
             this.World = world;
             this.Camera = camera;
-            this.SamplerFactory = () => new DefaultSampler(world, camera);
+            this.SamplerFactory = () => new OldDefaultSampler(world, camera);
             this.ProgressMonitorFactory = camera.ProgressMonitorFactory;
         }
 

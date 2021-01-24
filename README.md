@@ -4,6 +4,7 @@ support. Secondary are general architecture and code clarity without sacrificing
 too much performance.
 
 ## Features
+* Pixie is now a single assembly
 * Improved sampler support
 * Imporved camera support
 * General improved architecture

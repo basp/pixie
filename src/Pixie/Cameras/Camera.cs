@@ -90,7 +90,7 @@ namespace Pixie
         /// </summary>
         /// <param name="w">The <c>World</c> instance to be rendered.</param>
         public Canvas Render(World w) =>
-            Render(() => new DefaultSampler(w, this));
+            Render(() => new OldDefaultSampler(w, this));
 
         /// <summary>
         /// Renders a world to a canvas with a custom sampler.

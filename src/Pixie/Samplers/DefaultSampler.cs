@@ -1,50 +1,44 @@
-// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
-
 namespace Pixie
 {
     using System;
-    using System.Threading;
     using Linie;
+    using Serilog;
 
-    [Obsolete]
-    public class DefaultSampler : ISampler
+    public class DefaultSampler : Sampler
     {
-        private readonly World world;
-        private readonly Camera camera;
-
-        public DefaultSampler(World world, Camera camera)
+        public DefaultSampler() : this(1, 1)
         {
-            this.world = world;
-            this.camera = camera;        
         }
 
-        public Color Sample(int x, int y)
+        public DefaultSampler(int numberOfSamples, int numberOfSets = 83)
+            : base(numberOfSamples, numberOfSets)
         {
-            Interlocked.Increment(ref Stats.PrimaryRay4s);
-            var ray = this.RayForPixel(x, y);
-            return world.Trace(ray);
         }
 
-        internal Ray4 RayForPixel(int px, int py)
+        protected override void InitializeSamples()
         {
-            var pixelSize = this.camera.PixelSize;
-            
-            var halfWidth = this.camera.HalfWidth;
-            var halfHeight = this.camera.HalfHeight;
+            var n = (int)Math.Sqrt(this.numberOfSamples);
 
-            var xOffset = (px + 0.5) * pixelSize;
-            var yOffset = (py + 0.5) * pixelSize;
+            Log.Information(
+                "{SamplerName} generates {NumberOfSets} sets of {NumberOfSamples} samples (N = {N})",
+                nameof(DefaultSampler),
+                this.numberOfSets,
+                this.numberOfSamples,
+                n);
 
-            var worldX = halfWidth - xOffset;
-            var worldY = halfHeight - yOffset;
-
-            var inv = this.camera.TransformInv;
-
-            var pixel = inv * Vector4.CreatePosition(worldX, worldY, -1);
-            var origin = inv * Vector4.CreatePosition(0, 0, 0);
-            var direction = (pixel - origin).Normalize();
-
-            return new Ray4(origin, direction);
+            for (var j = 0; j < this.numberOfSets; j++)
+            {
+                for (var p = 0; p < n; p++)
+                {
+                    for (var q = 0; q < n; q++)
+                    {
+                        var x = (q + 0.5) / n;
+                        var y = (p + 0.5) / n;
+                        var sp = new Point2(x, y);
+                        this.samples.Add(sp);
+                    }
+                }
+            }
         }
     }
 }

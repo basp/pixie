@@ -4,13 +4,13 @@ namespace Pixie.Tests
     using Xunit;
     using Linie;
 
-    public class DefaultSamplerTests
+    public class OldDefaultSamplerTests
     {
         [Fact]
         public void TestCreateRay4ThroughCenterOfCanvas()
         {
             var c = new Camera(201, 101, Math.PI / 2);
-            var s = new DefaultSampler(new World(), c);
+            var s = new OldDefaultSampler(new World(), c);
             var r = s.RayForPixel(100, 50);
             const double epsilon = 0.00001;
             var comparer = Vector4.GetEqualityComparer(epsilon);
@@ -22,7 +22,7 @@ namespace Pixie.Tests
         public void TestCreateRay4ThroughCornerOfCanvas()
         {
             var c = new Camera(201, 101, Math.PI / 2);
-            var s = new DefaultSampler(new World(), c);
+            var s = new OldDefaultSampler(new World(), c);
             var r = s.RayForPixel(0, 0);
             var expectedOrigin = Vector4.CreatePosition(0, 0, 0);
             var expectedDirection = Vector4.CreateDirection(0.66519, 0.33259, -0.66851);
@@ -40,7 +40,7 @@ namespace Pixie.Tests
                 Transform.RotateY(Math.PI / 4) *
                 Transform.Translate(0, -2, 5);
 
-            var s = new DefaultSampler(new World(), c);
+            var s = new OldDefaultSampler(new World(), c);
             var r = s.RayForPixel(100, 50);
             var expectedOrigin = Vector4.CreatePosition(0, 2, -5);
             var expectedDirection = Vector4.CreateDirection(

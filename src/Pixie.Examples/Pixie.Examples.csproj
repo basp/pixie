@@ -5,7 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Linie" Version="0.6.2" />
+    <PackageReference Include="Linie" Version="0.6.3" />
   </ItemGroup>
 
   <PropertyGroup>
