@@ -29,8 +29,47 @@ So now that we have a nice sphere setup we need some kind of camera. Here are so
 ```
 const int hres = 200;
 const int vres = 200;
-const double s = 1.0;
-const double zw = -100;
+const double s = 1.0;       // pixel size
+const double zw = -100;     // camera z coordinate
 ```
 
-TODO
+We need a few more things before we can start our algorithm.
+```
+// the world object contains the sphere object
+var world = Build();
+
+// grabs the known sphere from the world to trace it
+var tracer = new SingleSphereTracer(world);
+
+// default sampler will just fire a single ray per pixel
+var sampler = new DefaultSampler();
+
+// holds the image
+var canvas = new Canvas(hres, vres);
+
+// all our camera rays will be orthogonal
+var d = Vector4.CreateDirection(0, 0, 1);
+```
+
+Amd with all this in place we can perform a basic ray tracing algorithm:
+```
+for (var r = 0; r < vres; r++)
+{
+    for (var c = 0; c < hres; c++)
+    {
+        var color = new Color(0);
+        for (var j = 0; j < numberOfSamples; j++)
+        {
+            var sp = sampler.SampleUnitSquare();
+            var x = s * (c - 0.5 * hres + sp.X);
+            var y = s * (r - 0.5 * vres + sp.Y);
+            var o = Vector4.CreatePosition(x, y, zw);
+            var ray = new Ray4(o, d);
+            color += tracer.Trace(ray);
+        }
+
+        color = color / numberOfSamples;
+        canvas[c, r] = color;
+    }
+}
+```
