@@ -3,6 +3,7 @@
 namespace Pixie
 {
     using System;
+    using Linie;
 
     public class Scene
     {
