@@ -41,7 +41,7 @@ namespace Pixie
                 w.WriteLine($"{this.Width} {this.Height}");
                 w.WriteLine($"255");
 
-                for (var j = 0; j < this.height; j++)
+                for (var j = this.height - 1; j >= 0; j--)
                 {
                     for (var i = 0; i < this.width; i++)
                     {

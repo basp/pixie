@@ -16,7 +16,14 @@ namespace Pixie
             this.camera = camera;        
         }
 
-        public Ray4 Ray4ForPixel(int px, int py)
+        public Color Sample(int x, int y)
+        {
+            Interlocked.Increment(ref Stats.PrimaryRay4s);
+            var ray = this.RayForPixel(x, y);
+            return world.Trace(ray);
+        }
+
+        internal Ray4 RayForPixel(int px, int py)
         {
             var pixelSize = this.camera.PixelSize;
             
@@ -36,13 +43,6 @@ namespace Pixie
             var direction = (pixel - origin).Normalize();
 
             return new Ray4(origin, direction);
-        }
-
-        public Color Sample(int x, int y)
-        {
-            Interlocked.Increment(ref Stats.PrimaryRay4s);
-            var ray = this.Ray4ForPixel(x, y);
-            return world.Trace(ray);
         }
     }
 }

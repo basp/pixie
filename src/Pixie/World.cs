@@ -15,7 +15,7 @@ namespace Pixie
 
         public IList<Shape> Objects { get; set; } = new List<Shape>();
 
-        public ITracer Tracer { get; set; } = new DefaultTracer();
+        public Sphere Sphere { get; set; }
 
         /// <summary>
         /// Intersect a ray with all objects in the world.

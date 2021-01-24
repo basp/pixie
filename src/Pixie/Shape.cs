@@ -17,6 +17,8 @@ namespace Pixie
         // does object cast shadow?
         public bool Shadow { get; set; } = true;
 
+        public Color Color { get; set; }
+
         public Material Material { get; set; } = new Material();
 
         public Shape Parent { get; set; } = null;

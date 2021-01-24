@@ -6,6 +6,7 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using Linie;
     using PowerArgs;
 
     [ArgExceptionBehavior(ArgExceptionPolicy.StandardExceptionHandling)]
@@ -23,6 +24,247 @@
         }
 
         [ArgActionMethod]
+        [ArgDescription("Test 1")]
+        public static void Test1()
+        {
+            var sphere = new Sphere()
+            {
+            };
+
+            var ray = new Ray4(
+                Vector4.CreatePosition(0, 0, -2),
+                Vector4.CreateDirection(0, 0, 1));
+
+            var xs = sphere.Intersect(ray);
+            foreach (var ix in xs)
+            {
+                Console.WriteLine(ix);
+            }
+        }
+
+        [ArgActionMethod]
+        [ArgDescription("Test 2")]
+        public static void Test2()
+        {
+            var world = new World
+            {
+                Sphere = new Sphere
+                {
+                    Transform = Transform.Scale(85, 85, 85),
+                }
+            };
+
+            var tracer = new SingleSphereTracer(world);
+
+            const int hres = 200;
+            const int vres = 200;
+            const double s = 1.0;
+            const double zw = -100;
+            var canvas = new Canvas(hres, vres);
+            var d = Vector4.CreateDirection(0, 0, 1);
+            for (var r = 0; r < vres; r++)
+            {
+                for (var c = 0; c < hres; c++)
+                {
+                    var x = s * (c - 0.5 * (hres - 1));
+                    var y = s * (r - 0.5 * (vres - 1));
+                    var o = Vector4.CreatePosition(x, y, zw);
+                    var ray = new Ray4(o, d);
+                    canvas[c, r] = tracer.Trace(ray);
+                }
+            }
+
+            canvas.SavePpm(@"out.ppm");
+        }
+
+        static World Build()
+        {
+            var s1 = new Sphere
+            {
+                Transform = Transform
+                    .Scale(80, 80, 80)
+                    .Translate(0, -25, 0),
+
+                Color = new Color(1, 0, 0),
+            };
+
+            var s2 = new Sphere
+            {
+                Transform = Transform
+                    .Scale(60, 60, 60)
+                    .Translate(0, 30, 0),
+
+                Color = new Color(1, 1, 0),
+            };
+
+            var p = new Plane
+            {
+                Transform = Transform
+                    .RotateX(-Math.PI / 4),
+
+                Color = new Color(0, 0.3, 0),
+            };
+
+            var w = new World();
+            w.Objects.Add(s1);
+            w.Objects.Add(s2);
+            w.Objects.Add(p);
+
+            return w;
+        }
+
+        [ArgActionMethod]
+        [ArgDescription("Test 3")]
+        public static void Test3()
+        {
+            const int hres = 200;
+            const int vres = 200;
+            const double s = 1.0;
+            const double zw = -100;
+
+            var world = Build();
+            var tracer = new MultipleObjectsTracer(world);
+            var canvas = new Canvas(hres, vres);
+            var d = Vector4.CreateDirection(0, 0, 1);
+            for (var r = 0; r < vres; r++)
+            {
+                for (var c = 0; c < hres; c++)
+                {
+                    var x = s * (c - 0.5 * (hres - 1));
+                    var y = s * (r - 0.5 * (vres - 1));
+                    var o = Vector4.CreatePosition(x, y, zw);
+                    var ray = new Ray4(o, d);
+                    canvas[c, r] = tracer.Trace(ray);
+                }
+            }
+
+            canvas.SavePpm(@"out.ppm");
+        }
+
+        [ArgActionMethod]
+        [ArgDescription("Regular sampling")]
+        public static void Test4()
+        {
+            const int hres = 200;
+            const int vres = 200;
+            const double s = 1.0;
+            const double zw = -100;
+            const int numberOfSamples = 25;
+
+            var n = (int)Math.Sqrt(numberOfSamples);
+            var world = Build();
+            var tracer = new MultipleObjectsTracer(world);
+            var canvas = new Canvas(hres, vres);
+            var d = Vector4.CreateDirection(0, 0, 1);
+            for (var r = 0; r < vres; r++)
+            {
+                for (var c = 0; c < hres; c++)
+                {
+                    var color = new Color(0);
+                    for (var p = 0; p < n; p++)
+                    {
+                        for (var q = 0; q < n; q++)
+                        {
+                            var x = s * (c - 0.5 * hres + (q + 0.5) / n);
+                            var y = s * (r - 0.5 * vres + (p + 0.5) / n);
+                            var o = Vector4.CreatePosition(x, y, zw);
+                            var ray = new Ray4(o, d);
+                            color += tracer.Trace(ray);
+                        }
+                    }
+
+                    color = color / numberOfSamples;
+                    canvas[c, r] = color;
+                }
+            }
+
+            canvas.SavePpm(@"out.ppm");
+        }
+
+        [ArgActionMethod]
+        [ArgDescription("Random sampling")]
+        public static void Test5()
+        {
+            const int hres = 200;
+            const int vres = 200;
+            const double s = 1.0;
+            const double zw = -100;
+            const int numberOfSamples = 5 * 5;
+
+            var rng = new Random();
+            var n = (int)Math.Sqrt(numberOfSamples);
+            var world = Build();
+            var tracer = new MultipleObjectsTracer(world);
+            var canvas = new Canvas(hres, vres);
+            var d = Vector4.CreateDirection(0, 0, 1);
+            for (var r = 0; r < vres; r++)
+            {
+                for (var c = 0; c < hres; c++)
+                {
+                    var color = new Color(0);
+                    for (var p = 0; p < n; p++)
+                    {
+                        for (var q = 0; q < n; q++)
+                        {
+                            var x = s * (c - 0.5 * hres + rng.NextDouble());
+                            var y = s * (r - 0.5 * vres + rng.NextDouble());
+                            var o = Vector4.CreatePosition(x, y, zw);
+                            var ray = new Ray4(o, d);
+                            color += tracer.Trace(ray);
+                        }
+                    }
+
+                    color = color / numberOfSamples;
+                    canvas[c, r] = color;
+                }
+            }
+
+            canvas.SavePpm(@"out.ppm");
+        }
+
+        [ArgActionMethod]
+        [ArgDescription("Jittered sampling")]
+        public static void Test6()
+        {
+            const int hres = 200;
+            const int vres = 200;
+            const double s = 1.0;
+            const double zw = -100;
+            const int numberOfSamples = 5 * 5;
+
+            var rng = new Random();
+            var n = (int)Math.Sqrt(numberOfSamples);
+            var world = Build();
+            var tracer = new MultipleObjectsTracer(world);
+            var canvas = new Canvas(hres, vres);
+            var d = Vector4.CreateDirection(0, 0, 1);
+            for (var r = 0; r < vres; r++)
+            {
+                for (var c = 0; c < hres; c++)
+                {
+                    var color = new Color(0);
+                    for (var p = 0; p < n; p++)
+                    {
+                        for (var q = 0; q < n; q++)
+                        {
+                            var x = s * (c - 0.5 * hres + (q + rng.NextDouble()) / n);
+                            var y = s * (r - 0.5 * vres + (p + rng.NextDouble()) / n);
+                            var o = Vector4.CreatePosition(x, y, zw);
+                            var ray = new Ray4(o, d);
+                            color += tracer.Trace(ray);
+                        }
+                    }
+
+                    color = color / numberOfSamples;
+                    canvas[c, r] = color;
+                }
+            }
+
+            canvas.SavePpm(@"out.ppm");
+        }
+
+        [ArgActionMethod]
+        [ArgDescription("Render an image")]
         public static void Render(RenderArgs args)
         {
             if (!TryLoadAssembly(args.Asm, out var asm))

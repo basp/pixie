@@ -25,6 +25,9 @@ namespace Pixie
             this.T == other.T &&
             this.Object == other.Object;
 
+        public override string ToString() =>
+            $"Intersection ({this.T}, {this.Object})";
+
         public Interaction Resolve(Ray4 r) =>
             Resolve(r, IntersectionList.Create(this));
 
