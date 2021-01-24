@@ -57,17 +57,29 @@ for (var r = 0; r < vres; r++)
 {
     for (var c = 0; c < hres; c++)
     {
+        // for every pixel we start with black
         var color = new Color(0);
+
+        // integrate over the number of samples
+        // using unit square sampling
         for (var j = 0; j < numberOfSamples; j++)
         {
+            // get sampling point offsets
             var sp = sampler.SampleUnitSquare();
+
+            // calculate world x and y coordinates
             var x = s * (c - 0.5 * hres + sp.X);
             var y = s * (r - 0.5 * vres + sp.Y);
+
+            // shoot ray
             var o = Vector4.CreatePosition(x, y, zw);
             var ray = new Ray4(o, d);
             color += tracer.Trace(ray);
         }
 
+        // we take a number of samples by calculating 
+        // subpixel x and y positions and averaging
+        // color values
         color = color / numberOfSamples;
         canvas[c, r] = color;
     }
