@@ -8,6 +8,7 @@
     using System.Reflection;
     using Linie;
     using PowerArgs;
+    using Serilog;
 
     [ArgExceptionBehavior(ArgExceptionPolicy.StandardExceptionHandling)]
     class Program
@@ -19,7 +20,13 @@
 
         private static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .CreateLogger();
+
             Console.WriteLine(banner);
+
             Args.InvokeAction<Program>(args);
         }
 
@@ -253,6 +260,45 @@
                             var ray = new Ray4(o, d);
                             color += tracer.Trace(ray);
                         }
+                    }
+
+                    color = color / numberOfSamples;
+                    canvas[c, r] = color;
+                }
+            }
+
+            canvas.SavePpm(@"out.ppm");
+        }
+
+        [ArgActionMethod]
+        [ArgDescription("Sampler")]
+        public static void Test7()
+        {
+            const int hres = 200;
+            const int vres = 200;
+            const double s = 1.0;
+            const double zw = -100;
+            const int numberOfSamples = 5 * 5;
+
+            var rng = new Random();
+            var world = Build();
+            var tracer = new MultipleObjectsTracer(world);
+            var sampler = new JitteredSampler(numberOfSamples);
+            var canvas = new Canvas(hres, vres);
+            var d = Vector4.CreateDirection(0, 0, 1);
+            for (var r = 0; r < vres; r++)
+            {
+                for (var c = 0; c < hres; c++)
+                {
+                    var color = new Color(0);
+                    for (var j = 0; j < numberOfSamples; j++)
+                    {
+                        var sp = sampler.SampleUnitSquare();
+                        var x = s * (c - 0.5 * hres + sp.X);
+                        var y = s * (r - 0.5 * vres + sp.Y);
+                        var o = Vector4.CreatePosition(x, y, zw);
+                        var ray = new Ray4(o, d);
+                        color += tracer.Trace(ray);
                     }
 
                     color = color / numberOfSamples;

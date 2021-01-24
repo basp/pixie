@@ -6,6 +6,7 @@ namespace Pixie
     using System.Threading;
     using Linie;
 
+    [Obsolete]
     public class FocalBlurSampler : ISampler
     {
         private readonly Random rng = new Random();

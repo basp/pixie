@@ -3,6 +3,8 @@
     <ItemGroup>
         <PackageReference Include="Linie" Version="0.6.2" />
         <PackageReference Include="PowerArgs" Version="3.6.0" />
+        <PackageReference Include="Serilog" Version="2.10.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
         <PackageReference Include="ShellProgressBar" Version="5.0.0" />
     </ItemGroup>
 

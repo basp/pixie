@@ -8,6 +8,7 @@ namespace Pixie
     using System.Threading;
     using Linie;
 
+    [Obsolete]
     public class RandomSuperSampler : ISampler
     {
         private readonly Random rng = new Random();

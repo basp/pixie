@@ -2,9 +2,11 @@
 
 namespace Pixie
 {
+    using System;
     using System.Threading;
     using Linie;
 
+    [Obsolete]
     public class DefaultSampler : ISampler
     {
         private readonly World world;
