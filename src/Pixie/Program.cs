@@ -271,19 +271,19 @@
         }
 
         [ArgActionMethod]
-        [ArgDescription("Sampler")]
+        [ArgDescription("Abstract sampler")]
         public static void Test7()
         {
-            const int hres = 200;
-            const int vres = 200;
-            const double s = 1.0;
-            const double zw = -100;
-            const int numberOfSamples = 5 * 5;
+            const int hres = 400;
+            const int vres = 400;
+            const double s = 0.5;
+            const double zw = -200;
+            const int numberOfSamples = 13 * 13;
 
             var world = Build();
             var tracer = new MultipleObjectsTracer(world);
-            // var sampler = new JitteredSampler(numberOfSamples);
-            var sampler = new DefaultSampler(16);
+            var sampler = new JitteredSampler(numberOfSamples);
+            // var sampler = new DefaultSampler(16);
             var canvas = new Canvas(hres, vres);
             var d = Vector4.CreateDirection(0, 0, 1);
             for (var r = 0; r < vres; r++)

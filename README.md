@@ -85,3 +85,11 @@ for (var r = 0; r < vres; r++)
     }
 }
 ```
+
+TODO:
+* Camera needs a lens like pinhole, thin, fisheye, etc.
+* Shading should be decoupled properly, if we depend on specific materials we
+need to have a thing that will give us the right shader.
+* Shapes in general could use a bit of love in the form of some factory 
+methods to make it easier to create & transform them at the same time.
+* Implement Ray Tracing in One Weekend using Pixie example
