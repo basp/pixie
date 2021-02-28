@@ -18,7 +18,6 @@ namespace Pixie.Mazes
                 [root] = 0,
             };
 
-
             // Flood fill over the maze
             var frontier = new List<Cell>(new[] { root });
             while (frontier.Count > 0)
