@@ -133,6 +133,42 @@ namespace Pixie.Mazes
             }
         }
 
+        public void Sidewinder()
+        {
+            foreach (var row in this.GetRows())
+            {
+                var run = new HashSet<Cell>();
+                foreach (var cell in row)
+                {
+                    run.Add(cell);
+
+                    var eastBound = !this.East(cell).HasValue;
+                    var northBound = !this.North(cell).HasValue;
+                    
+                    var shouldCloseRun =
+                        eastBound || (!northBound && rng.Next(2) == 0);
+
+                    if (shouldCloseRun)
+                    {
+                        var member = run.Sample(rng);
+                        this.North(member).MatchSome(x =>
+                        {
+                            member.Link(x);
+                        });
+
+                        run.Clear();
+                    }
+                    else
+                    {
+                        this.East(cell).MatchSome(x =>
+                        {
+                            cell.Link(x);
+                        });
+                    }
+                }
+            }
+        }
+
         public override string ToString()
         {
             throw new NotImplementedException();
@@ -202,6 +238,15 @@ namespace Pixie.Mazes
             }
 
             return bmp;
+        }
+    }
+
+    internal static class Extensions
+    {
+        public static Cell Sample(this IEnumerable<Cell> self, Random rng)
+        {
+            var index = rng.Next(self.Count());
+            return self.ElementAt(index);
         }
     }
 }
