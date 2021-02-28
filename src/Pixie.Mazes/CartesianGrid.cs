@@ -3,7 +3,6 @@ namespace Pixie.Mazes
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.Linq;
     using Optional;
     using Optional.Unsafe;
@@ -144,7 +143,7 @@ namespace Pixie.Mazes
 
                     var eastBound = !this.East(cell).HasValue;
                     var northBound = !this.North(cell).HasValue;
-                    
+
                     var shouldCloseRun =
                         eastBound || (!northBound && rng.Next(2) == 0);
 
@@ -172,81 +171,6 @@ namespace Pixie.Mazes
         public override string ToString()
         {
             throw new NotImplementedException();
-        }
-
-        public Bitmap Render()
-        {
-            const int padding = 5;
-            const int cellSize = 30;
-            var imageWidth = 2 * padding + cellSize * this.Columns;
-            var imageHeight = 2 * padding + cellSize * this.Rows;
-            var background = Color.White;
-            var wall = Color.Black;
-            var bmp = new Bitmap(imageWidth, imageHeight);
-            using (var gfx = Graphics.FromImage(bmp))
-            {
-                gfx.FillRectangle(
-                    new SolidBrush(background),
-                    new Rectangle(0, 0, imageWidth, imageHeight));
-
-                foreach (var cell in this)
-                {
-                    var x1 = padding + cell.Column * cellSize;
-                    var y1 = padding + cell.Row * cellSize;
-                    var x2 = padding + (cell.Column + 1) * cellSize;
-                    var y2 = padding + (cell.Row + 1) * cellSize;
-
-                    Action drawNorthWall = () =>
-                        gfx.DrawLine(new Pen(new SolidBrush(wall)), x1, y1, x2, y1);
-
-                    Action drawSouthWall = () =>
-                        gfx.DrawLine(new Pen(new SolidBrush(wall)), x1, y2, x2, y2);
-
-                    Action drawWestWall = () =>
-                        gfx.DrawLine(new Pen(new SolidBrush(wall)), x1, y1, x1, y2);
-
-                    Action drawEastWall = () =>
-                        gfx.DrawLine(new Pen(new SolidBrush(wall)), x2, y1, x2, y2);
-
-                    this.North(cell).MatchNone(drawNorthWall);
-                    this.West(cell).MatchNone(drawWestWall);
-
-                    this.East(cell).Match(
-                        x =>
-                        {
-                            if (cell.IsLinked(x))
-                            {
-                                return;
-                            }
-
-                            drawEastWall();
-                        },
-                        drawEastWall);
-
-                    this.South(cell).Match(
-                        x =>
-                        {
-                            if (cell.IsLinked(x))
-                            {
-                                return;
-                            }
-
-                            drawSouthWall();
-                        },
-                        drawSouthWall);
-                }
-            }
-
-            return bmp;
-        }
-    }
-
-    internal static class Extensions
-    {
-        public static Cell Sample(this IEnumerable<Cell> self, Random rng)
-        {
-            var index = rng.Next(self.Count());
-            return self.ElementAt(index);
         }
     }
 }
