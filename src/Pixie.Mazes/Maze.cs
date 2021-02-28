@@ -10,9 +10,9 @@ namespace Pixie.Mazes
     {
         private readonly CartesianGrid grid;
 
-        private readonly Distances distances;
+        private readonly IDictionary<Cell,int> distances;
 
-        public Maze(CartesianGrid grid, Distances distances)
+        public Maze(CartesianGrid grid, IDictionary<Cell,int> distances)
         {
             this.grid = grid;
             this.distances = distances;
