@@ -18,6 +18,8 @@ namespace Pixie.Mazes
                 [root] = 0,
             };
 
+
+            // Flood fill over the maze
             var frontier = new List<Cell>(new[] { root });
             while (frontier.Count > 0)
             {
@@ -28,6 +30,7 @@ namespace Pixie.Mazes
                     {
                         if (cells.ContainsKey(link))
                         {
+                            // Already visited this cell so just skip
                             continue;
                         }
 
