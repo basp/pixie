@@ -9,7 +9,7 @@ namespace Pixie;
 /// </typeparam>
 public readonly struct Vector2<T> :
     IEquatable<Vector2<T>>
-    where T : IFloatingPointIeee754<T>
+    where T : INumber<T>
 {
     public readonly T X, Y;
 
@@ -34,36 +34,6 @@ public readonly struct Vector2<T> :
             0 => this.X,
             _ => this.Y,
         };
-
-    public static bool operator ==(Vector2<T> left, Vector2<T> right) =>
-        left.Equals(right);
-
-    public static bool operator !=(Vector2<T> left, Vector2<T> right) =>
-        !(left == right);
-
-    public static Vector2<T> operator -(Vector2<T> u) =>
-        new(
-            -u.X,
-            -u.Y);
-
-    /// <summary>
-    /// Adds two vectors together.
-    /// </summary>
-    /// <param name="u">The first vector to add.</param>
-    /// <param name="v">The second vector to add.</param>
-    /// <returns>The summed vector.</returns>
-    public static Vector2<T> operator +(Vector2<T> u, Vector2<T> v) =>
-        new(u.X + v.X, u.Y + v.Y);
-
-    public static Vector2<T> operator -(Vector2<T> u, Vector2<T> v) =>
-        new(u.X - v.X, u.Y - v.Y);
-
-    public static Vector2<T> operator *(Vector2<T> u, T s) =>
-        new(u.X * s, u.Y * s);
-
-    public T Dot(Vector2<T> other) => Vector2.Dot(this, other);
-
-    public T LengthSquared() => Vector2.Dot(this, this);
 
     public Vector2<U> Map<U>(Func<T, U> f)
         where U : IFloatingPointIeee754<U> =>

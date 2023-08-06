@@ -2,7 +2,7 @@
 
 public readonly struct Vector3<T> :
     IEquatable<Vector3<T>>
-    where T : IFloatingPointIeee754<T>
+    where T : INumber<T>
 {
     public readonly T X, Y, Z;
 
@@ -21,6 +21,13 @@ public readonly struct Vector3<T> :
             _ => this.Z,
         };
 
+    public Vector3<U> Map<U>(Func<T, U> f)
+        where U : INumber<U> =>
+        new(
+            f(this.X),
+            f(this.Y),
+            f(this.Z));
+
     public void Deconstruct(out T x, out T y, out T z)
     {
         x = this.X;
@@ -29,7 +36,18 @@ public readonly struct Vector3<T> :
     }
 
     public bool Equals(Vector3<T> other) =>
-        throw new NotImplementedException();
+        this.X == other.X &&
+        this.Y == other.Y &&
+        this.Z == other.Z;
+
+    public override bool Equals(object obj) =>
+        obj is Vector3<T> other && this.Equals(other);
+
+    public override int GetHashCode() =>
+        HashCode.Combine(this.X, this.Y, this.Z);
+
+    public override string ToString() =>
+        $"({this.X} {this.Y} {this.Z})";
 }
 
 public static class Vector3

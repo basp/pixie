@@ -36,7 +36,7 @@ public class Vector2Tests
     public void TestNegation()
     {
         var u = new Vector2<double>(1, 2);
-        var w = -u;
+        var w = Vector2.Negate(u);
         Assert.Equal(-1, w.X);
         Assert.Equal(-2, w.Y);
     }
@@ -46,7 +46,7 @@ public class Vector2Tests
     {
         var u = new Vector2<float>(2, 3);
         var v = new Vector2<float>(1, 2);
-        var w = u + v;
+        var w = Vector2.Add(u, v);
         Assert.Equal(3, w.X);
         Assert.Equal(5, w.Y);
     }
@@ -56,7 +56,7 @@ public class Vector2Tests
     {
         var u = new Vector2<float>(2, 1);
         var v = new Vector2<float>(1, 1);
-        var w = u - v;
+        var w = Vector2.Subtract(u, v);
         Assert.Equal(1, w.X);
         Assert.Equal(0, w.Y);
     }
@@ -65,7 +65,7 @@ public class Vector2Tests
     public void TestMultiplication()
     {
         var u = new Vector2<double>(2, 3);
-        var v = u * 0.5;
+        var v = Vector2.Multiply(u, 0.5);
         Assert.Equal(1, v.X);
         Assert.Equal(1.5, v.Y);
     }
