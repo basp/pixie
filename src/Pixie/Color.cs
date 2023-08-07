@@ -54,7 +54,7 @@ public readonly struct Color<T> :
         this.G == other.G &&
         this.B == other.B;
 
-    public override bool Equals([NotNullWhen(true)] object obj) =>
+    public override bool Equals(object obj) =>
         obj is Color<T> other && this.Equals(other);
 
     public override int GetHashCode() =>

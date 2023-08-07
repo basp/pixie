@@ -1,88 +1,114 @@
-namespace Pixie.Tests;
+﻿namespace Linie.Tests;
 
 public class Vector2Tests
 {
+    [Fact]
+    public void TestConstructor()
+    {
+        var u = new Vector2<int>(2);
+        Assert.IsType<Vector2<int>>(u);
+        Assert.Equal(2, u.X);
+        Assert.Equal(2, u.Y);
+    }
+
+    [Fact]
+    public void TestCreation()
+    {
+        var ud = Vector2.Create(1.0, 2);
+        var uf = Vector2.Create(1.0f, 2);
+        var ui = Vector2.Create(1, 2);
+
+        Assert.IsType<Vector2<double>>(ud);
+        Assert.Equal(1.0, ud.X);
+        Assert.Equal(2.0, ud.Y);
+
+        Assert.IsType<Vector2<float>>(uf);
+        Assert.Equal(1.0f, uf.X);
+        Assert.Equal(2.0f, uf.Y);
+
+        Assert.IsType<Vector2<int>>(ui);
+        Assert.Equal(1, ui.X);
+        Assert.Equal(2, ui.Y);
+    }
+
+    [Fact]
+    public void TestIndexing()
+    {
+        var u = Vector2.Create(1, 2);
+
+        Assert.Equal(1, u[0]);
+        Assert.Equal(2, u[1]);
+
+        Assert.Equal(u[0], u.X);
+        Assert.Equal(u[1], u.Y);
+    }
+
     [Fact]
     public void TestEquality()
     {
         var u = Vector2.Create(1.0, 2);
         var v = Vector2.Create(1.0, 2);
-        var w = Vector2.Create(2.0, 3);
-        var o = new object();
-        
-        Assert.Equal(u, v);
-        Assert.NotEqual(u, w);
-        Assert.NotEqual(u, o);
-    }
-    
-    [Fact]
-    public void TestCreate()
-    {
-        var u = Vector2.Create(1.0, 2.5);
-        Assert.Equal(1.0, u.X);
-        Assert.Equal(2.5, u.Y);
-    }
-    
-    [Fact]
-    public void TestIndexing()
-    {
-        var u = new Vector2<double>(2, 3);
-        Assert.Equal(2, u[0]);
-        Assert.Equal(3, u[1]);
-        Assert.Equal(3, u[1000]);
-    }
+        var w = Vector2.Create(2.0, 2);
 
-    [Fact]
-    public void TestNegation()
-    {
-        var u = new Vector2<double>(1, 2);
-        var w = Vector2.Negate(u);
-        Assert.Equal(-1, w.X);
-        Assert.Equal(-2, w.Y);
+        Assert.Equal(u, v);
+        Assert.Equal(v, u);
+
+        Assert.NotEqual(u, w);
+        Assert.NotEqual(v, w);
     }
 
     [Fact]
     public void TestAddition()
     {
-        var u = new Vector2<float>(2, 3);
-        var v = new Vector2<float>(1, 2);
+        var u = Vector2.Create(1, 2);
+        var v = Vector2.Create(2, 3);
         var w = Vector2.Add(u, v);
-        Assert.Equal(3, w.X);
-        Assert.Equal(5, w.Y);
+        Assert.Equal(Vector2.Create(3, 5), w);
     }
 
     [Fact]
     public void TestSubtraction()
     {
-        var u = new Vector2<float>(2, 1);
-        var v = new Vector2<float>(1, 1);
+        var u = Vector2.Create(1, 2);
+        var v = Vector2.Create(2, 3);
         var w = Vector2.Subtract(u, v);
-        Assert.Equal(1, w.X);
-        Assert.Equal(0, w.Y);
+        Assert.Equal(Vector2.Create(-1, -1), w);
     }
 
     [Fact]
     public void TestMultiplication()
     {
-        var u = new Vector2<double>(2, 3);
-        var v = Vector2.Multiply(u, 0.5);
+        var u = new Vector2<double>(1, 2);
+        Assert.Equal(
+            Vector2.Create(2.0, 4.0),
+            Vector2.Multiply(2, u));
+        Assert.Equal(
+            Vector2.Create(2.0, 4.0),
+            Vector2.Multiply(u, 2));
+        Assert.Equal(
+            Vector2.Create(0.5, 1.0),
+            Vector2.Multiply(0.5, u));
+        Assert.Equal(
+            Vector2.Create(0.5, 1.0),
+            Vector2.Multiply(u, 0.5));
+    }
+
+    [Fact]
+    public void TestDivision()
+    {
+        var u = new Vector2<double>(1, 3.0);
+        var cmp = Vector2.GetComparer(1e-6);
+        Assert.Equal(
+            Vector2.Create(0.5, 1.5),
+            Vector2.Divide(u, 2));
+    }
+
+    [Fact]
+    public void TestAbs()
+    {
+        var u = Vector2.Create(-1, 2);
+        var v = Vector2.Abs(u);
         Assert.Equal(1, v.X);
-        Assert.Equal(1.5, v.Y);
-    }
-
-    [Fact]
-    public void TestDeconstruction()
-    {
-        var (x, y) = new Vector2<double>(1, 2);
-        Assert.Equal(1, x);
-        Assert.Equal(2, y);
-    }
-
-    [Fact]
-    public void TestMapping()
-    {
-        var u = new Vector2<double>(1.5, 2.5);
-        var v = u.Map(x => (float)Math.Floor(x));
-        Assert.IsType<Vector2<float>>(v);
+        Assert.Equal(2, v.Y);
     }
 }

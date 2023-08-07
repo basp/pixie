@@ -1,42 +1,39 @@
-﻿namespace Pixie.Tests;
+﻿namespace Linie.Tests;
 
 public class UtilsTests
 {
     [Fact]
-    public void TestRadians()
-    {
-        const double deg = 45.0;
-        var rad = Utils.Radians(deg);
-        Assert.Equal(Math.PI / 4, rad);
-    }
-
-    [Fact]
-    public void TestDegrees()
-    {
-        const double rad = Math.PI / 4;
-        Assert.Equal(45.0, Utils.Degrees(rad));
-    }
-
-    [Fact]
     public void TestSafeSqrt()
     {
-        var tests = new[]
+        const double atol = 0.1;
+        var valid = new[]
         {
-            (-0.0001, 0),
-            (-0.00001, 0),
+            (-0.1, 0),
+            (-0.09, 0),
+            (-0.01, 0),
+            (-0, 0),
             (0, 0),
+            (+0, 0),
             (0.1, Math.Sqrt(0.1)),
-            (9, Math.Sqrt(9.0)),
-            (16, Math.Sqrt(16)),
-#if RELEASE
-            (-5, Math.Sqrt((0)))
-#endif
+            (1, Math.Sqrt(1)),
+            (2, Math.Sqrt(2)),
+            (3.5, Math.Sqrt(3.5)),
         };
 
-        foreach (var (x, expected) in tests)
+        var invalid = new[]
         {
-            var actual = Utils.SafeSqrt(x);
-            Assert.Equal(expected, actual);
+            -0.12, -0.11, -0.1001,
+        };
+
+        foreach (var (x, want) in valid)
+        {
+            Assert.Equal(want, Utils.SafeSqrt(x, atol));
+        }
+
+        foreach (var x in invalid)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(
+                () => Utils.SafeSqrt(x, atol));
         }
     }
 }

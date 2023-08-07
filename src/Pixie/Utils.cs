@@ -1,93 +1,73 @@
-namespace Pixie;
+﻿namespace Linie;
 
 public static class Utils
 {
-    private const double RadiansPerDegree = Math.PI / 180.0;
-    private const double DegreesPerRadian = 180.0 / Math.PI;
+    public static double InvPi = 1 / Math.PI;
 
-    public static double Radians(double degrees) =>
-        Utils.RadiansPerDegree * degrees;
+    public static double Inv2Pi = 1 / (2 * Math.PI);
 
-    public static double Degrees(double radians) =>
-        Utils.DegreesPerRadian * radians;
+    public static double Inv4Pi = 1 / (4 * Math.PI);
 
-#if DEBUG
-    public static double SafeSqrt(double x, double atol = 1e-3)
+    public static double PiOver2 = Math.PI / 2;
+
+    public static double PiOver4 = Math.PI / 4;
+
+    public static double Sqrt2 = Math.Sqrt(2);
+
+    public static T Radians<T>(T deg)
+        where T : IFloatingPointIeee754<T> =>
+        (T.Pi / T.CreateChecked(180)) * deg;
+
+    public static T Degrees<T>(T rad)
+        where T : IFloatingPointIeee754<T> =>
+        (T.CreateChecked(180) / T.Pi) * rad;
+
+    public static T SmoothStep<T>(T x, T a, T b)
+        where T : IFloatingPointIeee754<T>
     {
-        Debug.Assert(x >= -atol);
-        return Math.Sqrt(Math.Max(0, x));
-    }
-#else
-     public static double SafeSqrt(double x) => Math.Sqrt(Math.Max(0, x));
-#endif
+        if (a == b)
+        {
+            return (x < a) ? T.Zero : T.One;
+        }
 
-#if DEBUG
+        var t = T.Clamp(
+            (x - a) / (b - a),
+            T.Zero,
+            T.One);
+
+        return t * t * (T.CreateChecked(3) - T.CreateChecked(2) * t);
+    }
+
     public static double SafeAsin(double x)
     {
-        Debug.Assert(x is >= -1.0001 and <= 1.0001);
+#if DEBUG
+        if (x is < -1.0001 or > 1.0001)
+        {
+            throw new ArgumentOutOfRangeException(nameof(x));
+        }
+#endif
         return Math.Asin(Math.Clamp(x, -1, 1));
     }
-#else
-     public static double SafeAsin(double x) =>
-         Math.Asin(Math.Clamp(x, -1, 1));
-#endif
 
-#if DEBUG
     public static double SafeAcos(double x)
     {
-        Debug.Assert(x is >= -1.0001 and <= 1.0001);
+#if DEBUG
+        if (x is < -1.0001 or > 1.0001)
+        {
+            throw new ArgumentOutOfRangeException(nameof(x));
+        }
+#endif
         return Math.Acos(Math.Clamp(x, -1, 1));
     }
-#else
-     public static double SafeAcos(double x) =>
-         Math.Acos(Math.Clamp(x, -1, 1));
+
+    public static double SafeSqrt(double x, double atol = 1e-3)
+    {
+#if DEBUG
+        if (x < -atol)
+        {
+            throw new ArgumentOutOfRangeException(nameof(x));
+        }
 #endif
-
-    public static T SinXOverX<T>(T x)
-        where T : IFloatingPointIeee754<T>
-    {
-        if (T.One - x * x == T.One)
-        {
-            return T.One;
-        }
-
-        return T.Sin(x) / x;
-    }
-
-    public static double SmoothStep(double x, double a, double b)
-    {
-        if (a.IsApprox(b, 1e-6))
-        {
-            return (x < a) ? 0 : 1;
-        }
-
-        var t = Math.Clamp((x - a) / (b - a), 0, 1);
-        return t * t * (3 - 2 * t);
-    }
-
-    public static T Sqr<T>(T x) where T : INumber<T> => x * x;
-
-    public static double EvaluatePolynomial(
-        IReadOnlyList<double> c,
-        double x)
-    {
-        var n = c.Count;
-        var y = c[n - 1];
-
-        for (var k = n - 2; k >= 0; k--)
-        {
-            y = Math.FusedMultiplyAdd(x, y, c[k]);
-        }
-
-        return y;
-    }
-
-    public static T DifferenceOfProducts<T>(T a, T b, T c, T d)
-        where T : IFloatingPointIeee754<T>
-    {
-        var cd = c * d;
-        var differenceOfProducts = T.FusedMultiplyAdd(a, b, -cd);
-        var error = T.FusedMultiplyAdd(-c, d, cd);
-        return differenceOfProducts + error;
+        return Math.Sqrt(Math.Max(x, 0));
     }
 }

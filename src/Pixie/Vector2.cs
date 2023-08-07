@@ -1,23 +1,40 @@
-namespace Pixie;
+﻿namespace Linie;
 
 /// <summary>
-/// Represents a vector of two elements of a specified numeric type.
+/// Represents a direction in two-dimensional space.
 /// </summary>
 /// <typeparam name="T">
-/// The type of the elements in the vector. <c>T</c> can be any primitive
-/// numeric type.
+/// The type of elements in the vector. <c>T</c> can be any primitive numeric
+/// type.
 /// </typeparam>
 public readonly struct Vector2<T> :
-    IEquatable<Vector2<T>>
+    IEquatable<Vector2<T>>,
+    IFormattable
     where T : INumber<T>
 {
     public readonly T X, Y;
 
     /// <summary>
+    /// Creates a new <see cref="Vector2{T}"/> object whose two elements have
+    /// the same value. 
+    /// </summary>
+    /// <param name="v">
+    /// The value to assign to both elements.
+    /// </param>
+    public Vector2(T v)
+        : this(v, v)
+    {
+    }
+
+    /// <summary>
     /// Creates a vector whose elements have the specified values.
     /// </summary>
-    /// <param name="x">The value to assign to the <see cref="X"/> field.</param>
-    /// <param name="y">The value to assign to the <see cref="Y"/> field.</param>
+    /// <param name="x">
+    /// The value to assign to the <see cref="X"/> field.
+    /// </param>
+    /// <param name="y">
+    /// The value to assign to the <see cref="Y"/> field.
+    /// </param>
     public Vector2(T x, T y)
     {
         this.X = x;
@@ -27,7 +44,9 @@ public readonly struct Vector2<T> :
     /// <summary>
     /// Gets the element at the specified index.
     /// </summary>
-    /// <param name="index">The index of the element to get.</param>
+    /// <param name="index">
+    /// The index of the element to get.
+    /// </param>
     public T this[int index] =>
         index switch
         {
@@ -35,117 +54,165 @@ public readonly struct Vector2<T> :
             _ => this.Y,
         };
 
-    public Vector2<U> Map<U>(Func<T, U> f)
-        where U : IFloatingPointIeee754<U> =>
-        new(
-            f(this.X),
-            f(this.Y));
-
-    /// <summary>
-    /// Deconstructs the components of this instance into separate variables.
-    /// </summary>
-    /// <param name="x">
-    /// When this method returns, contains the value of the <c>x</c> component.
-    /// </param>
-    /// <param name="y">
-    /// When this method returns, contains the value of the <c>y</c> component.
-    /// </param>
-    public void Deconstruct(out T x, out T y)
-    {
-        x = this.X;
-        y = this.Y;
-    }
-
-    /// <summary>
-    /// Returns a value that indicates whether this instance and another vector
-    /// are equal.
-    /// </summary>
-    /// <param name="other">The other vector.</param>
-    /// <returns>
-    /// <c>true</c> if the two vectors are equal, otherwise <c>false</c>.
-    /// </returns>
     public bool Equals(Vector2<T> other) =>
         this.X == other.X &&
         this.Y == other.Y;
 
-    /// <summary>
-    /// Returns a value that indicates whether this instance and a specified
-    /// object are equal.
-    /// </summary>
-    /// <param name="obj">The object to compare with the current instance.</param>
-    /// <returns>
-    /// <c>true</c> if the current instance and <c>obj</c> are equal; otherwise, <c>false</c>. If <c>obj</c> is
-    /// <c>null</c>, the method returns <c>false</c>.
-    /// </returns>
-    /// <remarks>
-    /// The current instance and <c>obj</c> are equal if <c>obj</c> is a <see cref="Vector2"/> object and their
-    /// <see cref="X"/> and <see cref="Y"/> elements are equal.
-    /// </remarks>
-    public override bool Equals([NotNullWhen(true)] object obj) =>
+
+    public override bool Equals(object obj) =>
         obj is Vector2<T> other && this.Equals(other);
 
     public override int GetHashCode() =>
         HashCode.Combine(this.X, this.Y);
 
     public override string ToString() =>
-        $"({this.X} {this.Y})";
+        this.ToString(null, null);
+
+    public string ToString(string format, IFormatProvider formatProvider) =>
+        string.Format(
+            "({0} {1})",
+            this.X.ToString(format, formatProvider),
+            this.Y.ToString(format, formatProvider));
+}
+
+internal class Vector2EqualityComparer<T> :
+    IEqualityComparer<Vector2<T>>
+    where T : INumber<T>
+{
+    private readonly T atol;
+
+    public Vector2EqualityComparer(T atol)
+    {
+        this.atol = atol;
+    }
+
+    public bool Equals(Vector2<T> u, Vector2<T> v) =>
+        T.Abs(u.X - v.X) < this.atol &&
+        T.Abs(u.Y - v.Y) < this.atol;
+
+    public int GetHashCode(Vector2<T> obj) =>
+        obj.GetHashCode();
 }
 
 public static class Vector2
 {
+    public static IEqualityComparer<Vector2<T>> GetComparer<T>(T atol)
+        where T : INumber<T> =>
+        new Vector2EqualityComparer<T>(atol);
+
     public static Vector2<T> Create<T>(T x, T y)
-        where T : IFloatingPointIeee754<T> =>
+        where T : INumber<T> =>
         new(x, y);
 
+    /// <summary>
+    /// Returns a vector whose elements are the absolute values of each of the
+    /// specified vector's elements.
+    /// </summary>
+    /// <param name="u">
+    /// A vector.
+    /// </param>
+    /// <typeparam name="T">
+    /// The type of elements in the vector. <c>T</c> can be any primitive
+    /// numeric type.
+    /// </typeparam>
+    /// <returns>
+    /// The absolute value vector.
+    /// </returns>
+    public static Vector2<T> Abs<T>(Vector2<T> u)
+        where T : INumber<T> =>
+        new(
+            T.Abs(u.X),
+            T.Abs(u.Y));
+
+    /// <summary>
+    /// Adds two vectors together.
+    /// </summary>
+    /// <param name="u">
+    /// The first vector to add.
+    /// </param>
+    /// <param name="v">
+    /// The second vector to add.
+    /// </param>
+    /// <typeparam name="T">
+    /// The type of elements in the vector. <c>T</c> can be any primitive
+    /// numeric type.
+    /// </typeparam>
+    /// <returns>
+    /// The summed vector.
+    /// </returns>
     public static Vector2<T> Add<T>(Vector2<T> u, Vector2<T> v)
-        where T : IFloatingPointIeee754<T> =>
+        where T : INumber<T> =>
         new(
             u.X + v.X,
             u.Y + v.Y);
 
+    /// <summary>
+    /// Subtracts the second vector from the first.
+    /// </summary>
+    /// <param name="u">
+    /// The first vector.
+    /// </param>
+    /// <param name="v">
+    /// The second vector.
+    /// </param>
+    /// <typeparam name="T">
+    /// The type of elements int he vector. <c>T</c> can be any primitive
+    /// numeric type.
+    /// </typeparam>
+    /// <returns>
+    /// The difference vector.
+    /// </returns>
     public static Vector2<T> Subtract<T>(Vector2<T> u, Vector2<T> v)
-        where T : IFloatingPointIeee754<T> =>
+        where T : INumber<T> =>
         new(
             u.X - v.X,
             u.Y - v.Y);
 
+    /// <summary>
+    /// Multiplies a vector by a scalar.
+    /// </summary>
+    /// <param name="a">A scalar.</param>
+    /// <param name="u">A vector.</param>
+    /// <typeparam name="T">
+    /// The type of the scalar and elements in the vector.
+    /// </typeparam>
+    /// <returns>
+    /// The scaled vector.
+    /// </returns>
     public static Vector2<T> Multiply<T>(T a, Vector2<T> u)
-        where T : IFloatingPointIeee754<T> =>
+        where T : INumber<T> =>
         new(
             a * u.X,
             a * u.Y);
 
+    /// <summary>
+    /// Multiplies a vector by a scalar.
+    /// </summary>
+    /// <param name="u">A vector.</param>
+    /// <param name="a">A scalar.</param>
+    /// <typeparam name="T">
+    /// The type of the scalar and elements in the vector.
+    /// </typeparam>
+    /// <returns>
+    ///The scaled vector.
+    /// </returns>
     public static Vector2<T> Multiply<T>(Vector2<T> u, T a)
-        where T : IFloatingPointIeee754<T> => Vector2.Multiply(a, u);
+        where T : INumber<T> => Vector2.Multiply(a, u);
 
+    /// <summary>
+    /// Divides a vector by a scalar.
+    /// </summary>
+    /// <param name="u">A vector.</param>
+    /// <param name="a">A scalar.</param>
+    /// <typeparam name="T">
+    ///The type of the scalar and elements in the vector.
+    /// </typeparam>
+    /// <returns>
+    /// The scaled vector.
+    /// </returns>
     public static Vector2<T> Divide<T>(Vector2<T> u, T a)
         where T : IFloatingPointIeee754<T> =>
         new(
-            u.X / a, 
+            u.X / a,
             u.Y / a);
-
-    public static T Magnitude<T>(Vector2<T> u)
-        where T : IFloatingPointIeee754<T> =>
-        T.Sqrt(MagnitudeSquared(u));
-
-    public static T MagnitudeSquared<T>(Vector2<T> u)
-        where T : IFloatingPointIeee754<T> =>
-        Vector2.Dot(u, u);
-    
-    public static T Dot<T>(Vector2<T> u, Vector2<T> v)
-        where T : IFloatingPointIeee754<T> =>
-        u.X * v.X +
-        u.Y * v.Y;
-
-    public static Vector2<T> Negate<T>(Vector2<T> u)
-        where T : IFloatingPointIeee754<T> =>
-        new(-u.X, -u.Y);
-
-    public static Vector2<T> Normalize<T>(Vector2<T> u)
-        where T : IFloatingPointIeee754<T> =>
-        Vector2.Divide(u, Vector2.Magnitude(u));
-
-    public static IEqualityComparer<Vector2<T>> GetEqualityComparer<T>(T atol)
-        where T : IFloatingPointIeee754<T> =>
-        new Vector2EqualityComparer<T>(atol);
 }
