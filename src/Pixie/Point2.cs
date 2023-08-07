@@ -8,10 +8,21 @@
 /// type.
 /// </typeparam>
 public readonly struct Point2<T> :
-    IEquatable<Point2<T>>
+    IEquatable<Point2<T>>,
+    IFormattable
     where T : INumber<T>
 {
     public readonly T X, Y;
+
+    public Point2()
+        : this(T.Zero)
+    {
+    }
+    
+    public Point2(T v)
+        : this(v, v)
+    {
+    }
 
     /// <summary>
     /// Creates a 2D point whose elements have the specified values.
@@ -38,7 +49,12 @@ public readonly struct Point2<T> :
         index switch
         {
             0 => this.X,
+#if DEBUG
+            1 => this.Y,
+            _ => throw new IndexOutOfRangeException(nameof(index)),
+#else
             _ => this.Y,
+#endif
         };
 
     /// <summary>
@@ -52,6 +68,31 @@ public readonly struct Point2<T> :
     public bool Equals(Point2<T> other) =>
         this.X == other.X &&
         this.Y == other.Y;
+
+    public override bool Equals(object obj) =>
+        obj is Point2<T> other && this.Equals(other);
+
+    public override int GetHashCode() =>
+        HashCode.Combine(this.X, this.Y);
+
+    public string ToString(string format, IFormatProvider formatProvider) =>
+        string.Format(
+            "(point {0} {1})",
+            this.X.ToString(format, formatProvider),
+            this.Y.ToString(format, formatProvider));
+
+    public override string ToString() =>
+        this.ToString(null, null);
+
+    public Point2<U> Map<U>(Func<T, U> f)
+        where U : INumber<U> =>
+        Point2.Map(f, this);
+
+    public static bool operator ==(Point2<T> a, Point2<T> b) =>
+        a.Equals(b);
+
+    public static bool operator !=(Point2<T> a, Point2<T> b) =>
+        !(a == b);
 }
 
 public static class Point2
@@ -59,6 +100,17 @@ public static class Point2
     public static Point2<T> Create<T>(T x, T y)
         where T : INumber<T> =>
         new(x, y);
+
+    public static IEqualityComparer<Point2<T>> GetComparer<T>(T atol)
+        where T : INumber<T> =>
+        new Point2EqualityComparer<T>(atol);
+
+    public static Point2<U> Map<T, U>(Func<T, U> f, Point2<T> p)
+        where T : INumber<T>
+        where U : INumber<U> =>
+        new(
+            f(p.X),
+            f(p.Y));
 
     /// <summary>
     /// Adds a vector to a point.
@@ -97,4 +149,10 @@ public static class Point2
         new(
             a.X - u.X,
             a.Y - u.Y);
+
+    public static Vector2<T> Subtract<T>(Point2<T> a, Point2<T> b)
+        where T : INumber<T> =>
+        new(
+            a.X - b.X,
+            a.Y - b.Y);
 }

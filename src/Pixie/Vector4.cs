@@ -46,39 +46,12 @@ public readonly struct Vector4<T> :
             this.Y.ToString(format, formatProvider),
             this.Z.ToString(format, formatProvider),
             this.W.ToString(format, formatProvider));
-}
 
-internal class Vector4EqualityComparer<T> :
-    IEqualityComparer<Vector4<T>>
-    where T : INumber<T>
-{
-    private readonly T atol;
-
-    public Vector4EqualityComparer(T atol)
-    {
-        this.atol = atol;
-    }
-
-    public bool Equals(Vector4<T> u, Vector4<T> v) =>
-        T.Abs(u.X - v.X) < this.atol &&
-        T.Abs(u.Y - v.Y) < this.atol &&
-        T.Abs(u.Z - v.Z) < this.atol &&
-        T.Abs(u.W - v.W) < this.atol;
-
-    public int GetHashCode(Vector4<T> obj) =>
-        obj.GetHashCode();
+    public T Dot(Vector4<T> other) => Vector4.Dot(this, other);
 }
 
 public static class Vector4
 {
-    public static IEqualityComparer<Vector4<T>> GetComparer<T>(T atol)
-        where T : INumber<T> =>
-        new Vector4EqualityComparer<T>(atol);
-    
-    public static Vector4<T> Create<T>(T x, T y, T z, T w)
-        where T : INumber<T> =>
-        new(x, y, z, w);
-
     public static Vector4<T> Add<T>(Vector4<T> a, Vector4<T> b)
         where T : INumber<T> =>
         new(
@@ -86,6 +59,29 @@ public static class Vector4
             a.Y + b.Y,
             a.Z + b.Z,
             a.W + b.W);
+
+    public static Vector4<T> CreatePosition<T>(T x, T y, T z)
+        where T : INumber<T> =>
+        new(x, y, z, T.Zero);
+
+    public static Vector4<T> CreateDirection<T>(T x, T y, T z)
+        where T : INumber<T> =>
+        new(x, y, z, T.One);
+
+    public static Vector4<T> Create<T>(T x, T y, T z, T w)
+        where T : INumber<T> =>
+        new(x, y, z, w);
+
+    public static T Dot<T>(Vector4<T> u, Vector4<T> v)
+        where T : INumber<T> =>
+        u.X * v.X +
+        u.Y * v.Y +
+        u.Z * v.Z +
+        u.W * v.W;
+
+    public static IEqualityComparer<Vector4<T>> GetComparer<T>(T atol)
+        where T : INumber<T> =>
+        new Vector4EqualityComparer<T>(atol);
 
     public static Vector4<T> Subtract<T>(Vector4<T> a, Vector4<T> b)
         where T : INumber<T> =>

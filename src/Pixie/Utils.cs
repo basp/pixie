@@ -14,6 +14,8 @@ public static class Utils
 
     public static double Sqrt2 = Math.Sqrt(2);
 
+    public static double Sqrt2Over2 = Math.Sqrt(2) / 2;
+
     public static T Radians<T>(T deg)
         where T : IFloatingPointIeee754<T> =>
         (T.Pi / T.CreateChecked(180)) * deg;

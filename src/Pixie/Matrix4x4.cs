@@ -57,6 +57,12 @@ public class Matrix4x4<T> :
         set => this.data[(row * 4) + column] = value;
     }
 
+    public T this[int index] => this.data[index];
+
+    public int Count => 16;
+
+    public int[] Dimensions => new[] { 4, 4 };
+
     public Vector4<T> GetRow(int i) =>
         new(
             this[i, 0],
@@ -97,9 +103,6 @@ public class Matrix4x4<T> :
 
         return m;
     }
-
-    public T Minor(int row, int column) =>
-        this.Submatrix(row, column).Determinant();
 
     public T Cofactor(int row, int column) =>
         (row + column) % 2 == 0
@@ -174,14 +177,13 @@ public class Matrix4x4<T> :
     public override string ToString() => this.ToString(null, null);
 
     IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+
+    private T Minor(int row, int column) =>
+        this.Submatrix(row, column).Determinant();
 }
 
 public static class Matrix4x4
 {
-    public static bool IsIdentity<T>(this Matrix4x4<T> self)
-        where T : INumber<T> =>
-        self.Equals(Matrix4x4<T>.Identity);
-
     public static Matrix4x4<T> Create<T>(T v) where T : INumber<T> => new(v);
 
     public static Matrix4x4<T> Create<T>(
@@ -196,6 +198,11 @@ public static class Matrix4x4
             m20, m21, m22, m23,
             m30, m31, m32, m33);
 
+    public static IEqualityComparer<Matrix4x4<T>> GetComparer<T>(T atol)
+        where T : INumber<T> =>
+        new Matrix4x4EqualityComparer<T>(atol);
+
+    // ReSharper disable once ReturnTypeCanBeEnumerable.Global
     public static Matrix4x4<U> Map<T, U>(this Matrix4x4<T> m, Func<T, U> f)
         where T : INumber<T>
         where U : INumber<U>
@@ -223,6 +230,16 @@ public static class Matrix4x4
         }
 
         return c;
+    }
+
+    public static Vector4<T> Multiply<T>(in Matrix4x4<T> m, in Vector4<T> u)
+        where T : INumber<T>
+    {
+        var x = m.GetRow(0).Dot(u);
+        var y = m.GetRow(1).Dot(u);
+        var z = m.GetRow(2).Dot(u);
+        var w = m.GetRow(3).Dot(u);
+        return Vector4.Create(x, y, z, w);
     }
 
     public static Matrix4x4<T> Translate<T>(

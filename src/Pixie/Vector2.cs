@@ -14,6 +14,11 @@ public readonly struct Vector2<T> :
 {
     public readonly T X, Y;
 
+    public Vector2()
+        : this(T.Zero)
+    {
+    }
+
     /// <summary>
     /// Creates a new <see cref="Vector2{T}"/> object whose two elements have
     /// the same value. 
@@ -51,13 +56,17 @@ public readonly struct Vector2<T> :
         index switch
         {
             0 => this.X,
+#if DEBUG
+            1 => this.Y,
+            _ => throw new IndexOutOfRangeException(nameof(index)),
+#else
             _ => this.Y,
+#endif
         };
 
     public bool Equals(Vector2<T> other) =>
         this.X == other.X &&
         this.Y == other.Y;
-
 
     public override bool Equals(object obj) =>
         obj is Vector2<T> other && this.Equals(other);
@@ -73,36 +82,23 @@ public readonly struct Vector2<T> :
             "({0} {1})",
             this.X.ToString(format, formatProvider),
             this.Y.ToString(format, formatProvider));
-}
 
-internal class Vector2EqualityComparer<T> :
-    IEqualityComparer<Vector2<T>>
-    where T : INumber<T>
-{
-    private readonly T atol;
+    public static bool operator ==(Vector2<T> u, Vector2<T> v) =>
+        u.Equals(v);
 
-    public Vector2EqualityComparer(T atol)
-    {
-        this.atol = atol;
-    }
-
-    public bool Equals(Vector2<T> u, Vector2<T> v) =>
-        T.Abs(u.X - v.X) < this.atol &&
-        T.Abs(u.Y - v.Y) < this.atol;
-
-    public int GetHashCode(Vector2<T> obj) =>
-        obj.GetHashCode();
+    public static bool operator !=(Vector2<T> u, Vector2<T> v) =>
+        !(u == v);
 }
 
 public static class Vector2
 {
-    public static IEqualityComparer<Vector2<T>> GetComparer<T>(T atol)
-        where T : INumber<T> =>
-        new Vector2EqualityComparer<T>(atol);
-
     public static Vector2<T> Create<T>(T x, T y)
         where T : INumber<T> =>
         new(x, y);
+
+    public static IEqualityComparer<Vector2<T>> GetComparer<T>(T atol)
+        where T : INumber<T> =>
+        new Vector2EqualityComparer<T>(atol);
 
     /// <summary>
     /// Returns a vector whose elements are the absolute values of each of the

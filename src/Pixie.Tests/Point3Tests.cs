@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Pixie.Tests;
+﻿namespace Pixie.Tests;
 
 public class Point3Tests
 {
@@ -138,6 +136,6 @@ public class Point3Tests
     {
         var p = Point3.Create(1, 2, 3);
         var s = p.ToString();
-        Assert.Equal("(1 2 3)", s);
+        Assert.Equal("(point 1 2 3)", s);
     }
 }

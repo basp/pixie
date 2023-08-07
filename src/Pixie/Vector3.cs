@@ -7,6 +7,16 @@ public readonly struct Vector3<T> :
 {
     public readonly T X, Y, Z;
 
+    public Vector3()
+        : this(T.Zero)
+    {
+    }
+
+    public Vector3(T v)
+        : this(v, v, v)
+    {
+    }
+
     public Vector3(T x, T y, T z)
     {
         this.X = x;
@@ -19,8 +29,16 @@ public readonly struct Vector3<T> :
         {
             0 => this.X,
             1 => this.Y,
+#if DEBUG
+            2 => this.Z,
+            _ => throw new IndexOutOfRangeException(nameof(index)),
+#else
             _ => this.Z,
+#endif
         };
+
+    public Vector3<U> Map<U>(Func<T, U> f)
+        where U : INumber<U> => Vector3.Map(f, this);
 
     public bool Equals(Vector3<T> other) =>
         this.X == other.X &&
@@ -42,37 +60,22 @@ public readonly struct Vector3<T> :
             this.X.ToString(format, formatProvider),
             this.Y.ToString(format, formatProvider),
             this.Y.ToString(format, formatProvider));
-}
 
-internal class Vector3EqualityComparer<T> :
-    IEqualityComparer<Vector3<T>>
-    where T : INumber<T>
-{
-    private readonly T atol;
+    public static bool operator ==(Vector3<T> u, Vector3<T> v) =>
+        u.Equals(v);
 
-    public Vector3EqualityComparer(T atol)
-    {
-        this.atol = atol;
-    }
-
-    public bool Equals(Vector3<T> x, Vector3<T> y) =>
-        T.Abs(x.X - y.X) < this.atol &&
-        T.Abs(x.Y - y.Y) < this.atol &&
-        T.Abs(x.Z - y.Z) < this.atol;
-
-    public int GetHashCode(Vector3<T> obj) =>
-        obj.GetHashCode();
+    public static bool operator !=(Vector3<T> u, Vector3<T> v) =>
+        !(u == v);
 }
 
 public static class Vector3
 {
-    public static IEqualityComparer<Vector3<T>> GetComparer<T>(T atol)
+    public static Vector3<T> Abs<T>(Vector3<T> u)
         where T : INumber<T> =>
-        new Vector3EqualityComparer<T>(atol);
-
-    public static Vector3<T> Create<T>(T x, T y, T z)
-        where T : INumber<T> =>
-        new(x, y, z);
+        new(
+            T.Abs(u.X),
+            T.Abs(u.Y),
+            T.Abs(u.Z));
 
     public static Vector3<T> Add<T>(Vector3<T> u, Vector3<T> v)
         where T : INumber<T> =>
@@ -81,12 +84,38 @@ public static class Vector3
             u.Y + v.Y,
             u.Z + v.Z);
 
-    public static Vector3<T> Subtract<T>(Vector3<T> u, Vector3<T> v)
+    public static Vector3<T> Create<T>(T x, T y, T z)
         where T : INumber<T> =>
+        new(x, y, z);
+
+    public static T Cross<T>(Vector3<T> u, Vector3<T> v)
+        where T : INumber<T> =>
+        throw new NotImplementedException();
+
+    public static Vector3<T> Divide<T>(Vector3<T> u, T a)
+        where T : IFloatingPointIeee754<T> =>
         new(
-            u.X - v.X,
-            u.Y - v.Y,
-            u.Z - v.Z);
+            u.X / a,
+            u.Y / a,
+            u.Z / a);
+
+    public static T Dot<T>(Vector3<T> u, Vector3<T> v)
+        where T : INumber<T> =>
+        u.X * v.X +
+        u.Y * v.Y +
+        u.Z * v.Z;
+
+    public static IEqualityComparer<Vector3<T>> GetComparer<T>(T atol)
+        where T : INumber<T> =>
+        new Vector3EqualityComparer<T>(atol);
+
+    public static Vector3<U> Map<T, U>(Func<T, U> f, Vector3<T> u)
+        where T : INumber<T>
+        where U : INumber<U> =>
+        new(
+            f(u.X),
+            f(u.Y),
+            f(u.Z));
 
     public static Vector3<T> Multiply<T>(T a, Vector3<T> u)
         where T : INumber<T> =>
@@ -95,10 +124,10 @@ public static class Vector3
             a * u.Y,
             a * u.Z);
 
-    public static Vector3<T> Divide<T>(Vector3<T> u, T a)
-        where T : IFloatingPointIeee754<T> =>
+    public static Vector3<T> Subtract<T>(Vector3<T> u, Vector3<T> v)
+        where T : INumber<T> =>
         new(
-            u.X / a,
-            u.Y / a,
-            u.Z / a);
+            u.X - v.X,
+            u.Y - v.Y,
+            u.Z - v.Z);
 }

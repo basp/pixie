@@ -16,7 +16,7 @@ public class Vector3Tests
     public void TestIndexing()
     {
         var u = Vector3.Create(1.0, 2, 3);
-        
+
         Assert.Equal(1, u[0]);
         Assert.Equal(2, u[1]);
         Assert.Equal(3, u[2]);
@@ -24,6 +24,28 @@ public class Vector3Tests
         Assert.Equal(u[0], u.X);
         Assert.Equal(u[1], u.Y);
         Assert.Equal(u[2], u.Z);
+    }
+
+    [Fact]
+    public void TestAddition()
+    {
+        var u = Vector3.Create(1.0, 2, 3);
+        var v = Vector3
+            .Create(3, 2, 1)
+            .Map(v => (double)v);
+        var w = Vector3.Add(u, v);
+        Assert.Equal(Vector3.Create(4.0, 4.0, 4.0), w);
+    }
+
+    [Fact]
+    public void TestSubtraction()
+    {
+        var u = Vector3.Create(1.0, 2, 3);
+        var v = Vector3
+            .Create(3, 2, 1)
+            .Map(v => (double)v);
+        var w = Vector3.Subtract(u, v);
+        Assert.Equal(Vector3.Create(-2.0, 0, 2), w);
     }
 
     [Fact]

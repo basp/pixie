@@ -88,7 +88,7 @@ public class Matrix2x2<T> :
     {
         return other != null && this.data.SequenceEqual(other.data);
     }
-        
+
 
     public override bool Equals(object obj)
     {
@@ -116,6 +116,12 @@ public class Matrix2x2<T> :
         return $"[{string.Join(' ', rows)}]";
     }
 
-    public override string ToString() => 
+    public override string ToString() =>
         this.ToString(null, null);
+}
+
+public static class Matrix2x2
+{
+    public static Matrix2x2<T> Create<T>(T m00, T m01, T m10, T m11)
+        where T : INumber<T> => new(m00, m01, m10, m11);
 }

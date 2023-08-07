@@ -10,7 +10,7 @@ public class Point2Tests
         Assert.Equal(0, p.X);
         Assert.Equal(0, p.Y);
     }
-    
+
     [Fact]
     public void TestCreation()
     {
@@ -45,12 +45,21 @@ public class Point2Tests
         var a = Point2.Create(1.0, 2);
         var b = Point2.Create(1.0, 2);
         var c = Point2.Create(2.0, 3);
-        
+
         Assert.Equal(a, b);
         Assert.Equal(b, a);
 
         Assert.NotEqual(a, c);
         Assert.NotEqual(b, c);
+    }
+
+    [Fact]
+    public void TestGetHashCode()
+    {
+        var a = Point2.Create(1.0, 2.0);
+        var want = HashCode.Combine(1.0, 2.0);
+        var ans = a.GetHashCode();
+        Assert.Equal(want, ans);
     }
 
     [Fact]
@@ -62,9 +71,9 @@ public class Point2Tests
         Assert.Equal(0, b.X);
         Assert.Equal(4, b.Y);
     }
-    
+
     [Fact]
-    public void TestSubtraction()
+    public void TestPointVectorSubtraction()
     {
         var a = Point2.Create(1.0, 2);
         var u = Vector2.Create(2.0, 3);
@@ -72,5 +81,23 @@ public class Point2Tests
 
         Assert.Equal(-1, c.X);
         Assert.Equal(-1, c.Y);
+    }
+
+    [Fact]
+    public void TestPointPointSubtraction()
+    {
+        var a = Point2.Create(1, 2.0);
+        var b = Point2.Create(2.0, 1.5);
+        
+        var cmp = Vector2.GetComparer(1e-6);
+        
+        Assert.Equal(
+            Vector2.Create(-1, 0.5),
+            Point2.Subtract(a, b),
+            cmp);
+        Assert.Equal(
+            Vector2.Create(1.0, -0.5),
+            Point2.Subtract(b, a),
+            cmp);
     }
 }

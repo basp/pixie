@@ -166,12 +166,19 @@ public class Matrix3x3<T> :
 
 public static class Matrix3x3
 {
-    public static void Multiply<T>(
+    public static Matrix3x3<T> Create<T>(
+        T m00, T m01, T m02,
+        T m10, T m11, T m12,
+        T m20, T m21, T m22)
+        where T : INumber<T> =>
+        new(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+    
+    public static Matrix3x3<T> Multiply<T>(
         in Matrix3x3<T> a,
-        in Matrix3x3<T> b,
-        Matrix3x3<T> c)
+        in Matrix3x3<T> b)
         where T : INumber<T>
     {
+        var c = new Matrix3x3<T>();
         for (var i = 0; i < 3; i++)
         {
             for (var j = 0; j < 3; j++)
@@ -182,5 +189,7 @@ public static class Matrix3x3
                     (a[i, 2] * b[2, j]);
             }
         }
+
+        return c;
     }
 }

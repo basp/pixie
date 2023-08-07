@@ -2,7 +2,7 @@
 
 namespace Pixie;
 
-public struct Point3<T> :
+public readonly struct Point3<T> :
     IEquatable<Point3<T>>
     where T : INumber<T>
 {
@@ -30,7 +30,12 @@ public struct Point3<T> :
         {
             0 => this.X,
             1 => this.Y,
+#if DEBUG
+            2 => this.Z,
+            _ => throw new IndexOutOfRangeException(nameof(index)),
+#else
             _ => this.Z,
+#endif
         };
 
     public bool Equals(Point3<T> other) =>
@@ -38,36 +43,32 @@ public struct Point3<T> :
         this.Y == other.Y &&
         this.Z == other.Z;
 
+    public override bool Equals(object obj) =>
+        obj is Point3<T> other && this.Equals(other);
+
+    public override int GetHashCode() =>
+        HashCode.Combine(this.X, this.Y, this.Z);
+
     public override string ToString() =>
-        $"({this.X} {this.Y} {this.Z})";
-}
+        $"(point {this.X} {this.Y} {this.Z})";
 
-internal class Point3EqualityComparer<T> :
-    IEqualityComparer<Point3<T>>
-    where T : INumber<T>
-{
-    private readonly T atol;
+    public static bool operator ==(Point3<T> a, Point3<T> b) =>
+        a.Equals(b);
 
-    public Point3EqualityComparer(T atol)
-    {
-        this.atol = atol;
-    }
-
-    public bool Equals(Point3<T> a, Point3<T> b) =>
-        T.Abs(a.X - b.X) < this.atol &&
-        T.Abs(a.Y - b.Y) < this.atol &&
-        T.Abs(a.Z - b.Z) < this.atol;
-
-    public int GetHashCode(Point3<T> obj) =>
-        HashCode.Combine(obj.X, obj.Y, obj.Z);
+    public static bool operator !=(Point3<T> a, Point3<T> b) =>
+        !(a == b);
 }
 
 public static class Point3
 {
+    public static Point3<T> Create<T>(T x, T y, T z)
+        where T : INumber<T> =>
+        new(x, y, z);
+
     public static IEqualityComparer<Point3<T>> GetComparer<T>(T atol)
         where T : INumber<T> =>
         new Point3EqualityComparer<T>(atol);
-    
+
     public static Point3<T> FromCylindrical<T>(T r, T theta, T y)
         where T : IFloatingPointIeee754<T>
     {
@@ -84,8 +85,4 @@ public static class Point3
         var z = r * T.Sin(theta) * T.Cos(phi);
         return Point3.Create(x, y, z);
     }
-
-    public static Point3<T> Create<T>(T x, T y, T z)
-        where T : INumber<T> =>
-        new(x, y, z);
 }
