@@ -1,4 +1,4 @@
-﻿namespace Linie;
+﻿namespace Pixie;
 
 public readonly struct Vector4<T> :
     IEquatable<Vector4<T>>,

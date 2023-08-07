@@ -1,4 +1,4 @@
-﻿namespace Linie;
+﻿namespace Pixie;
 
 /// <summary>
 /// Represents a direction in two-dimensional space.

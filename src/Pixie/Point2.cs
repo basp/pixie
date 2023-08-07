@@ -1,4 +1,4 @@
-﻿namespace Linie;
+﻿namespace Pixie;
 
 /// <summary>
 /// Represents an x- and y-coordinate in two-dimensional space.

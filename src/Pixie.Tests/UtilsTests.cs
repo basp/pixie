@@ -1,4 +1,4 @@
-﻿namespace Linie.Tests;
+﻿namespace Pixie.Tests;
 
 public class UtilsTests
 {

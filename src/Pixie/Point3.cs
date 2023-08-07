@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Linie;
+namespace Pixie;
 
 public struct Point3<T> :
     IEquatable<Point3<T>>

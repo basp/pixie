@@ -1,4 +1,4 @@
-﻿namespace Linie;
+﻿namespace Pixie;
 
 public static class Utils
 {

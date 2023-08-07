@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Linie.Tests;
+namespace Pixie.Tests;
 
 public class Point3Tests
 {
