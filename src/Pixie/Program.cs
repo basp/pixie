@@ -24,7 +24,7 @@ public class Program
         ppm.Write(s);
     }
     
-    public static void Main(string[] args)
+    public static void Main(string[] _)
     {
         var p = new Program();
         p.Example01();
