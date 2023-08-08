@@ -1,8 +1,28 @@
 namespace Pixie;
 
-public class Program
+/*
+ We might want to include some benchmarks later. For now we don't have much to 
+ compare against since we already optimized vs Linie/Pixie1 by using 
+ System.Numerics.
+ 
+public class PixieVsNumerics
 {
-    private void Example01()
+    private Matrix4x4 numericsM;
+    private Vector4 numericsP;
+
+    [Benchmark]
+    public Vector4 NumericsMatrix() =>
+        Vector4.Transform(
+            this.numericsP, 
+            this.numericsM);
+}
+*/
+
+public static class Program
+{
+    // ReSharper disable once UnusedMember.Local
+    // This method is an example. It is fine if it is not called.
+    private static void Example01()
     {
         var ppm = new Pixmap(256, 256);
         for (var j = ppm.Height - 1; j >= 0; j--)
@@ -23,7 +43,5 @@ public class Program
 
     public static void Main(string[] _)
     {
-        var p = new Program();
-        p.Example01();
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Pixie.Tests;
+﻿namespace Pixie.Tests;
 
 public class VectorMathTests
 {
@@ -350,5 +348,43 @@ public class VectorMathTests
             var ans = Vector4.Transform(p, @case.T);
             Assert.Equal(@case.want, ans);
         }
+    }
+
+    [Fact]
+    public void ImperativeTransformationsBehaveNormally()
+    {
+        var p = new Vector4(1, 0, 1, 1);
+        var A = Matrix4x4.CreateRotationX(VectorMathTests.PiOver2);
+        var B = Matrix4x4.CreateScale(5, 5, 5);
+        var C = Matrix4x4.CreateTranslation(10, 5, 7);
+        var cmp = new Vector4Comparer(1e-5f);
+        
+        var p2 = Vector4.Transform(p, A);
+        var p3 = Vector4.Transform(p2, B);
+        var p4 = Vector4.Transform(p3, C);
+
+        Assert.Equal(new Vector4(1, -1, 0, 1), p2, cmp);
+        Assert.Equal(new Vector4(5, -5, 0,  1), p3, cmp);
+        Assert.Equal(new Vector4(15, 0, 7, 1), p4, cmp);
+    }
+
+    [Fact]
+    public void MultipliedTransformationsAreWeird()
+    {
+        // These are not so much weird but in that the application is unlike
+        // described in most textbooks. Most texts, including The Ray-Tracer
+        // Challenge will tell you to multiply the matrices in reverse order.
+        // So in this test, <c>T</c> would be <c>C * B * A</c> in order to
+        // yield the correct result. However, due to the way
+        // <c>System.Numerics</c> is implemented we can just write this
+        // combination in a natural way.
+        var p = new Vector4(1, 0, 1, 1);
+        var A = Matrix4x4.CreateRotationX(VectorMathTests.PiOver2);
+        var B = Matrix4x4.CreateScale(5, 5, 5);
+        var C = Matrix4x4.CreateTranslation(10, 5, 7);
+        var T = A * B * C;
+        Assert.Equal(
+            new Vector4(15, 0, 7, 1),
+            Vector4.Transform(p, T));
     }
 }
