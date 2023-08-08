@@ -2,6 +2,15 @@
 
 public class VectorMathTests
 {
+    private const float PiOver4 = MathF.PI / 4;
+    private const float PiOver2 = MathF.PI / 2;
+
+    private static readonly float Sqrt2 = MathF.Sqrt(2);
+    private static readonly float Sqrt2Over2 = VectorMathTests.Sqrt2 / 2;
+
+    private static readonly Matrix4x4Comparer approxMat4x4 = new(1e-5f);
+    private static readonly Vector4Comparer approxVec4 =  new(1e-5f);
+    
     [Fact]
     public void MatrixMatrixMultiplication()
     {
@@ -80,9 +89,8 @@ public class VectorMathTests
             -0.52256f, -0.81391f, -0.30075f, 0.30639f);
         // Turns out that <c>1e-5f</c> is about the minimum
         // tolerance we can expect for the <c>Invert</c> method.
-        var cmp = new Matrix4x4Comparer(1e-5f);
         Assert.True(Matrix4x4.Invert(A, out var ans));
-        Assert.Equal(want, ans, cmp);
+        Assert.Equal(want, ans, VectorMathTests.approxMat4x4);
     }
 
     [Fact]
@@ -98,9 +106,8 @@ public class VectorMathTests
             -0.07692f, 0.12308f, 0.02564f, 0.03077f,
             0.35897f, 0.35897f, 0.43590f, 0.92308f,
             -0.69231f, -0.69231f, -0.76923f, -1.92308f);
-        var cmp = new Matrix4x4Comparer(1e-5f);
         Assert.True(Matrix4x4.Invert(A, out var ans));
-        Assert.Equal(want, ans, cmp);
+        Assert.Equal(want, ans, VectorMathTests.approxMat4x4);
     }
 
     [Fact]
@@ -116,9 +123,8 @@ public class VectorMathTests
             -0.07778f, 0.03333f, 0.36667f, -0.33333f,
             -0.02901f, -0.14630f, -0.10926f, 0.12963f,
             0.17778f, 0.06667f, -0.26667f, 0.33333f);
-        var cmp = new Matrix4x4Comparer(1e-5f);
         Assert.True(Matrix4x4.Invert(A, out var ans));
-        Assert.Equal(want, ans, cmp);
+        Assert.Equal(want, ans, VectorMathTests.approxMat4x4);
     }
 
     [Fact]
@@ -134,12 +140,11 @@ public class VectorMathTests
             3, -8, 2, -9,
             -4, 4, 4, 1,
             -6, 5, -1, 1);
-        var cmp = new Matrix4x4Comparer(1e-5f);
         // C = A * B
         // A = C * inv(B)
         var C = A * B;
         Assert.True(Matrix4x4.Invert(B, out var invB));
-        Assert.Equal(A, C * invB, cmp);
+        Assert.Equal(A, C * invB, VectorMathTests.approxMat4x4);
     }
 
     [Fact]
@@ -215,20 +220,12 @@ public class VectorMathTests
         Assert.Equal(want, ans);
     }
 
-
-    private static readonly float Sqrt2 = MathF.Sqrt(2);
-    private static readonly float Sqrt2Over2 = VectorMathTests.Sqrt2 / 2;
-
-    private const float PiOver4 = MathF.PI / 4;
-    private const float PiOver2 = MathF.PI / 2;
-
     [Fact]
     public void PointXAxisRotation()
     {
         var p = new Vector4(0, 1, 0, 1);
         var halfQuarter = Matrix4x4.CreateRotationX(VectorMathTests.PiOver4);
         var fullQuarter = Matrix4x4.CreateRotationX(VectorMathTests.PiOver2);
-        var cmp = new Vector4Comparer(1e-5f);
         Assert.Equal(
             new Vector4(
                 0,
@@ -236,12 +233,12 @@ public class VectorMathTests
                 VectorMathTests.Sqrt2Over2,
                 1),
             Vector4.Transform(p, halfQuarter),
-            cmp);
+            VectorMathTests.approxVec4);
         Assert.Equal(
             // For a left-handed system, this rotates *into* the screen.
             new Vector4(0, 0, 1, 1),
             Vector4.Transform(p, fullQuarter),
-            cmp);
+            VectorMathTests.approxVec4);
     }
 
     [Fact]
@@ -257,8 +254,7 @@ public class VectorMathTests
             -VectorMathTests.Sqrt2Over2,
             1);
         var ans = Vector4.Transform(p, inv);
-        var cmp = new Vector4Comparer(1e-5f);
-        Assert.Equal(want, ans, cmp);
+        Assert.Equal(want, ans, VectorMathTests.approxVec4);
     }
 
     [Fact]
@@ -267,7 +263,6 @@ public class VectorMathTests
         var p = new Vector4(0, 0, 1, 1);
         var halfQuarter = Matrix4x4.CreateRotationY(VectorMathTests.PiOver4);
         var fullQuarter = Matrix4x4.CreateRotationY(VectorMathTests.PiOver2);
-        var cmp = new Vector4Comparer(1e-5f);
         Assert.Equal(
             new Vector4(
                 VectorMathTests.Sqrt2Over2,
@@ -275,13 +270,13 @@ public class VectorMathTests
                 VectorMathTests.Sqrt2Over2,
                 1),
             Vector4.Transform(p, halfQuarter),
-            cmp);
+            VectorMathTests.approxVec4);
         Assert.Equal(
             // Rotating around the y-axis translates the z-coordinate
             // towards the <c>+z</c> around a circle.
             new Vector4(1, 0, 0, 1),
             Vector4.Transform(p, fullQuarter),
-            cmp);
+            VectorMathTests.approxVec4);
     }
 
     [Fact]
@@ -290,7 +285,6 @@ public class VectorMathTests
         var p = new Vector4(0, 1, 0, 1);
         var halfQuarter = Matrix4x4.CreateRotationZ(VectorMathTests.PiOver4);
         var fullQuarter = Matrix4x4.CreateRotationZ(VectorMathTests.PiOver2);
-        var cmp = new Vector4Comparer(1e-5f);
         Assert.Equal(
             new Vector4(
                 -VectorMathTests.Sqrt2Over2,
@@ -298,11 +292,11 @@ public class VectorMathTests
                 0,
                 1),
             Vector4.Transform(p, halfQuarter),
-            cmp);
+            VectorMathTests.approxVec4);
         Assert.Equal(
             new Vector4(-1, 0, 0, 1),
             Vector4.Transform(p, fullQuarter),
-            cmp);
+            VectorMathTests.approxVec4);
     }
 
     [Fact]
