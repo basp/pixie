@@ -90,7 +90,10 @@ public class VectorMathTests
         // Turns out that <c>1e-5f</c> is about the minimum
         // tolerance we can expect for the <c>Invert</c> method.
         Assert.True(Matrix4x4.Invert(A, out var ans));
-        Assert.Equal(want, ans, VectorMathTests.approxMat4x4);
+        Assert.Equal(
+            want, 
+            ans, 
+            VectorMathTests.approxMat4x4);
     }
 
     [Fact]
@@ -107,7 +110,10 @@ public class VectorMathTests
             0.35897f, 0.35897f, 0.43590f, 0.92308f,
             -0.69231f, -0.69231f, -0.76923f, -1.92308f);
         Assert.True(Matrix4x4.Invert(A, out var ans));
-        Assert.Equal(want, ans, VectorMathTests.approxMat4x4);
+        Assert.Equal(
+            want, 
+            ans, 
+            VectorMathTests.approxMat4x4);
     }
 
     [Fact]
@@ -124,7 +130,10 @@ public class VectorMathTests
             -0.02901f, -0.14630f, -0.10926f, 0.12963f,
             0.17778f, 0.06667f, -0.26667f, 0.33333f);
         Assert.True(Matrix4x4.Invert(A, out var ans));
-        Assert.Equal(want, ans, VectorMathTests.approxMat4x4);
+        Assert.Equal(
+            want, 
+            ans, 
+            VectorMathTests.approxMat4x4);
     }
 
     [Fact]
@@ -144,7 +153,10 @@ public class VectorMathTests
         // A = C * inv(B)
         var C = A * B;
         Assert.True(Matrix4x4.Invert(B, out var invB));
-        Assert.Equal(A, C * invB, VectorMathTests.approxMat4x4);
+        Assert.Equal(
+            A, 
+            C * invB, 
+            VectorMathTests.approxMat4x4);
     }
 
     [Fact]
@@ -246,7 +258,8 @@ public class VectorMathTests
     {
         var p = new Vector4(0, 1, 0, 1);
         var halfQuarter = Matrix4x4.CreateRotationX(VectorMathTests.PiOver4);
-        Assert.True(Matrix4x4.Invert(halfQuarter, out var inv));
+        Assert.True(
+            Matrix4x4.Invert(halfQuarter, out var inv));
         var want = new Vector4(
             0,
             VectorMathTests.Sqrt2Over2,
@@ -254,7 +267,10 @@ public class VectorMathTests
             -VectorMathTests.Sqrt2Over2,
             1);
         var ans = Vector4.Transform(p, inv);
-        Assert.Equal(want, ans, VectorMathTests.approxVec4);
+        Assert.Equal(
+            want, 
+            ans, 
+            VectorMathTests.approxVec4);
     }
 
     [Fact]
