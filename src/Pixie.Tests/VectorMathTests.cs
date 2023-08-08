@@ -1,4 +1,6 @@
-﻿namespace Pixie.Tests;
+﻿using System.Drawing;
+
+namespace Pixie.Tests;
 
 public class VectorMathTests
 {
@@ -215,14 +217,19 @@ public class VectorMathTests
         Assert.Equal(want, ans);
     }
 
-    private static readonly float Sqrt2Over2 = MathF.Sqrt(2) / 2;
+
+    private static readonly float Sqrt2 = MathF.Sqrt(2);
+    private static readonly float Sqrt2Over2 = VectorMathTests.Sqrt2 / 2;
+
+    private const float PiOver4 = MathF.PI / 4;
+    private const float PiOver2 = MathF.PI / 2;
 
     [Fact]
-    public void PointRotationX()
+    public void PointXAxisRotation()
     {
         var p = new Vector4(0, 1, 0, 1);
-        var halfQuarter = Matrix4x4.CreateRotationX(MathF.PI / 4);
-        var fullQuarter = Matrix4x4.CreateRotationX(MathF.PI / 2);
+        var halfQuarter = Matrix4x4.CreateRotationX(VectorMathTests.PiOver4);
+        var fullQuarter = Matrix4x4.CreateRotationX(VectorMathTests.PiOver2);
         var cmp = new Vector4Comparer(1e-5f);
         Assert.Equal(
             new Vector4(
@@ -233,8 +240,115 @@ public class VectorMathTests
             Vector4.Transform(p, halfQuarter),
             cmp);
         Assert.Equal(
+            // For a left-handed system, this rotates *into* the screen.
             new Vector4(0, 0, 1, 1),
             Vector4.Transform(p, fullQuarter),
             cmp);
+    }
+
+    [Fact]
+    public void InversePointXAxisRotation()
+    {
+        var p = new Vector4(0, 1, 0, 1);
+        var halfQuarter = Matrix4x4.CreateRotationX(VectorMathTests.PiOver4);
+        Assert.True(Matrix4x4.Invert(halfQuarter, out var inv));
+        var want = new Vector4(
+            0,
+            VectorMathTests.Sqrt2Over2,
+            // For a left-handed system, this rotates *away* from the screen.
+            -VectorMathTests.Sqrt2Over2,
+            1);
+        var ans = Vector4.Transform(p, inv);
+        var cmp = new Vector4Comparer(1e-5f);
+        Assert.Equal(want, ans, cmp);
+    }
+
+    [Fact]
+    public void PointYAxisRotation()
+    {
+        var p = new Vector4(0, 0, 1, 1);
+        var halfQuarter = Matrix4x4.CreateRotationY(VectorMathTests.PiOver4);
+        var fullQuarter = Matrix4x4.CreateRotationY(VectorMathTests.PiOver2);
+        var cmp = new Vector4Comparer(1e-5f);
+        Assert.Equal(
+            new Vector4(
+                VectorMathTests.Sqrt2Over2,
+                0,
+                VectorMathTests.Sqrt2Over2,
+                1),
+            Vector4.Transform(p, halfQuarter),
+            cmp);
+        Assert.Equal(
+            // Rotating around the y-axis translates the z-coordinate
+            // towards the <c>+z</c> around a circle.
+            new Vector4(1, 0, 0, 1),
+            Vector4.Transform(p, fullQuarter),
+            cmp);
+    }
+
+    [Fact]
+    public void PointZAxisRotation()
+    {
+        var p = new Vector4(0, 1, 0, 1);
+        var halfQuarter = Matrix4x4.CreateRotationZ(VectorMathTests.PiOver4);
+        var fullQuarter = Matrix4x4.CreateRotationZ(VectorMathTests.PiOver2);
+        var cmp = new Vector4Comparer(1e-5f);
+        Assert.Equal(
+            new Vector4(
+                -VectorMathTests.Sqrt2Over2,
+                VectorMathTests.Sqrt2Over2,
+                0,
+                1),
+            Vector4.Transform(p, halfQuarter),
+            cmp);
+        Assert.Equal(
+            new Vector4(-1, 0, 0, 1),
+            Vector4.Transform(p, fullQuarter),
+            cmp);
+    }
+
+    [Fact]
+    public void PointShearing()
+    {
+        var tests = new[]
+        {
+            new
+            {
+                T = Transform.CreateShear(1, 0, 0, 0, 0, 0),
+                want = new Vector4(5, 3, 4, 1),
+            },
+            new
+            {
+                T = Transform.CreateShear(0, 1, 0, 0, 0, 0),
+                want = new Vector4(6, 3, 4, 1),
+            },
+            new
+            {
+                T = Transform.CreateShear(0, 0, 1, 0, 0, 0),
+                want = new Vector4(2, 5, 4, 1),
+            },
+            new
+            {
+                T = Transform.CreateShear(0, 0, 0, 1, 0, 0),
+                want = new Vector4(2, 7, 4, 1),
+            },
+            new
+            {
+                T = Transform.CreateShear(0, 0, 0, 0, 1, 0),
+                want = new Vector4(2, 3, 6, 1),
+            },
+            new
+            {
+                T = Transform.CreateShear(0, 0, 0, 0, 0, 1),
+                want = new Vector4(2, 3, 7, 1),
+            },
+        };
+
+        var p = new Vector4(2, 3, 4, 1);
+        foreach (var @case in tests)
+        {
+            var ans = Vector4.Transform(p, @case.T);
+            Assert.Equal(@case.want, ans);
+        }
     }
 }
