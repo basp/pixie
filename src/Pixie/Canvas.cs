@@ -29,7 +29,7 @@ public abstract class Canvas<T> where T : INumber<T>
                 throw new IndexOutOfRangeException(nameof(y));
             }
 
-            return this.data[(y * this.Width) + x];
+            return this.data[y * this.Width + x];
         }
         set
         {
@@ -43,7 +43,7 @@ public abstract class Canvas<T> where T : INumber<T>
                 throw new IndexOutOfRangeException(nameof(y));
             }
 
-            this.data[(y * this.Width) + x] = value;
+            this.data[y * this.Width + x] = value;
         }
 #endif
     }

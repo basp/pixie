@@ -1,8 +1,28 @@
 ﻿namespace Pixie;
 
-public static class Transform
+public class Transform
 {
-    public static Matrix4x4 CreateShear(
+    public Transform()
+        : this(Matrix4x4.Identity, Matrix4x4.Identity)
+    {
+    }
+
+    public Transform(Matrix4x4 m)
+        : this(m, Utils.UnsafeInvert(m))
+    {
+    }
+    
+    public Transform(Matrix4x4 m, Matrix4x4 inv)
+    {
+        this.Matrix = m;
+        this.Inverse = inv;
+    }
+
+    public Matrix4x4 Matrix { get; }
+
+    public Matrix4x4 Inverse { get; }
+
+    public static Transform CreateShear(
         float xy, float xz,
         float yx, float yz,
         float zx, float zy)
@@ -12,6 +32,8 @@ public static class Transform
             yx, 1, yz, 0,
             zx, zy, 1, 0,
             0f, 0f, 0, 1);
-        return Matrix4x4.Transpose(m);
+        m = Matrix4x4.Transpose(m);
+        var inv = Utils.UnsafeInvert(m);
+        return new Transform(m, inv);
     }
 }

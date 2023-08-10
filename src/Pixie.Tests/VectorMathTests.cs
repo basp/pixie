@@ -355,7 +355,7 @@ public class VectorMathTests
         var p = new Vector4(2, 3, 4, 1);
         foreach (var @case in tests)
         {
-            var ans = Vector4.Transform(p, @case.T);
+            var ans = Vector4.Transform(p, @case.T.Matrix);
             Assert.Equal(@case.want, ans);
         }
     }
@@ -396,5 +396,25 @@ public class VectorMathTests
         Assert.Equal(
             new Vector4(15, 0, 7, 1),
             Vector4.Transform(p, T));
+    }
+
+    [Fact]
+    public void TestUnsafeInvert()
+    {
+        var A = new Matrix4x4(
+            9, 3, 0, 9,
+            -5, -2, -6, -3,
+            -4, 9, 6, 4,
+            -7, 6, 6, 2);
+        var want = new Matrix4x4(
+            -0.04074f, -0.07778f, 0.14444f, -0.22222f,
+            -0.07778f, 0.03333f, 0.36667f, -0.33333f,
+            -0.02901f, -0.14630f, -0.10926f, 0.12963f,
+            0.17778f, 0.06667f, -0.26667f, 0.33333f);
+        var ans = Utils.UnsafeInvert(A);
+        Assert.Equal(
+            want, 
+            ans, 
+            VectorMathTests.approxMat4x4);
     }
 }
