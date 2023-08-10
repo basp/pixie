@@ -18,6 +18,8 @@ public readonly struct Intersection : IComparable<Intersection>
 
 public static class IntersectionExtensions
 {
+    // We might want to consider re-using a pre-allocated list for this
+    // and copying into that instead of creating a new list every time.
     public static Option<Intersection> GetHit(this IEnumerable<Intersection> xs)
     {
         var list = xs

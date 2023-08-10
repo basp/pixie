@@ -4,6 +4,18 @@ public readonly struct Color<T> :
     IEquatable<Color<T>>
     where T : INumber<T>
 {
+    public static readonly Color<T> Black =
+        new(
+            T.Zero,
+            T.Zero,
+            T.Zero);
+
+    public static readonly Color<T> White =
+        new(
+            T.One,
+            T.One,
+            T.One);
+
     public readonly T R, G, B;
 
     public Color(T v)

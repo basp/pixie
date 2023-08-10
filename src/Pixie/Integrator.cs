@@ -8,6 +8,6 @@ public abstract class Integrator
     {
         this.aggregate = aggregate;
     }
-    
+
     public abstract Color<double> Li(Ray ray);
 }
