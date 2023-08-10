@@ -128,5 +128,22 @@ public class IntersectionTests
         Assert.True(i.HasValue);
         Assert.Equal(i4, i.ValueOrFailure());
     }
+
+    [Fact]
+    public void IntersectScaledSphereWithRay()
+    {
+        var ray = new Ray(
+            new Vector3(0, 0, -5),
+            new Vector3(0, 0, 1));
+        var t = new Transform(Matrix4x4.CreateScale(2, 2, 2));
+        var obj = new Primitive(new Sphere())
+        {
+            Transform = t,
+        };
+        var xs = obj.Intersect(ray).ToList();
+        Assert.Equal(2, xs.Count);
+        Assert.Equal(3, xs[0].T);
+        Assert.Equal(7, xs[1].T);
+    }
 }
 
