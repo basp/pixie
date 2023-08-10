@@ -8,7 +8,7 @@ public class Transform
     }
 
     public Transform(Matrix4x4 m)
-        : this(m, Utils.UnsafeInvert(m))
+        : this(m, Utils.InvertOrNan(m))
     {
     }
     
@@ -33,7 +33,7 @@ public class Transform
             zx, zy, 1, 0,
             0f, 0f, 0, 1);
         m = Matrix4x4.Transpose(m);
-        var inv = Utils.UnsafeInvert(m);
+        var inv = Utils.InvertOrNan(m);
         return new Transform(m, inv);
     }
 }

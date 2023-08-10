@@ -399,7 +399,7 @@ public class VectorMathTests
     }
 
     [Fact]
-    public void TestUnsafeInvert()
+    public void TestOptionalInvert()
     {
         var A = new Matrix4x4(
             9, 3, 0, 9,
@@ -411,10 +411,13 @@ public class VectorMathTests
             -0.07778f, 0.03333f, 0.36667f, -0.33333f,
             -0.02901f, -0.14630f, -0.10926f, 0.12963f,
             0.17778f, 0.06667f, -0.26667f, 0.33333f);
-        var ans = Utils.UnsafeInvert(A);
+        var ans = Utils.InvertOrNan(A);
+        
         Assert.Equal(
             want, 
             ans, 
             VectorMathTests.approxMat4x4);
     }
+    
+    
 }
