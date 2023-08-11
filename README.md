@@ -15,17 +15,18 @@ new Vector3(0.5f, 0, 1).AsPosition();  // => <0.5, 0, 1, 1>
 new Vector3(0.5f, 0, 1).AsDirection(); // => <0.5, 0, 1, 0>
 ```
 
-This is very much a super-breaking chanage since it changes the whole API.
+This is very much a super-breaking change since it changes the whole API.
 
 ### Now `float` instead of `double`
 Since we are now building on top of **System.Numerics** all our vectors are
 based on `float` instead of `double`. For now, the speed increase seems to
 outweigh the loss of precision.
 
-> Why the speed increase? Those classes from **System.Numerics** have 
-> *intrinsics* so they can potentially be executed on the CPU or using 
-> specialized CPU instructions.
-
+> Why the speed increase? Those classes from **System.Numerics** might have 
+> *intrinsics* which basically means the compiler can deal with them in a
+> special way. For us this means potentially executing them on the GPU or
+> using special (vectorized) CPU instructions.
+ 
 ### `Color` be gone
 Finally deciding to bite the bullet, the `struct Color<T>` type has been wiped.
 Colors will be represented as `Vector3` values.
