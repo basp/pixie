@@ -51,7 +51,7 @@ public class ShapeTests
     }
 
     private static readonly float Sqrt3Over3 = MathF.Sqrt(3) / 3;
-    
+
     [Fact]
     public void TheNormalOnASphereAtANonAxialPoint()
     {
@@ -93,22 +93,37 @@ public class ShapeTests
             Transform = new Transform(
                 Matrix4x4.CreateTranslation(0, 1, 0)),
         };
-        
-        var pWorld = new Vector3(0, 1.70711f, -0.70711f).AsPosition();
-        var pObj = Vector4.Transform(pWorld, obj.Transform.Inverse);
-        var nObj = pObj - new Vector4(0, 0, 0, 1);
-        var nWorld = Vector4.Transform(nObj, Matrix4x4.Transpose(obj.Transform.Inverse));
-        nWorld.W = 0;
-        nWorld = Vector4.Normalize(nWorld);
-        
-        var ans = obj.GetNormalAt(new Vector4(0, 1.70711f, -0.70711f, 1));
-        
+        var ans = obj.GetNormalAt(
+            new Vector4(0, 1.70711f, -0.70711f, 1));
         var want = new Vector4(
-            0, 
-            0.70711f, 
+            0,
+            0.70711f,
             -0.70711f,
             0);
-        var cmp = new Vector4Comparer(1e-4f);
+        var cmp = new Vector4Comparer(1e-5f);
+        Assert.Equal(want, ans, cmp);
+    }
+
+    [Fact]
+    public void TheNormalOnTransformedSphere()
+    {
+        // In TRTC book, matrix <c>m</c> is constructed by
+        // in the reverse order, by multiplying scale * rot.
+        // However, with the System.Numerics API we can multiply
+        // the matrices in natural order.
+        var m =
+            Matrix4x4.CreateRotationZ(MathF.PI / 5) *
+            Matrix4x4.CreateScale(1, 0.5f, 1);
+        var obj = new Primitive(new Sphere())
+        {
+            Transform = new Transform(m),
+        };
+        var pWorld = new Vector3(0, MathF.Sqrt(2) / 2, -MathF.Sqrt(2) / 2)
+            .AsPosition();
+        var ans = obj.GetNormalAt(pWorld);
+        var want = new Vector3(0, 0.97014f, -0.24254f)
+            .AsDirection();
+        var cmp = new Vector4Comparer(1e-5f);
         Assert.Equal(want, ans, cmp);
     }
 }

@@ -418,6 +418,28 @@ public class VectorMathTests
             ans, 
             VectorMathTests.approxMat4x4);
     }
-    
-    
+
+    [Fact]
+    public void ReflectVectorApproaching45Deg()
+    {
+        var v = new Vector3(1, -1, 0).AsDirection();
+        var n = new Vector3(0, 1, 0).AsDirection();
+        var ans = v.Reflect(n);
+        var want = new Vector3(1, 1, 0).AsDirection();
+        Assert.Equal(want, ans);
+    }
+
+    [Fact]
+    public void ReflectVectorOffSlantedSurface()
+    {
+        var v = new Vector3(0, -1, 0)
+            .AsDirection();
+        var n = new Vector3(MathF.Sqrt(2) / 2, MathF.Sqrt(2) / 2, 0)
+            .AsDirection();
+        var ans = v.Reflect(n);
+        var want = new Vector3(1, 0, 0)
+            .AsDirection();
+        var cmp = new Vector4Comparer(1e-6f);
+        Assert.Equal(want, ans, cmp);
+    }
 }
