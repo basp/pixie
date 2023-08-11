@@ -33,7 +33,7 @@ to use the `Vector4.Transform` method now:
 ```csharp
 var m = Matrix4x4.CreateScale(1, 0.5f, 1);
 var u = new Vector3(0, 1, 0.5).AsDirection();
-var v = Vector4.Transorm(u, m); // <0, 0.5, 0.5>
+var v = Vector4.Transform(u, m); // <0, 0.5, 0.5>
 ```
 
 > **System.Numerics** overloads a lot of common operators but if you can not
