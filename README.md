@@ -87,6 +87,16 @@ better.
 * The API is more low-level since we are dealing with **System.Numerics** types.
 * We have less control and can provide less utility since we do not own the 
 types in that package.
+* Loss of precision due to `float` all over the place.
+
+## Upsides
+* We do not have to maintain a CPU based GLM API. That's a lot of code we do
+not have to worry about. Also more code also means more potential for errors so
+depending on well supported library seems like a sane choice.
+* This also means we do not have to document it.
+* It is fast. Expecting a 10x performance increase (compared to Pixie1 which
+runs only on the CPU).
+* Focus on writing a cool ray-tracer.
 
 ## Overview
 Below is an overview of the system. It shows the aggregate relations between
