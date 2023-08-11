@@ -22,6 +22,10 @@ Since we are now building on top of **System.Numerics** all our vectors are
 based on `float` instead of `double`. For now, the speed increase seems to
 outweigh the loss of precision.
 
+> Why the speed increase? Those classes from **System.Numerics** have 
+> *intrinsics* so they can potentially be executed on the CPU or using 
+> specialized CPU instructions.
+
 ### `Color` be gone
 Finally deciding to bite the bullet, the `struct Color<T>` type has been wiped.
 Colors will be represented as `Vector3` values.
