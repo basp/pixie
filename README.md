@@ -71,6 +71,9 @@ var t = Matrix4x4.Identity *
     Matrix4x4.RotateX(MathF.PI / 5);
 ```
 
+This will behave just like you would assume it would if you forget about the
+whole reverse multiplying thingy.
+
 ### Some new concepts
 There are a few new important classes that are not really part of **TRTC** but
 inspired from **pbrt** instead. The `Primitive` class is used to combine a 
