@@ -66,7 +66,7 @@ public class IntersectionTests
         Assert.Equal(-4.0, xs[1].T);
     }
 
-    class Foo : Material
+    record Foo : Material
     {
     }
 
