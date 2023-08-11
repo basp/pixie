@@ -84,4 +84,31 @@ public class ShapeTests
         var cmp = new Vector4Comparer(1e-5f);
         Assert.Equal(Vector4.Normalize(n), n, cmp);
     }
+
+    [Fact]
+    public void TheNormalOnATranslatedSphere()
+    {
+        var obj = new Primitive(new Sphere())
+        {
+            Transform = new Transform(
+                Matrix4x4.CreateTranslation(0, 1, 0)),
+        };
+        
+        var pWorld = new Vector3(0, 1.70711f, -0.70711f).AsPosition();
+        var pObj = Vector4.Transform(pWorld, obj.Transform.Inverse);
+        var nObj = pObj - new Vector4(0, 0, 0, 1);
+        var nWorld = Vector4.Transform(nObj, Matrix4x4.Transpose(obj.Transform.Inverse));
+        nWorld.W = 0;
+        nWorld = Vector4.Normalize(nWorld);
+        
+        var ans = obj.GetNormalAt(new Vector4(0, 1.70711f, -0.70711f, 1));
+        
+        var want = new Vector4(
+            0, 
+            0.70711f, 
+            -0.70711f,
+            0);
+        var cmp = new Vector4Comparer(1e-4f);
+        Assert.Equal(want, ans, cmp);
+    }
 }

@@ -28,8 +28,8 @@ public class Primitive
         var objNormal = this.Shape.GetNormalAt(objPoint);
         var n = Vector4.Transform(
             objNormal,
-            Matrix4x4.Transpose(this.Transform.Inverse)) * objNormal;
-        n = n with { W = 0 };
+            Matrix4x4.Transpose(this.Transform.Inverse));
+        n.W = 0;
         return Vector4.Normalize(n);
     }
 
