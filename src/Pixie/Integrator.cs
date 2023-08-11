@@ -1,7 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using Optional.Collections;
-
-namespace Pixie;
+﻿namespace Pixie;
 
 public abstract class Integrator
 {
@@ -12,5 +9,5 @@ public abstract class Integrator
         this.aggregate = aggregate;
     }
 
-    public abstract Color<double> Li(Ray ray);
+    public abstract Vector3 Li(Ray ray);
 }

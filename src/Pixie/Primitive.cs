@@ -3,10 +3,8 @@
 public class Primitive
 {
     public Primitive(Shape shape)
+        : this(shape, Pixie.Material.Default)
     {
-        this.Shape = shape;
-        this.Material = Option.None<Material>();
-        this.Transform = new Transform();
     }
 
     public Primitive(Shape shape, Material material)

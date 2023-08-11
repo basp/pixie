@@ -6,4 +6,4 @@ global using System.Numerics;
 global using BenchmarkDotNet.Attributes;
 global using Optional;
 global using Optional.Collections;
-
+global using Optional.Unsafe;

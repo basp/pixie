@@ -15,5 +15,5 @@ public class Vector4Comparer : IEqualityComparer<Vector4>
         MathF.Abs(u.Z - v.Z) < this.atol &&
         MathF.Abs(u.W - v.W) < this.atol;
 
-    public int GetHashCode(Vector4 obj) => throw new NotImplementedException();
+    public int GetHashCode(Vector4 obj) => obj.GetHashCode();
 }

@@ -1,17 +1,17 @@
 ﻿namespace Pixie;
 
-public abstract class Canvas<T> where T : INumber<T>
+public abstract class Canvas
 {
-    private readonly Color<T>[] data;
+    private readonly Vector3[] data;
 
     protected Canvas(int width, int height)
     {
         this.Width = width;
         this.Height = height;
-        this.data = new Color<T>[height * width];
+        this.data = new Vector3[height * width];
     }
 
-    public Color<T> this[int x, int y]
+    public Vector3 this[int x, int y]
     {
 #if RELEASE
         get => this.data[y * this.Width + x];
