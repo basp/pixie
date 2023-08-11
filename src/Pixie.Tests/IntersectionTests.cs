@@ -66,20 +66,23 @@ public class IntersectionTests
         Assert.Equal(-4.0, xs[1].T);
     }
 
-    /*
+    class Foo : Material
+    {
+    }
+
     [Fact]
     public void IntersectPrimitive()
     {
         var r = new Ray(
             new Vector3(0, 0, 5),
             new Vector3(0, 0, 1));
-        var obj = new Primitive(new Sphere());
+        var mat = new Foo();
+        var obj = new Primitive(new Sphere(), mat);
         var xs = obj.Intersect(r).ToList();
         Assert.Equal(2, xs.Count);
-        Assert.Equal(obj, xs[0].Obj);
-        Assert.Equal(obj, xs[1].Obj);
+        Assert.True(xs[0].Material.HasValue);
+        Assert.True(xs[1].Material.HasValue);
     }
-    */
 
     [Fact]
     public void AllIntersectionsHavePositiveT()
@@ -147,4 +150,3 @@ public class IntersectionTests
         Assert.Equal(7, xs[1].T);
     }
 }
-
