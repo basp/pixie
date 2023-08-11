@@ -1,4 +1,7 @@
-﻿namespace Pixie;
+﻿using System.Runtime.InteropServices;
+using Optional.Collections;
+
+namespace Pixie;
 
 public abstract class Integrator
 {

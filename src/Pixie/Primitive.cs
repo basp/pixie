@@ -38,6 +38,6 @@ public class Primitive
         ray = Ray.Transform(ray, this.Transform.Inverse);
         return this.Shape
             .Intersect(ray)
-            .Select(t => new Intersection(t, this));
+            .Select(x => new Intersection(x.T, this.Material));
     }
 }
