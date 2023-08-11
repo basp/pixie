@@ -80,8 +80,8 @@ public class IntersectionTests
         var obj = new Primitive(new Sphere(), mat);
         var xs = obj.Intersect(r).ToList();
         Assert.Equal(2, xs.Count);
-        Assert.True(xs[0].Material.HasValue);
-        Assert.True(xs[1].Material.HasValue);
+        Assert.Equal(mat, xs[0].Material.ValueOrFailure());
+        Assert.Equal(mat, xs[1].Material.ValueOrFailure());
     }
 
     [Fact]
