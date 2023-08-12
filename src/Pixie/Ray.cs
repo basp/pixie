@@ -19,7 +19,7 @@ public readonly struct Ray
     public Vector4 Direction { get; }
 
     public static Ray Transform(Ray ray, Matrix4x4 m) =>
-        new Ray(
+        new(
             Vector4.Transform(ray.Origin, m),
             Vector4.Transform(ray.Direction, m));
     
@@ -27,7 +27,4 @@ public readonly struct Ray
         this.Origin + (this.Direction * t);
 
     public Ray Transform(Matrix4x4 m) => Ray.Transform(this, m);
-    
-    public IEnumerable<Intersection> Intersect(Primitive primitive) =>
-        primitive.Intersect(this);
 }

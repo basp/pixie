@@ -5,7 +5,7 @@ public class ShapeTests
     [Fact]
     public void DefaultTransformation()
     {
-        var obj = new Primitive(new Sphere());
+        var obj = new SimplePrimitive(new Sphere());
         Assert.Equal(Matrix4x4.Identity, obj.Transform.Matrix);
         Assert.Equal(Matrix4x4.Identity, obj.Transform.Inverse);
     }
@@ -15,7 +15,7 @@ public class ShapeTests
     {
         var m = Matrix4x4.CreateTranslation(2, 3, 4);
         var t = new Transform(m);
-        var obj = new Primitive(new Sphere())
+        var obj = new SimplePrimitive(new Sphere())
         {
             Transform = t,
         };
@@ -88,7 +88,7 @@ public class ShapeTests
     [Fact]
     public void TheNormalOnATranslatedSphere()
     {
-        var obj = new Primitive(new Sphere())
+        var obj = new SimplePrimitive(new Sphere())
         {
             Transform = new Transform(
                 Matrix4x4.CreateTranslation(0, 1, 0)),
@@ -114,7 +114,7 @@ public class ShapeTests
         var m =
             Matrix4x4.CreateRotationZ(MathF.PI / 5) *
             Matrix4x4.CreateScale(1, 0.5f, 1);
-        var obj = new Primitive(new Sphere())
+        var obj = new SimplePrimitive(new Sphere())
         {
             Transform = new Transform(m),
         };

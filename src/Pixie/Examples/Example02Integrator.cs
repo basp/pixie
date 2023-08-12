@@ -14,7 +14,12 @@ public class Integrator02 : Integrator
     public override Vector3 Li(Ray ray) => ray
         .Transform(this.aggregate.Transform.Inverse)
         .Intersect(this.aggregate)
-        .GetHit()
         .Map(_ => this.red)
         .ValueOr(this.black);
+}
+
+public static class Integrator02Extensions
+{
+    public static Option<Intersection> Intersect(this Ray self, Primitive primitive) =>
+            primitive.Intersect(self);
 }

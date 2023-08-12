@@ -35,7 +35,7 @@ public static class Program
         var ppm = new Pixmap(canvasPixels, canvasPixels);
         var A = Matrix4x4.CreateScale(1, 0.5f, 1);
         var B = Matrix4x4.CreateRotationZ(MathF.PI / 4);
-        var obj = new Primitive(new Sphere())
+        var obj = new SimplePrimitive(new Sphere())
         {
             Transform = new Transform(A * B),
         };
@@ -75,7 +75,7 @@ public static class Program
         {
             Color = new Vector3(1, 0.2f, 1),
         };
-        var obj = new Primitive(shape, material)
+        var obj = new SimplePrimitive(shape, material)
         {
             Transform = new Transform(
                 Matrix4x4.CreateScale(1, 0.5f, 1)),

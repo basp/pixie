@@ -14,8 +14,7 @@ public class Integrator03 : Integrator
     {
         var maybeHit = ray
             .Transform(this.aggregate.Transform.Inverse)
-            .Intersect(this.aggregate)
-            .GetHit();
+            .Intersect(this.aggregate);
 
         if (!maybeHit.HasValue)
         {
@@ -23,12 +22,12 @@ public class Integrator03 : Integrator
         }
 
         var hit = maybeHit.ValueOrFailure();
-        if (!hit.Material.HasValue)
+        if (!hit.Interaction.HasValue)
         {
             return new Vector3(0, 0, 0);
         }
 
-        var mat = hit.Material.ValueOrFailure();
+        var mat = hit.Interaction.ValueOrFailure().Material;
         var point = ray.GetPointAt(hit.T);
         var normal = this.aggregate.GetNormalAt(point);
         var eye = -ray.Direction;
