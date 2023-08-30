@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BD64DF75-D1A8-4EAE-8DF0-5ACA981244B1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9E04C542-8724-4BE1-8812-5E7920E8C3F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pixie", "src\Pixie\Pixie.csproj", "{768C5CDF-DB7E-44E2-82AB-7AC6FCDF9BF3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pixie", "src\Pixie\Pixie.csproj", "{60C6A2F2-B021-438C-99AD-1849C143BCC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pixie.Tests", "src\Pixie.Tests\Pixie.Tests.csproj", "{CAAFC0B1-9651-41C2-BA6B-D45084CB6B36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pixie.Tests", "src\Pixie.Tests\Pixie.Tests.csproj", "{0835A8B9-6D97-400D-BA89-C21B303C0263}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,17 +18,17 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{768C5CDF-DB7E-44E2-82AB-7AC6FCDF9BF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{768C5CDF-DB7E-44E2-82AB-7AC6FCDF9BF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{768C5CDF-DB7E-44E2-82AB-7AC6FCDF9BF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{768C5CDF-DB7E-44E2-82AB-7AC6FCDF9BF3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CAAFC0B1-9651-41C2-BA6B-D45084CB6B36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CAAFC0B1-9651-41C2-BA6B-D45084CB6B36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CAAFC0B1-9651-41C2-BA6B-D45084CB6B36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CAAFC0B1-9651-41C2-BA6B-D45084CB6B36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60C6A2F2-B021-438C-99AD-1849C143BCC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60C6A2F2-B021-438C-99AD-1849C143BCC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60C6A2F2-B021-438C-99AD-1849C143BCC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60C6A2F2-B021-438C-99AD-1849C143BCC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0835A8B9-6D97-400D-BA89-C21B303C0263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0835A8B9-6D97-400D-BA89-C21B303C0263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0835A8B9-6D97-400D-BA89-C21B303C0263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0835A8B9-6D97-400D-BA89-C21B303C0263}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{768C5CDF-DB7E-44E2-82AB-7AC6FCDF9BF3} = {BD64DF75-D1A8-4EAE-8DF0-5ACA981244B1}
-		{CAAFC0B1-9651-41C2-BA6B-D45084CB6B36} = {BD64DF75-D1A8-4EAE-8DF0-5ACA981244B1}
+		{60C6A2F2-B021-438C-99AD-1849C143BCC8} = {9E04C542-8724-4BE1-8812-5E7920E8C3F7}
+		{0835A8B9-6D97-400D-BA89-C21B303C0263} = {9E04C542-8724-4BE1-8812-5E7920E8C3F7}
 	EndGlobalSection
 EndGlobal

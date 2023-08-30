@@ -8,6 +8,7 @@ docfx_project
 
 # User-specific files
 .vscode
+.idea
 *.suo
 *.user
 *.userosscache

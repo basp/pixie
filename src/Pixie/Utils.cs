@@ -1,26 +1,61 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
 
-namespace Pixie;
-
-public static class Utils
+namespace Pixie
 {
-    private static readonly Matrix4x4 nans4x4 = new(
-        float.NaN, float.NaN, float.NaN, float.NaN,
-        float.NaN, float.NaN, float.NaN, float.NaN,
-        float.NaN, float.NaN, float.NaN, float.NaN,
-        float.NaN, float.NaN, float.NaN, float.NaN);
+    using System;
 
-    public static float Sqrt2Over2 = MathF.Sqrt(2) / 2;
-    public static float Sqrt3Over3 = MathF.Sqrt(3) / 3;
-    public static float PiOver2 = MathF.PI / 2;
-    public static float PiOver4 = MathF.PI / 4;
-    
-    public static Matrix4x4 InvertOrNan(Matrix4x4 m) =>
-        Utils.InvertOptional(m)
-            .ValueOr(Utils.nans4x4);
+    public static class Utils
+    {
+        public const int BinaryBaseNumber = 2;
 
-    private static Option<Matrix4x4> InvertOptional(Matrix4x4 m) =>
-        Matrix4x4.Invert(m, out var inv)
-            ? Option.Some(inv)
-            : Option.None<Matrix4x4>();
+        public const int SinglePrecision = 24;
+
+        public static float MachineEpsilon =>
+            (float)Math.Pow(BinaryBaseNumber, -SinglePrecision);
+
+        public static float Gamma(int n) =>
+            (n * MachineEpsilon) / (1 - (n * MachineEpsilon));
+
+        public static uint SingleToUInt32Bits(float v) =>
+            BitConverter.ToUInt32(BitConverter.GetBytes(v), 0);
+
+        public static float UInt32BitsToSingle(uint v) =>
+            BitConverter.ToSingle(BitConverter.GetBytes(v), 0);
+
+        public static float NextFloatUp(float v)
+        {
+            // guard against +inf
+            if (float.IsInfinity(v) && v > 0)
+            {
+                return v;
+            }
+
+            // skip zero when `v` is minus zero
+            v = v == -0 ? 0 : v;
+            var ui = SingleToUInt32Bits(v);
+
+            // since `ui` is unsigned we need to
+            // take care of the up direction
+            ui = v > 0 ? ui + 1 : ui - 1;
+            return UInt32BitsToSingle(ui);
+        }
+
+        public static float NextFloatDown(float v)
+        {
+            // guard against -inf
+            if (float.IsInfinity(v) && v < 0)
+            {
+                return v;
+            }
+
+            // skip minus zero when `v` is zero
+            v = v == 0 ? -0 : v;
+            var ui = SingleToUInt32Bits(v);
+
+            // since `ui` is unsigned we need to
+            // take care of the down direction
+            ui = v > 0 ? ui - 1 : ui + 1;
+            return UInt32BitsToSingle(ui);
+        }
+    }
 }

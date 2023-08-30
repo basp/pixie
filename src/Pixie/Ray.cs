@@ -1,30 +1,36 @@
-﻿namespace Pixie;
+// Licensed under the MIT license. See LICENSE file in the samples root for full license information.
 
-public readonly struct Ray
+namespace Pixie
 {
-    public Ray(Vector3 origin, Vector3 direction)
+    public struct Ray
     {
-        this.Origin = origin.AsPosition();
-        this.Direction = direction.AsDirection();
+        public readonly Vector4 Origin;
+        
+        public readonly Vector4 Direction;
+
+        public Ray(Vector4 origin, Vector4 direction)
+        {
+            this.Origin = origin;
+            this.Direction = direction;
+        }
+
+        /// <summary>
+        /// Return a position along this ray at distance t.
+        /// </summary>
+        /// <remarks>
+        /// Equivalent to calling <c>GetPosition(double)</c>.
+        /// </remarks>
+        public Vector4 this[double t]
+        {
+            get => this.Origin + (t * this.Direction);
+        }
+
+        /// <summary>
+        /// Return a position along this ray at distance t.
+        /// </summary>
+        /// <remarks>
+        /// Alternative for indexer <c>this[double]</c>.
+        /// </remarks>
+        public Vector4 GetPosition(double t) => this[t];
     }
-
-    public Ray(Vector4 origin, Vector4 direction)
-    {
-        this.Origin = origin;
-        this.Direction = direction;
-    }
-    
-    public Vector4 Origin { get;  }
-
-    public Vector4 Direction { get; }
-
-    public static Ray Transform(Ray ray, Matrix4x4 m) =>
-        new(
-            Vector4.Transform(ray.Origin, m),
-            Vector4.Transform(ray.Direction, m));
-    
-    public Vector4 GetPointAt(float t) =>
-        this.Origin + (this.Direction * t);
-
-    public Ray Transform(Matrix4x4 m) => Ray.Transform(this, m);
 }
